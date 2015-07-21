@@ -1,0 +1,318 @@
+abricot;#E67E30
+absinthe;#7FDD4C
+acajou;#88421D
+aigue-marine;#79F8F8
+aile de corbeau;#000000
+albâtre;#FEFEFE
+alezan;#A76726
+amande;#82C46C
+amarante;#91283B
+ambre jaune;#F0C300
+ambre rouge;#AD390E
+améthyste;#884DA7
+anthracite;#303030
+aquilain;#AD4F09
+ardoise;#5A5E6B
+argent;#CECECE
+argile;#EFEFEF
+asperge;#7BA05B
+aubergine;#370028
+auburn;#9D3E0C
+aurore;#FFCB60
+auréoline;#FDEE00
+avocat;#568203
+azur brume;#F0FFFF
+azur clair;#74D0F1
+azur;#007FFF
+azurin;#A9EAFE
+baillet;#AE642D
+banane;#D1B606
+basané;#8B6C42
+beige clair;#F5F5DC
+beige;#C8AD7F
+beigeasse;#AFA77B
+beurre frais;#FFF48D
+beurre;#F0E36B
+bis;#766F64
+bisque;#FFE4C4
+bistre;#856D4D
+bitume;#4E3D28
+blanc cassé;#FEFEE2
+blanc d'argent;#FEFEFE
+blanc d'espagne;#FEFDF0
+blanc de lait;#FBFCFA
+blanc de meudon;#FEFDF0
+blanc de plomb;#FEFEFE
+blanc de troyes;#FEFDF0
+blanc de zinc;#F6FEFE
+blanc lunaire;#F4FEFE
+blanc;#FFFFFF
+bleu acier;#3A8EBA
+bleu barbeau;#5472AE
+bleu canard;#048B9A
+bleu charrette;#8EA2C6
+bleu ciel;#77B5FE
+bleu céleste;#26C4EC
+bleu de berlin;#24445C
+bleu de cobalt;#22427C
+bleu de france;#318CE7
+bleu de minuit;#003366
+bleu de prusse;#24445C
+bleu des mers du sud;#00CCCB
+bleu dragée;#DFF2FF
+bleu fumée;#BBD2E1
+bleu givré;#80D0D0
+bleu guède;#56739A
+bleu hussard;#24445C
+bleu klein;#002FA7
+bleu majorelle;#6050DC
+bleu nuit;#0F056B
+bleu outremer;#1B019B
+bleu paon;#067790
+bleu persan;#6600FF
+bleu pétrole;#1D4851
+bleu roi;#318CE7
+bleu turquin;#425B8A
+bleu électrique;#2C75FF
+bleu;#0080FF
+bleuet;#5472AE
+blond vénitien;#E7A854
+blond;#E2BC74
+blé;#E8D630
+bordeaux;#6D071A
+bourgogne;#6B0D0D
+bouton d'or;#FCDC12
+brique;#842E1B
+bronze;#614E1A
+brou de noix;#3F2204
+brun clair;#CD853F
+brun;#5B3C11
+bureau;#6B5731
+caca d'oie;#CDCD0D
+cacao;#614B3A
+cachou;#2F1B0C
+café au lait;#785E2F
+café;#462E01
+cannelle;#7E5835
+capucine;#FF5E4D
+caramel;#7E3300
+carmin;#960018
+carotte;#F4661B
+cerise hollywood;#F400A1
+cerise profonde;#DA3287
+cerise rose;#EC3B83
+cerise;#DE3163
+chair;#FEC3AC
+chamois;#D0C07A
+chartreuse;#7FFF00
+chaudron;#85530F
+chocolat;#5A3A22
+châtaigne;#806D5A
+châtain;#8B6C42
+cinabre;#DB1702
+citron;#F7FF3C
+citrouille;#DF6D14
+colombin;#6A455D
+coquelicot;#C60800
+coquille d'œuf;#FDE9E0
+corail;#E73E01
+cramoisi;#DC143C
+crème;#FDF1B8
+cuisse de nymphe émue;#FF69B4
+cuisse de nymphe;#FEE7F0
+cuivre;#B36700
+cyan;#2BFAFA
+cæruléum;#357AB7
+céruse;#FEFEFE
+denim;#1560BD
+fauve;#AD4F09
+feu;#FF4901
+feuille morte;#99512B
+flave;#E6E697
+fraise écrasée;#A42424
+fraise;#BF3030
+framboise rose;#E25098
+framboise;#C72C48
+fuchsia;#FD3F92
+garance;#EE1010
+gingeolin;#6C0277
+glauque;#649B88
+glycine;#C9A0DC
+grenadine;#E9383F
+grenat;#6E0B14
+gris acier;#AFAFAF
+gris de lin;#D2CAEC
+gris de payne;#677179
+gris fer;#7F7F7F
+gris perle;#CECECE
+gris;#606060
+groseille;#CF0A1D
+grège;#BBAE98
+héliotrope;#DF73FF
+incarnadin;#FE96A0
+incarnat;#FF6F7D
+indigo chaud;#791CF8
+indigo du web;#4B0082
+indigo électrique;#6F00FF
+indigo;#2E006C
+isabelle;#785E2F
+ivoire;#FFFFD4
+jais;#000000
+jaune auréolin;#FDEE00
+jaune bouton d’or;#F6DC12
+jaune canari;#E7F00D
+jaune chartreuse;#DFFF00
+jaune d'or;#EFD807
+jaune de cobalt;#FDEE00
+jaune de mars;#EED153
+jaune de naples;#FFF0BC
+jaune impérial;#FFE436
+jaune mimosa;#FEF86C
+kaki;#94812B
+lapis-lazuli;#26619C
+lavallière;#8F5922
+lavande;#9683EC
+lie de vin;#AC1E44
+lilas;#B666D2
+lin;#FAF0E6
+magenta foncé;#800080
+magenta fuchsia;#DB0073
+magenta;#FF00FF
+malachite;#1FA055
+mandarine;#FEA347
+marine;#03224C
+marron;#582900
+mastic;#B3B191
+mauve;#D473D4
+maïs;#FFDE75
+melon;#DE9816
+menthe à l'eau;#54F98D
+menthe;#16B84E
+mordoré;#87591A
+moutarde;#C7CF00
+nacarat;#FC5D5D
+nankin;#F7E269
+neige;#FEFEFE
+noir animal;#000000
+noir d'aniline;#120D16
+noir d'encre;#000000
+noir d'ivoire;#000000
+noir de carbone;#130E0A
+noir de fumée;#130E0A
+noir de jais;#000000
+noir;#000000
+noisette;#955628
+ocre jaune;#DFAF2C
+ocre rouge;#DD985C
+olive;#708D23
+opale;#66CCCC
+or;#FFD700
+orange brûlé;#CC5500
+orange;#FF7F00
+orchidée;#DA70D6
+orpiment;#FCD21C
+orpin de perse;#FCD21C
+paille;#FEE347
+parme;#CFA0E9
+pastel;#56739A
+pelure d'oignon;#D58490
+pervenche;#CCCCFF
+pistache;#BEF574
+poil de chameau;#B67823
+ponceau;#C60800
+prasin;#4CA66B
+prune;#811453
+puce;#4E1609
+queue-de-renard;#91283B
+rose bonbon;#F9429E
+rose dragée;#FEBFD2
+rose du web;#FFC0CB
+rose mountbatten;#997A8D
+rose persan vif;#FE28A2
+rose razzle dazzle;#EED5D2
+rose shocking &tm;;#FC0FC0
+rose ultra;#FF6FFF
+rose vif;#FF007F
+rose;#FD6C9E
+rouge anglais;#F7230C
+rouge cardinal;#B82010
+rouge cerise;#BB0B0B
+rouge d'alizarine;#E32636
+rouge d'andrinople;#A91101
+rouge de falun;#801818
+rouge feu;#FE1B00
+rouge sang;#850606
+rouge tomette;#AE4A34
+rouge turc;#A91101
+rouge-orangé;#FF0000
+rouille;#985717
+roux;#AD4F09
+rubis;#E0115F
+sable;#E0CDA9
+safran;#F3D617
+safre;#0131B4
+sang de bœuf;#730800
+sanguine;#850606
+saphir;#0131B4
+sarcelle;#008E8E
+saumon rose;#FF91A4
+saumon;#F88E55
+smalt;#003399
+smaragdin;#01D758
+soufre;#FFFF6B
+souris;#9E9E9E
+sépia;#AE8964
+tabac;#9F551E
+tangerine;#FF7F00
+taupe;#463F32
+terre d'ombre;#926D27
+terre de sienne brûlée;#E97451
+terre de sienne;#8A3324
+tomate;#DE2916
+topaze;#FAEA73
+tourterelle;#BBACAC
+turquoise;#25FDE9
+vanille;#E1CE9A
+vermeil;#FF0921
+vermillon;#DB1702
+vert anglais;#18391E
+vert anis;#9FE855
+vert bouteille;#096A09
+vert chartreuse;#C2F732
+vert céladon;#83A697
+vert d'eau;#B0F2B6
+vert de chrome;#18391E
+vert de hooker;#1B4F08
+vert de vessie;#22780F
+vert gazon ou herbe;#3A9D23
+vert impérial;#00561B
+vert kaki;#798933
+vert lichen;#85C17E
+vert lime;#9EFD38
+vert militaire;#596643
+vert mousse;#679F5A
+vert mélèze;#386F48
+vert opaline;#97DFC6
+vert perroquet;#3AF24B
+vert pin;#01796F
+vert poireau;#4CA66B
+vert pomme;#34C924
+vert prairie;#57D53B
+vert printemps;#00FF7F
+vert sapin;#095228
+vert sauge;#689D71
+vert tilleul;#A5D152
+vert véronèse;#5A6521
+vert épinard;#175732
+vert-de-gris;#95A595
+vert;#008020
+violet d'évêque;#723E64
+violet;#7F00FF
+violine;#A10684
+viride;#40826D
+zinzolin;#6C0277
+ébène;#000000
+écarlate;#ED0000
+écru;#FEFEE0
+émeraude;#01D758
+étain;#EDEDED
