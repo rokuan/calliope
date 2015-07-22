@@ -3,6 +3,7 @@ package apps.rokuan.com.calliope_helper.db;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -15,6 +16,7 @@ import com.j256.ormlite.table.TableUtils;
 import com.rokuan.calliopecore.parser.Parser;
 import com.rokuan.calliopecore.parser.SpeechParser;
 import com.rokuan.calliopecore.parser.WordBuffer;
+import com.rokuan.calliopecore.sentence.Action;
 import com.rokuan.calliopecore.sentence.CityInfo;
 import com.rokuan.calliopecore.sentence.CountryInfo;
 import com.rokuan.calliopecore.sentence.CustomObject;
@@ -26,6 +28,8 @@ import com.rokuan.calliopecore.sentence.Verb;
 import com.rokuan.calliopecore.sentence.VerbConjugation;
 import com.rokuan.calliopecore.sentence.Word;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
+import com.rokuan.calliopecore.sentence.structure.data.place.PlaceObject;
+import com.rokuan.calliopecore.sentence.structure.data.time.TimeObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +42,8 @@ import java.util.Set;
  * Created by LEBEAU Christophe on 18/07/15.
  */
 public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements SpeechParser {
+    public static final String DATA_SEPARATOR = ";";
+
     private static final Class<?>[] COMMON_CLASSES = {
             Word.class,
             LanguageInfo.class,
@@ -47,7 +53,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             PlacePreposition.class,
             TimePreposition.class
     };
-    String[] COMMON_COLUMN_NAMES = {
+    private static final String[] COMMON_COLUMN_NAMES = {
             Word.WORD_FIELD_NAME,
             LanguageInfo.LANGUAGE_FIELD_NAME,
             CityInfo.CITY_FIELD_NAME,
@@ -56,14 +62,11 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             PlacePreposition.VALUE_FIELD_NAME,
             TimePreposition.VALUE_FIELD_NAME
     };
-
-    Class<?>[] PROFILE_CLASSES = {
-            /*CustomObject.class,
-            CustomPlace.class*/
+    private static final Class<?>[] PROFILE_CLASSES = {
             CustomProfileObject.class,
             CustomProfilePlace.class
     };
-    String[] PROFILE_RELATED_COLUMN_NAMES = {
+    private static final String[] PROFILE_RELATED_COLUMN_NAMES = {
             CustomObject.OBJECT_FIELD_NAME,
             CustomPlace.PLACE_FIELD_NAME
     };
@@ -81,6 +84,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, Profile.class);
+            TableUtils.createTable(connectionSource, Word.class);
             TableUtils.createTable(connectionSource, CityInfo.class);
             TableUtils.createTable(connectionSource, CountryInfo.class);
             TableUtils.createTable(connectionSource, LanguageInfo.class);
@@ -95,6 +99,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             TableUtils.createTable(connectionSource, CustomPlace.class);*/
 
             loadProfiles(connectionSource);
+            loadWords(connectionSource);
             loadCities(connectionSource);
             loadCountries(connectionSource);
             loadLanguages(connectionSource);
@@ -121,42 +126,159 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         profileDao.create(defaultProfile);
     }
 
-    private void loadCities(ConnectionSource connectionSource) throws IOException {
+    private void loadWords(ConnectionSource connectionSource) throws IOException, SQLException {
         AssetManager assets = context.getAssets();
-        InputStream in = assets.open("cities.txt");
+        InputStream in = assets.open("words.txt");
         Scanner sc = new Scanner(in);
+        Dao<Word, Integer> dao = DaoManager.createDao(connectionSource, Word.class);
 
         while(sc.hasNextLine()){
             String line = sc.nextLine();
-            // TODO:
+            String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[1].split(",");
+            Set<Word.WordType> wordTypes = new HashSet<>();
+
+            for(String ty: types){
+                wordTypes.add(Word.WordType.valueOf(ty));
+            }
+
+            dao.create(new Word(fields[0], wordTypes));
         }
 
         in.close();
         sc.close();
     }
 
-    private void loadCountries(ConnectionSource connectionSource){
-        // TODO
+    private void loadCities(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("cities.txt");
+        Scanner sc = new Scanner(in);
+        Dao<CityInfo, Integer> dao = DaoManager.createDao(connectionSource, CityInfo.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new CityInfo(fields[2], Double.parseDouble(fields[0]), Double.parseDouble(fields[1])));
+        }
+
+        in.close();
+        sc.close();
     }
 
-    private void loadLanguages(ConnectionSource connectionSource){
-        // TODO
+    private void loadCountries(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("countries.txt");
+        Scanner sc = new Scanner(in);
+        Dao<CountryInfo, String> dao = DaoManager.createDao(connectionSource, CountryInfo.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new CountryInfo(fields[4], fields[2]));
+        }
+
+        in.close();
+        sc.close();
     }
 
-    private void loadVerbs(ConnectionSource connectionSource){
-        // TODO
+    private void loadLanguages(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("languages.txt");
+        Scanner sc = new Scanner(in);
+        Dao<LanguageInfo, String> dao = DaoManager.createDao(connectionSource, LanguageInfo.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new LanguageInfo(fields[0], fields[1]));
+        }
+
+        in.close();
+        sc.close();
     }
 
-    private void loadConjugations(ConnectionSource connectionSource){
-        // TODO
+    private void loadVerbs(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("verbs.txt");
+        Scanner sc = new Scanner(in);
+        Dao<Verb, String> dao = DaoManager.createDao(connectionSource, Verb.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new Verb(fields[0], Action.VerbAction.valueOf(fields[1]), (Integer.parseInt(fields[3]) == 0)));
+        }
+
+        in.close();
+        sc.close();
     }
 
-    private void loadPlacePrepositions(ConnectionSource connectionSource){
-        // TODO
+    private void loadConjugations(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("conjugations.txt");
+        Scanner sc = new Scanner(in);
+        Dao<VerbConjugation, String> dao = DaoManager.createDao(connectionSource, VerbConjugation.class);
+        Dao<Verb, String> verbDao = DaoManager.createDao(connectionSource, Verb.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+            Verb.Pronoun pronoun = null;
+
+            try{
+                pronoun = Verb.Pronoun.values()[Integer.parseInt(fields[4])];
+            }catch(Exception e){
+
+            }
+
+            dao.create(new VerbConjugation(Verb.ConjugationTense.valueOf(fields[3]),
+                    Verb.Form.valueOf(fields[2]),
+                    pronoun,
+                    fields[1],
+                    verbDao.queryForId(fields[0])
+            ));
+        }
+
+        in.close();
+        sc.close();
     }
 
-    private void loadTimePrepositions(ConnectionSource connectionSource){
-        // TODO
+    private void loadPlacePrepositions(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("place_prepositions.txt");
+        Scanner sc = new Scanner(in);
+        Dao<PlacePreposition, String> dao = DaoManager.createDao(connectionSource, PlacePreposition.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new PlacePreposition(fields[0], PlaceObject.PlaceContext.valueOf(fields[1])));
+        }
+
+        in.close();
+        sc.close();
+    }
+
+    private void loadTimePrepositions(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("time_prepositions.txt");
+        Scanner sc = new Scanner(in);
+        Dao<TimePreposition, String> dao = DaoManager.createDao(connectionSource, TimePreposition.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new TimePreposition(fields[0], TimeObject.DateContext.valueOf(fields[1])));
+        }
+
+        in.close();
+        sc.close();
     }
 
     @Override
@@ -241,6 +363,10 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     @Override
     public InterpretationObject parseSpeech(WordBuffer words) {
         return new Parser().parseInterpretationObject(words);
+    }
+
+    public InterpretationObject parseText(String text){
+        return this.parseSpeech(this.lexSpeech(text));
     }
 
     public Word findWord(String q){
@@ -366,11 +492,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             }
         }
 
-        try {
-            connectionSource.close();
-        } catch (SQLException e) {
-
-        }
         return exists;
     }
 
@@ -387,12 +508,10 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     }
 
     public CustomObject findCustomObject(String q){
-        //return queryFirst(this, CustomObject.class, CustomObject.OBJECT_FIELD_NAME, q);
         return queryFirst(this, CustomProfileObject.class, CustomObject.OBJECT_FIELD_NAME, q);
     }
 
     public CustomPlace findCustomPlace(String q){
-        //return queryFirst(this, CustomPlace.class, CustomPlace.PLACE_FIELD_NAME, q);
         return queryFirst(this, CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, q);
     }
 
@@ -405,6 +524,16 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     }
 
     public VerbConjugation findConjugation(String q){
+        /*VerbConjugation conjugation  = queryFirst(this, VerbConjugation.class, VerbConjugation.VALUE_FIELD_NAME, q);
+
+        try {
+            Dao<Verb, String> verbDao = DaoManager.createDao(this.getConnectionSource(), Verb.class);
+            verbDao.refresh(conjugation.getVerb());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return conjugation;*/
         return queryFirst(this, VerbConjugation.class, VerbConjugation.VALUE_FIELD_NAME, q);
     }
 
@@ -420,12 +549,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            try {
-                connectionSource.close();
-            } catch (SQLException e) {
-
-            }
         }
     }
 }

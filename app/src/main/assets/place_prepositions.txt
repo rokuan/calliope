@@ -1,0 +1,50 @@
+jusqu'à;TO
+jusqu'au;TO
+jusqu'aux;TO
+à côté de;NEAR
+à côté du;NEAR
+à côté des;NEAR
+à proximité de;NEAR
+à proximité du;NEAR
+à proximité des;NEAR
+à;AT
+au;AT
+aux;AT
+dans;IN
+en;IN
+sur;ON
+sous;UNDER
+au dessus de;ABOVE
+au dessus du;ABOVE
+au dessus des;ABOVE
+en dessous de;UNDER
+en dessous du;UNDER
+en dessous des;UNDER
+devant;BEFORE
+derrière;AFTER
+entre;BETWEEN
+vers;TO
+autour de;AROUND
+autour du;AROUND
+autour des;AROUND
+contre;AGAINST
+le long de;ALONG
+le long du;ALONG
+le long des;ALONG
+chez;AT
+en face de;FRONT
+en face du;FRONT
+en face des;FRONT
+à gauche de;LEFT
+à gauche du;LEFT
+à gauche des;LEFT
+à droite de;RIGHT
+à droite du;RIGHT
+à droite des;RIGHT
+en bas de;DOWN
+en bas du;DOWN
+en bas des;DOWN
+en haut de;UP
+en haut du;UP
+en haut des;UP
+parmi;AMONG

@@ -1,0 +1,9 @@
+avant;BEFORE
+après;AFTER
+pendant;DURING
+jusqu'à;UNTIL
+jusqu'au;UNTIL
+depuis;SINCE
+losque;WHEN
+lorsqu;WHEN
+quand;WHEN

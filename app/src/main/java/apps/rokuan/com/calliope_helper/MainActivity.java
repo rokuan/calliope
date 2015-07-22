@@ -16,7 +16,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //new CalliopeSQLiteOpenHelper(this).getReadableDatabase();
-        new CalliopeSQLiteOpenHelper(this).getReadableDatabase();
+        CalliopeSQLiteOpenHelper db = new CalliopeSQLiteOpenHelper(this);
+        db.getReadableDatabase();
+        db.close();
 
         Intent i = new Intent(this, HomeActivity.class);
         this.startActivity(i);

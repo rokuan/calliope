@@ -51,7 +51,7 @@ russe;ru
 serbe;sr
 slovaque;sk
 slovène;sl
-suédoiis;sv
+suédois;sv
 swahili;sw
 tamil;ta
 tamoul;ta
