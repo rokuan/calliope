@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,6 +112,8 @@ public class HomeFragment extends HomeActivity.PlaceholderFragment implements Re
     @Override
     public void onResults(Bundle results) {
         ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+
+        Log.i("HomeFragment", "SpeechResults");
 
         try{
             String result = data.get(0);

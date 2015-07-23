@@ -28,6 +28,8 @@ import com.rokuan.calliopecore.sentence.Verb;
 import com.rokuan.calliopecore.sentence.VerbConjugation;
 import com.rokuan.calliopecore.sentence.Word;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
+import com.rokuan.calliopecore.sentence.structure.data.CountConverter;
+import com.rokuan.calliopecore.sentence.structure.data.DateConverter;
 import com.rokuan.calliopecore.sentence.structure.data.place.PlaceObject;
 import com.rokuan.calliopecore.sentence.structure.data.time.TimeObject;
 
@@ -37,12 +39,15 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by LEBEAU Christophe on 18/07/15.
  */
 public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements SpeechParser {
     public static final String DATA_SEPARATOR = ";";
+    public static final String SPECIAL_ENCODING = "ISO-8859-1";
 
     private static final Class<?>[] COMMON_CLASSES = {
             Word.class,
@@ -203,7 +208,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     private void loadVerbs(ConnectionSource connectionSource) throws IOException, SQLException {
         AssetManager assets = context.getAssets();
         InputStream in = assets.open("verbs.txt");
-        Scanner sc = new Scanner(in);
+        Scanner sc = new Scanner(in, SPECIAL_ENCODING);
         Dao<Verb, String> dao = DaoManager.createDao(connectionSource, Verb.class);
 
         while(sc.hasNextLine()){
@@ -220,13 +225,16 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     private void loadConjugations(ConnectionSource connectionSource) throws IOException, SQLException {
         AssetManager assets = context.getAssets();
         InputStream in = assets.open("conjugations.txt");
-        Scanner sc = new Scanner(in);
+        Scanner sc = new Scanner(in, SPECIAL_ENCODING);
         Dao<VerbConjugation, String> dao = DaoManager.createDao(connectionSource, VerbConjugation.class);
         Dao<Verb, String> verbDao = DaoManager.createDao(connectionSource, Verb.class);
+        String[] fields = null;
+        int currentLine = 1;
 
         while(sc.hasNextLine()){
             String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
+            //String[] fields = line.split(DATA_SEPARATOR);
+            fields = line.split(DATA_SEPARATOR);
             Verb.Pronoun pronoun = null;
 
             try{
@@ -235,12 +243,18 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
             }
 
-            dao.create(new VerbConjugation(Verb.ConjugationTense.valueOf(fields[3]),
-                    Verb.Form.valueOf(fields[2]),
-                    pronoun,
-                    fields[1],
-                    verbDao.queryForId(fields[0])
-            ));
+            try {
+                dao.create(new VerbConjugation(Verb.ConjugationTense.valueOf(fields[3]),
+                        Verb.Form.valueOf(fields[2]),
+                        pronoun,
+                        fields[1],
+                        verbDao.queryForId(fields[0])
+                ));
+            }catch(Exception e){
+                System.out.println("ERROR on line " + currentLine + ": " + fields[1] + "(" + fields[0] + ")");
+            }
+
+            currentLine++;
         }
 
         in.close();
@@ -337,25 +351,30 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 } else {
                     shouldContinue = true;
                 }
-            } else {
-                // Mot inconnu
-                buffer.add(new Word(words[i], Word.WordType.OTHER));
-                continue;
             }
 
             while(shouldContinue && i < words.length){
+                Log.i("CalliopeSQL", "builder=" + wordBuilder.toString());
                 currentWord = findWord(wordBuilder.toString());
 
-                if(i < words.length - 1){
-                    i++;
+                i++;
+
+                if(i < words.length) {
                     wordBuilder.append(' ');
                     wordBuilder.append(words[i]);
                     shouldContinue = wordStartsWith(wordBuilder.toString());
+
+                    if(!shouldContinue){
+                        i--;
+                    }
                 }
             }
 
+            Log.i("CalliopeSQL", "currentWord=" + currentWord);
             buffer.add(currentWord);
         }
+
+        Log.i("CalliopeSQL", "wordBuffer=" + buffer);
 
         return buffer;
     }
@@ -370,6 +389,41 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     }
 
     public Word findWord(String q){
+        // TODO: PROPER_NAME, NUMBER
+        if(q.matches(DateConverter.FULL_TIME_REGEX) || q.matches(DateConverter.HOUR_ONLY_REGEX)){
+            return new Word(q, Word.WordType.TIME);
+        }
+
+        /*if(Character.isDigit(w.charAt(0))){
+            return new Word(Word.WordType.NUMBER, w);
+        }*/
+        /*if(Character.isDigit(q.charAt(0))) {
+            try {
+                return new Word(q, Word.WordType.NUMBER);
+            } catch (Exception e) {
+                Matcher matcher = Pattern.compile("[0-9]+e").matcher(w);
+
+                if (matcher.find()) {
+                    String matchingValue = matcher.group(0);
+                    long longValue = Long.parseLong(matchingValue.substring(0, matchingValue.length() - 1));
+                    return new Word(String.valueOf(longValue), Word.WordType.NUMERICAL_POSITION);
+                }
+            }
+        }*/
+        try{
+            Integer.parseInt(q);
+            return new Word(q, Word.WordType.NUMBER);
+        }catch(Exception e){
+            // TODO: les positions de la forme [0-9]eme
+            Matcher matcher = Pattern.compile("[0-9]+e").matcher(q);
+
+            if (matcher.find()) {
+                String matchingValue = matcher.group(0);
+                long longValue = Long.parseLong(matchingValue.substring(0, matchingValue.length() - 1));
+                return new Word(String.valueOf(longValue), Word.WordType.NUMERICAL_POSITION);
+            }
+        }
+
         Set<Word.WordType> types = new HashSet<>();
         Word result = queryFirst(this, Word.class, Word.WORD_FIELD_NAME, q);
 
@@ -381,6 +435,16 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         PlacePreposition placePreposition = findPlacePreposition(q);
         TimePreposition timePreposition = findTimePreposition(q);
         VerbConjugation conjugation = findConjugation(q);
+
+        if(Character.isUpperCase(q.charAt(0))){
+            if(city == null && country == null) {
+                types.add(Word.WordType.PROPER_NAME);
+            }
+        } else {
+            if(CountConverter.isAPosition(q)){
+                types.add(Word.WordType.NUMERICAL_POSITION);
+            }
+        }
 
         if(language != null){
             types.add(Word.WordType.LANGUAGE);
@@ -450,14 +514,17 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
     private boolean wordStartsWith(String q){
         ConnectionSource connectionSource = this.getConnectionSource();
-
         boolean exists = false;
 
         for(int i=0; i<COMMON_CLASSES.length; i++){
             try {
                 Dao<?, ?> dao = DaoManager.createDao(connectionSource, COMMON_CLASSES[i]);
                 QueryBuilder builder = dao.queryBuilder();
-                exists = (builder.where().like(COMMON_COLUMN_NAMES[i], q + "%").countOf() > 0);
+                long count = builder.where().like(COMMON_COLUMN_NAMES[i], q + "%").countOf();
+                exists = (count > 0);
+
+                Log.i("CalliopeSQL", "For table " + COMMON_CLASSES[i] + ": " + count);
+                Log.i("CalliopeSQL", "For table " + COMMON_CLASSES[i] + ": exists=" + count);
 
                 if(exists){
                     break;
@@ -515,11 +582,11 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return queryFirst(this, CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, q);
     }
 
-    public PlacePreposition findPlacePreposition(String q){
+    public PlacePreposition findPlacePreposition(String q) {
         return queryFirst(this, PlacePreposition.class, PlacePreposition.VALUE_FIELD_NAME, q);
     }
 
-    public TimePreposition findTimePreposition(String q){
+    public TimePreposition findTimePreposition(String q) {
         return queryFirst(this, TimePreposition.class, TimePreposition.VALUE_FIELD_NAME, q);
     }
 
