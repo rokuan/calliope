@@ -14,9 +14,12 @@ public class Profile {
     public static final String PROFILE_PREF_KEY = "profile";
     public static final String ACTIVE_PROFILE_KEY = "active_profile";
 
-    @DatabaseField(id = true)
+    public static final String ID_FIELD_NAME = "profile_id";
+    public static final String PROFILE_FIELD_NAME = "profile_name";
+
+    @DatabaseField(id = true, columnName = ID_FIELD_NAME)
     private String profileId;
-    @DatabaseField
+    @DatabaseField(columnName = PROFILE_FIELD_NAME)
     private String profileName;
     private Bitmap profileIcon;
 

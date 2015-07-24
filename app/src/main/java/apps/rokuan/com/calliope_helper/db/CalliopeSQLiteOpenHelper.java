@@ -42,6 +42,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by LEBEAU Christophe on 18/07/15.
  */
@@ -79,6 +81,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     private static final String DB_NAME = "calliope_helper";
     private static final int DB_VERSION = 1;
     private Context context;
+    private EventBus defaultBus = EventBus.getDefault();
 
     public CalliopeSQLiteOpenHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -103,13 +106,21 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             /*TableUtils.createTable(connectionSource, CustomObject.class);
             TableUtils.createTable(connectionSource, CustomPlace.class);*/
 
+            defaultBus.post(new DatabaseEvent("Profiles"));
             loadProfiles(connectionSource);
+            defaultBus.post(new DatabaseEvent("Mots"));
             loadWords(connectionSource);
+            defaultBus.post(new DatabaseEvent("Villes"));
             loadCities(connectionSource);
+            defaultBus.post(new DatabaseEvent("Pays"));
             loadCountries(connectionSource);
+            defaultBus.post(new DatabaseEvent("Langues"));
             loadLanguages(connectionSource);
+            defaultBus.post(new DatabaseEvent("Verbes"));
             loadVerbs(connectionSource);
+            defaultBus.post(new DatabaseEvent("Conjugaisons"));
             loadConjugations(connectionSource);
+            defaultBus.post(new DatabaseEvent("Autres"));
             loadPlacePrepositions(connectionSource);
             loadTimePrepositions(connectionSource);
         } catch (SQLException e) {
@@ -354,7 +365,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             }
 
             while(shouldContinue && i < words.length){
-                Log.i("CalliopeSQL", "builder=" + wordBuilder.toString());
                 currentWord = findWord(wordBuilder.toString());
 
                 i++;
@@ -370,7 +380,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 }
             }
 
-            Log.i("CalliopeSQL", "currentWord=" + currentWord);
             buffer.add(currentWord);
         }
 
@@ -522,9 +531,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 QueryBuilder builder = dao.queryBuilder();
                 long count = builder.where().like(COMMON_COLUMN_NAMES[i], q + "%").countOf();
                 exists = (count > 0);
-
-                Log.i("CalliopeSQL", "For table " + COMMON_CLASSES[i] + ": " + count);
-                Log.i("CalliopeSQL", "For table " + COMMON_CLASSES[i] + ": exists=" + count);
 
                 if(exists){
                     break;

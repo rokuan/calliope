@@ -12,5 +12,25 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_example">Example action</string>
+    <string-array name="sections">
+        <item>Home</item>
+        <item>Store</item>
+        <item>Profiles</item>
+        <item>Objects</item>
+        <item>Places</item>
+        <item>People</item>
+    </string-array>
+
+    <string-array name="sections_icons">
+        <item>@drawable/ic_home_white_24dp</item>
+        <item>@drawable/ic_shop_white_24dp</item>
+        <item>@drawable/ic_account_box_white_24dp</item>
+        <item>@drawable/ic_memory_white_24dp</item>
+        <item>@drawable/ic_place_white_24dp</item>
+        <item>@drawable/ic_person_white_24dp</item>
+    </string-array>
+
+    <string name="store_section">Store</string>
+    <string name="profiles_section">Profiles</string>
+    <string name="data_section">Data</string>
 </resources>

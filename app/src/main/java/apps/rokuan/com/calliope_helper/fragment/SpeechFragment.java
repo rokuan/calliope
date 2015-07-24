@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 
 import java.util.ArrayList;
 
-import apps.rokuan.com.calliope_helper.HomeActivity;
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import butterknife.Bind;
@@ -25,7 +25,7 @@ import butterknife.OnClick;
 /**
  * Created by LEBEAU Christophe on 17/07/15.
  */
-public class HomeFragment extends HomeActivity.PlaceholderFragment implements RecognitionListener {
+public class SpeechFragment extends PlaceholderFragment implements RecognitionListener {
     private SpeechRecognizer speech;
     private Intent recognizerIntent;
     private CalliopeSQLiteOpenHelper db;
@@ -52,6 +52,9 @@ public class HomeFragment extends HomeActivity.PlaceholderFragment implements Re
     @Override
     public void onResume(){
         super.onResume();
+
+        //getActivity().getSupportActionBar().hide();
+        ((ActionBarActivity)getActivity()).getSupportActionBar().hide();
 
         speech = SpeechRecognizer.createSpeechRecognizer(this.getActivity());
         speech.setRecognitionListener(this);

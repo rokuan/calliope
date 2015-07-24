@@ -1,5 +1,7 @@
 package apps.rokuan.com.calliope_helper;
 
+import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -19,7 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -66,6 +70,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
 
     public NavigationDrawerFragment() {
+
     }
 
     @Override
@@ -105,7 +110,7 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
@@ -113,7 +118,8 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section1),
                         getString(R.string.title_section2),
                         getString(R.string.title_section3),
-                }));
+                }));*/
+        mDrawerListView.setAdapter(new MenuAdapter(getActionBar().getThemedContext()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mainView;
     }
@@ -255,11 +261,6 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -286,5 +287,47 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    public class MenuAdapter extends ArrayAdapter<String> {
+        private int[] drawables;
+        private String[] names;
+        private LayoutInflater inflater;
+
+        public MenuAdapter(Context context) {
+            super(context, R.layout.drawer_menu_item);
+
+            TypedArray array = context.getResources().obtainTypedArray(R.array.sections_icons);
+            drawables = new int[array.length()];
+
+            for(int i=0; i<drawables.length; i++){
+                drawables[i] = array.getResourceId(i, R.drawable.ic_shop_white_24dp);
+            }
+
+            names = context.getResources().getStringArray(R.array.sections);
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount(){
+            return names.length;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            View v = convertView;
+
+            if(v == null){
+                v = inflater.inflate(R.layout.drawer_menu_item, parent, false);
+            }
+
+            ImageView iconView = (ImageView)v.findViewById(R.id.menu_item_icon);
+            TextView nameView = (TextView)v.findViewById(R.id.menu_item_name);
+
+            iconView.setImageResource(drawables[position]);
+            nameView.setText(names[position]);
+
+            return v;
+        }
     }
 }

@@ -1,27 +1,22 @@
 package apps.rokuan.com.calliope_helper;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-import apps.rokuan.com.calliope_helper.fragment.HomeFragment;
+import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
 
-
-public class HomeActivity extends ActionBarActivity
+/**
+ * Created by LEBEAU Christophe on 24/07/15.
+ */
+public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -32,7 +27,9 @@ public class HomeActivity extends ActionBarActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    //private CharSequence mTitle;
+
+    //private String[] mSectionTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +38,13 @@ public class HomeActivity extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        //mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        //mSectionTitles = this.getResources().getStringArray(R.array.sections);
     }
 
     @Override
@@ -59,7 +57,7 @@ public class HomeActivity extends ActionBarActivity
     }
 
     public void onSectionAttached(int number) {
-        switch (number) {
+        /*switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
                 break;
@@ -69,14 +67,25 @@ public class HomeActivity extends ActionBarActivity
             case 3:
                 mTitle = getString(R.string.title_section3);
                 break;
-        }
+        }*/
+
+        /*switch (number){
+            case 1:
+            case 2:
+            case 3:
+                mTitle = mSectionTitles[number - 1];
+                break;
+            default:
+                mTitle = mSectionTitles[]
+                break;
+        }*/
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        //actionBar.setTitle(mTitle);
     }
 
 
@@ -107,58 +116,4 @@ public class HomeActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            /*PlaceholderFragment fragment = new PlaceholderFragment();
-
-            return fragment;*/
-            PlaceholderFragment fragment;
-
-            switch(sectionNumber){
-                case 0:
-                default:
-                    fragment = new HomeFragment();
-                    break;
-            }
-
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-
-        }
-
-        /*@Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            return rootView;
-        }*/
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((HomeActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-    }
-
 }

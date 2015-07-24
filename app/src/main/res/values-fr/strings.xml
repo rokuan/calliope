@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Calliope - Helper</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="title_section1">Accueil</string>
+    <string name="title_section2">Profile Store</string>
+    <string name="title_section3">Profils</string>
+
+    <string name="navigation_drawer_open">Ouvrir le volet de navigation</string>
+    <string name="navigation_drawer_close">Fermer le volet de navigation</string>
+
+    <string-array name="sections">
+        <item>Accueil</item>
+        <item>Store</item>
+        <item>Profils</item>
+        <item>Objets</item>
+        <item>Lieux</item>
+        <item>Personnages</item>
+    </string-array>
+
+    <string name="store_section">Store</string>
+    <string name="profiles_section">Profiles</string>
+    <string name="data_section">Données</string>
+</resources>
