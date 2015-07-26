@@ -30,7 +30,22 @@
         <item>@drawable/ic_person_white_24dp</item>
     </string-array>
 
+    <string name="wifi_address_hint">Address</string>
+    <string name="wifi_port_hint">Port</string>
+    <string name="wifi_password_hint">Internal Password</string>
+    <string name="wifi_disabled">Please enable wifi to continue</string>
+
+    <string name="connection">Connection</string>
+    <string name="save_data">Save</string>
+    <string name="back_message">Please click again to quit</string>
+
     <string name="store_section">Store</string>
     <string name="profiles_section">Profiles</string>
     <string name="data_section">Data</string>
+
+    <string-array name="profile_data_sections">
+        <item>Objects</item>
+        <item>Places</item>
+        <item>People</item>
+    </string-array>
 </resources>

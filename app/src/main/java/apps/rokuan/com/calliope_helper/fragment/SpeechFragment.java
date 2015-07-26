@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,8 +53,7 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
     public void onResume(){
         super.onResume();
 
-        //getActivity().getSupportActionBar().hide();
-        ((ActionBarActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
         speech = SpeechRecognizer.createSpeechRecognizer(this.getActivity());
         speech.setRecognitionListener(this);

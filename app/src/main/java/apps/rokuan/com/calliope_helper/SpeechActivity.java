@@ -3,7 +3,12 @@ package apps.rokuan.com.calliope_helper;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import apps.rokuan.com.calliope_helper.fragment.ConnectionFragment;
 import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
+import apps.rokuan.com.calliope_helper.fragment.ProfileDataFragment;
+import apps.rokuan.com.calliope_helper.fragment.ProfileStoreFragment;
+import apps.rokuan.com.calliope_helper.fragment.ProfilesFragment;
 import apps.rokuan.com.calliope_helper.fragment.SpeechFragment;
 
 
@@ -20,17 +25,14 @@ public class SpeechActivity extends NavigationDrawerActivity {
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if(position == 0){
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderSpeechFragment.newInstance(position + 1))
-                    .addToBackStack(BACK_STACK_NAME)
-                    .commit();
-        } else {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderSpeechFragment.newInstance(position + 1))
-                    .addToBackStack(BACK_STACK_NAME)
-                    .commit();
+        if(position == 0) {
+            fragmentManager.popBackStack();
         }
+
+        fragmentManager.beginTransaction()
+                .add(R.id.container, PlaceholderSpeechFragment.newInstance(position + 1))
+                .addToBackStack(BACK_STACK_NAME)
+                .commit();
     }
 
     @Override
@@ -51,15 +53,28 @@ public class SpeechActivity extends NavigationDrawerActivity {
     public static class PlaceholderSpeechFragment {
         public static PlaceholderFragment newInstance(int sectionNumber){
             PlaceholderFragment fragment;
+            Bundle args = new Bundle();
 
             switch(sectionNumber){
-                case 0:
-                default:
+                case 1:
                     fragment = new SpeechFragment();
+                    break;
+                case 2:
+                    fragment = new ProfileStoreFragment();
+                    break;
+                case 3:
+                    fragment = new ProfilesFragment();
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                default:
+                    args.putInt(ProfileDataFragment.ARG_DATA_INITIAL_TAB, sectionNumber - 4);
+                    fragment = new ProfileDataFragment();
                     break;
             }
 
-            Bundle args = new Bundle();
+            //Bundle args = new Bundle();
             args.putInt(PlaceholderFragment.ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
 

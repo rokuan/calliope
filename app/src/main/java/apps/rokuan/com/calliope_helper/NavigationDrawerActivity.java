@@ -1,12 +1,9 @@
 package apps.rokuan.com.calliope_helper;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +13,7 @@ import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
 /**
  * Created by LEBEAU Christophe on 24/07/15.
  */
-public class NavigationDrawerActivity extends AppCompatActivity
+public abstract class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -28,8 +25,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     //private CharSequence mTitle;
-
-    //private String[] mSectionTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +39,16 @@ public class NavigationDrawerActivity extends AppCompatActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        //mSectionTitles = this.getResources().getStringArray(R.array.sections);
     }
 
-    @Override
+    /*@Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
-    }
+    }*/
 
     public void onSectionAttached(int number) {
         /*switch (number) {
@@ -88,7 +82,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         //actionBar.setTitle(mTitle);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
@@ -115,5 +108,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(mNavigationDrawerFragment.isDrawerOpen()){
+            mNavigationDrawerFragment.close();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -10,6 +10,8 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "profiles")
 public class Profile {
+    public static final String DEFAULT_PROFILE_CODE = "default";
+
     public static final String PROFILE_COLUMN_NAME = "profile_id";
     public static final String PROFILE_PREF_KEY = "profile";
     public static final String ACTIVE_PROFILE_KEY = "active_profile";

@@ -30,8 +30,7 @@ public class PlaceholderFragment extends Fragment {
         switch(sectionNumber){
             case 0:
             default:
-                //fragment = new HomeFragment();
-                fragment = null;
+                fragment = new ConnectionFragment();
                 break;
         }
 

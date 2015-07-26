@@ -42,7 +42,11 @@ public class LoadingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result){
             Intent i = new Intent(activity, ConnectionActivity.class);
-            activity.startActivityForResult(i, 0);
+            //activity.startActivityForResult(i, RESULT_LEAVE_APPLICATION);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            activity.startActivity(i);
+            //activity.finish();
         }
     }
 
@@ -51,7 +55,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getActionBar().hide();
+        getSupportActionBar().hide();
 
         ButterKnife.bind(this);
     }
@@ -106,9 +110,9 @@ public class LoadingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         // TODO: verifier les autres cas de resultats
         this.finish();
-    }
+    }*/
 }

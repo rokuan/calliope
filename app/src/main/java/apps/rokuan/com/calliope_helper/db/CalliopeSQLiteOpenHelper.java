@@ -36,7 +36,9 @@ import com.rokuan.calliopecore.sentence.structure.data.time.TimeObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -136,10 +138,13 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     }
 
     private void loadProfiles(ConnectionSource connectionSource) throws SQLException {
-        Profile defaultProfile = new Profile("_default", "Defaut");
+        Profile defaultProfile = new Profile(Profile.DEFAULT_PROFILE_CODE, "Defaut");
         Dao<Profile, String> profileDao = DaoManager.createDao(connectionSource, Profile.class);
 
         profileDao.create(defaultProfile);
+        context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0).edit()
+                .putString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE)
+                .apply();
     }
 
     private void loadWords(ConnectionSource connectionSource) throws IOException, SQLException {
@@ -239,13 +244,10 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         Scanner sc = new Scanner(in, SPECIAL_ENCODING);
         Dao<VerbConjugation, String> dao = DaoManager.createDao(connectionSource, VerbConjugation.class);
         Dao<Verb, String> verbDao = DaoManager.createDao(connectionSource, Verb.class);
-        String[] fields = null;
-        int currentLine = 1;
 
         while(sc.hasNextLine()){
             String line = sc.nextLine();
-            //String[] fields = line.split(DATA_SEPARATOR);
-            fields = line.split(DATA_SEPARATOR);
+            String[] fields = line.split(DATA_SEPARATOR);
             Verb.Pronoun pronoun = null;
 
             try{
@@ -254,18 +256,12 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
             }
 
-            try {
-                dao.create(new VerbConjugation(Verb.ConjugationTense.valueOf(fields[3]),
-                        Verb.Form.valueOf(fields[2]),
-                        pronoun,
-                        fields[1],
-                        verbDao.queryForId(fields[0])
-                ));
-            }catch(Exception e){
-                System.out.println("ERROR on line " + currentLine + ": " + fields[1] + "(" + fields[0] + ")");
-            }
-
-            currentLine++;
+            dao.create(new VerbConjugation(Verb.ConjugationTense.valueOf(fields[3]),
+                    Verb.Form.valueOf(fields[2]),
+                    pronoun,
+                    fields[1],
+                    verbDao.queryForId(fields[0])
+            ));
         }
 
         in.close();
@@ -305,6 +301,82 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         in.close();
         sc.close();
     }
+
+    public List<CustomProfileObject> queryProfileObjects(String queryString){
+        /*try {
+            Dao<CustomProfileObject, Integer> objectsDao = DaoManager.createDao(this.getConnectionSource(), CustomProfileObject.class);
+            String currentProfile = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
+                    .getString(Profile.ACTIVE_PROFILE_KEY, "default");
+            QueryBuilder builder = objectsDao.queryBuilder();
+            Where where = builder.where();
+
+            where.like(CustomObject.OBJECT_FIELD_NAME, "%" + queryString + "%")
+                    .and()
+                    .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
+            objectsDao.query(where.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
+        return (List<CustomProfileObject>)queryProfileData(CustomProfileObject.class, CustomObject.OBJECT_FIELD_NAME, queryString);
+    }
+
+    private List<?> queryProfileData(Class<?> daoClass, String queryField, String queryValue){
+        try {
+            Dao<?, ?> dataDao = DaoManager.createDao(this.getConnectionSource(), daoClass);
+            String currentProfile = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
+                    .getString(Profile.ACTIVE_PROFILE_KEY, "default");
+            QueryBuilder builder = dataDao.queryBuilder();
+            Where where = builder.where();
+
+            where.like(queryField, "%" + queryValue + "%")
+                    .and()
+                    .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
+            return dataDao.query(where.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList();
+        }
+    }
+
+    public Profile getActiveProfile() throws SQLException {
+        String currentProfileId = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
+                .getString(Profile.ACTIVE_PROFILE_KEY, "default");
+        Dao<Profile, String> profileDao = DaoManager.createDao(this.getConnectionSource(), Profile.class);
+        return profileDao.queryForId(currentProfileId);
+    }
+
+    public boolean addCustomObject(CustomProfileObject object){
+        try {
+            Dao<CustomProfileObject, Integer> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileObject.class);
+            object.setProfile(getActiveProfile());
+            return (dao.create(object) >= 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addCustomPlace(CustomProfilePlace place){
+        try {
+            Dao<CustomProfilePlace, Integer> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePlace.class);
+            place.setProfile(getActiveProfile());
+            return (dao.create(place) >= 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /*private boolean addCustomData(Class<? extends ProfileRelated> dataClass, ProfileRelated profileData) {
+        try {
+            Dao<? extends ProfileRelated, ?> dao = DaoManager.createDao(this.getConnectionSource(), dataClass);
+            profileData.setProfile(getActiveProfile());
+            return (dao.create(profileData) >= 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }*/
 
     @Override
     public WordBuffer lexSpeech(String s) {

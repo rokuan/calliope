@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="accent_color">#123456</color>
+    <!-- <color name="accent_color">#123456</color>
     <color name="primary_color">#689F38</color>
-    <color name="dark_primary_color">#33691E</color>
+    <color name="dark_primary_color">#558B2F</color>
+    <color name="darker_primary_color">#33691E</color>
+    <color name="text_color">#345678</color> -->
+    <color name="accent_color">#123456</color>
+    <color name="primary_color">#0097A7</color>
+    <color name="dark_primary_color">#00838F</color>
+    <color name="darker_primary_color">#006064</color>
     <color name="text_color">#345678</color>
 </resources>

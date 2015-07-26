@@ -19,10 +19,25 @@
         <item>Profils</item>
         <item>Objets</item>
         <item>Lieux</item>
-        <item>Personnages</item>
+        <item>Personnes</item>
     </string-array>
+
+    <string name="wifi_address_hint">Adresse</string>
+    <string name="wifi_port_hint">Port</string>
+    <string name="wifi_password_hint">Mot de passe interne</string>
+    <string name="wifi_disabled">Veuillez activer le wi-fi pour continuer</string>
+
+    <string name="connection">Connexion</string>
+    <string name="save_data">Enregistrer</string>
+    <string name="back_message">Appuyez à nouveau pour quitter</string>
 
     <string name="store_section">Store</string>
     <string name="profiles_section">Profiles</string>
     <string name="data_section">Données</string>
+
+    <string-array name="profile_data_sections">
+        <item>Objets</item>
+        <item>Lieux</item>
+        <item>Personnes</item>
+    </string-array>
 </resources>
