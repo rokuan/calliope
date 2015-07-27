@@ -111,8 +111,8 @@ public class SpeechActivity extends NavigationDrawerActivity {
                 case 5:
                 case 6:
                 default:
-                    args.putInt(ProfileDataFragment.ARG_DATA_INITIAL_TAB, sectionNumber - 4);
                     fragment = new ProfileDataFragment();
+                    args.putInt(ProfileDataFragment.ARG_DATA_INITIAL_TAB, sectionNumber - 4);
                     break;
             }
 

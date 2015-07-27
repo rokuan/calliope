@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#CCCCCC"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
+        android:background="#FFFFFF"
+        android:layout_margin="8dp"
         android:padding="@dimen/form_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <EditText
             android:id="@+id/object_form_text"
+            android:hint="@string/object_text_hint"
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/text_layout2"
+            android:layout_below="@+id/text_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <EditText
             android:id="@+id/object_form_code"
+            android:hint="@string/object_code_hint"
             android:singleLine="true"
-            android:layout_below="@+id/object_form_text"
-            android:layout_marginTop="@dimen/form_padding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
         <Button
             android:id="@+id/object_form_save"
             android:textAllCaps="true"
             android:text="@string/save_data"
-            android:layout_below="@+id/object_form_code"
+            android:layout_below="@+id/text_layout2"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

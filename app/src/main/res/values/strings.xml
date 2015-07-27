@@ -30,6 +30,9 @@
         <item>@drawable/ic_person_white_24dp</item>
     </string-array>
 
+    <string name="object_text_hint">Text</string>
+    <string name="object_code_hint">Code</string>
+
     <string name="wifi_address_hint">Address</string>
     <string name="wifi_port_hint">Port</string>
     <string name="wifi_password_hint">Internal Password</string>

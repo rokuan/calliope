@@ -22,6 +22,9 @@
         <item>Personnes</item>
     </string-array>
 
+    <string name="object_text_hint">Texte</string>
+    <string name="object_code_hint">Code</string>
+
     <string name="wifi_address_hint">Adresse</string>
     <string name="wifi_port_hint">Port</string>
     <string name="wifi_password_hint">Mot de passe interne</string>

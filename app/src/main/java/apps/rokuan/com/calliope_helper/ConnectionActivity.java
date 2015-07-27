@@ -1,8 +1,12 @@
 package apps.rokuan.com.calliope_helper;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
+
+import java.util.List;
 
 import apps.rokuan.com.calliope_helper.fragment.ConnectionFragment;
 import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
@@ -20,20 +24,17 @@ public class ConnectionActivity extends NavigationDrawerActivity {
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragmentToAdd = PlaceholderConnectionFragment.newInstance(position + 1);
 
         if(position == 0) {
-            fragmentManager.popBackStack();
-        }
-
-        if(position >= NavigationDrawerFragment.OBJECTS_SECTION && position == currentSelectedPosition){
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderConnectionFragment.newInstance(position + 1))
-                    .addToBackStack(BACK_STACK_NAME)
+                    .replace(R.id.container, fragmentToAdd)
+                    .addToBackStack(null)
                     .commit();
         } else {
             fragmentManager.beginTransaction()
-                    .add(R.id.container, PlaceholderConnectionFragment.newInstance(position + 1))
-                    .addToBackStack(BACK_STACK_NAME)
+                    .add(R.id.container, fragmentToAdd)
+                    .addToBackStack(null)
                     .commit();
         }
 

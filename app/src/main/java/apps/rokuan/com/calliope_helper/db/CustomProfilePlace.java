@@ -9,7 +9,7 @@ import com.rokuan.calliopecore.sentence.CustomPlace;
  */
 @DatabaseTable(tableName = "custom_places")
 public class CustomProfilePlace extends CustomPlace implements ProfileRelated {
-    @DatabaseField(columnName = Profile.PROFILE_COLUMN_NAME, foreign = true)
+    @DatabaseField(columnName = Profile.PROFILE_COLUMN_NAME, foreign = true, index = true)
     private Profile profile;
 
     @Override

@@ -1,5 +1,6 @@
 package apps.rokuan.com.calliope_helper.db;
 
+import com.google.gson.annotations.Expose;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.rokuan.calliopecore.sentence.CustomObject;
@@ -9,7 +10,7 @@ import com.rokuan.calliopecore.sentence.CustomObject;
  */
 @DatabaseTable(tableName = "custom_objects")
 public class CustomProfileObject extends CustomObject implements ProfileRelated {
-    @DatabaseField(columnName = Profile.PROFILE_COLUMN_NAME, foreign = true)
+    @DatabaseField(columnName = Profile.PROFILE_COLUMN_NAME, foreign = true, index = true)
     private Profile profile;
 
     public CustomProfileObject(){

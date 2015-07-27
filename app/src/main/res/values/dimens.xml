@@ -9,4 +9,5 @@
     <dimen name="drawer_profile_padding">8dp</dimen>
     <dimen name="form_padding">16dp</dimen>
     <dimen name="form_input_top_margin">8dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
 </resources>

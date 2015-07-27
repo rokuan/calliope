@@ -27,7 +27,7 @@ public class ConnectionFragment extends PlaceholderFragment {
         View v = inflater.inflate(R.layout.fragment_connection, container, false);
 
         viewPager = (ViewPager)v.findViewById(R.id.pager);
-        viewPager.setAdapter(new ConnectionPagerAdapter(this.getActivity().getSupportFragmentManager()));
+        viewPager.setAdapter(new ConnectionPagerAdapter(this.getChildFragmentManager()));
 
         return v;
     }
