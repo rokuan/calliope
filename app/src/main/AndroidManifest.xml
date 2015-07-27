@@ -29,6 +29,7 @@
             android:name=".SpeechActivity"
             android:label="@string/title_activity_home" >
         </activity>
-    </application>
 
+        <service android:name=".service.ConnectionService" />
+    </application>
 </manifest>

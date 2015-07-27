@@ -33,4 +33,12 @@ public class Profile {
         profileId = code;
         profileName = name;
     }
+
+    public String getName(){
+        return profileName;
+    }
+
+    public String getIdentifier(){
+        return profileId;
+    }
 }

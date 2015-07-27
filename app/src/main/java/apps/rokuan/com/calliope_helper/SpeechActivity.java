@@ -1,7 +1,17 @@
 package apps.rokuan.com.calliope_helper;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import apps.rokuan.com.calliope_helper.fragment.ConnectionFragment;
@@ -10,16 +20,11 @@ import apps.rokuan.com.calliope_helper.fragment.ProfileDataFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileStoreFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfilesFragment;
 import apps.rokuan.com.calliope_helper.fragment.SpeechFragment;
+import apps.rokuan.com.calliope_helper.service.ConnectionService;
 
 
 public class SpeechActivity extends NavigationDrawerActivity {
     private static final String BACK_STACK_NAME = "speechBackStack";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -48,6 +53,43 @@ public class SpeechActivity extends NavigationDrawerActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(isDrawerOpen()){
+            closeDrawer();
+        } else if(getSupportFragmentManager().getBackStackEntryCount() == 1) {
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you want to exit?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    /*@Override
+    protected void onResume(){
+        super.onResume();
+    }*/
+
+    /*@Override
+    protected void onPause(){
+        super.onPause();
+        this.unbindService(serviceConnection);
+    }*/
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        this.stopService(new Intent(this.getApplicationContext(), ConnectionService.class));
     }
 
     public static class PlaceholderSpeechFragment {

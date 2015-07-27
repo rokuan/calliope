@@ -24,7 +24,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.sql.SQLException;
+
+import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
+import apps.rokuan.com.calliope_helper.db.Profile;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -54,16 +60,20 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private static final int HOME_SECTION = 0;
-    private static final int STORE_SECTION = 1;
-    private static final int PROFILES_SECTION = 2;
-    private static final int PEOPLE_SECTION = 3;
-    private static final int PLACES_SECTION = 4;
-    private static final int OBJECTS_SECTION = 5;
+    public static final int HOME_SECTION = 0;
+    public static final int STORE_SECTION = 1;
+    public static final int PROFILES_SECTION = 2;
+    public static final int OBJECTS_SECTION = 3;
+    public static final int PLACES_SECTION = 4;
+    public static final int PEOPLE_SECTION = 5;
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerListView;
+    //private ListView mDrawerListView;
     private View mFragmentContainerView;
+
+    @Bind(R.id.menu_list) protected ListView mDrawerListView;
+    @Bind(R.id.profile_name) protected TextView profileNameView;
+    @Bind(R.id.profile_code) protected TextView profileCodeView;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -103,7 +113,10 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View mainView = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView = (ListView) mainView.findViewById(R.id.menu_list);
+
+        ButterKnife.bind(this, mainView);
+
+        //mDrawerListView = (ListView) mainView.findViewById(R.id.menu_list);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -164,6 +177,17 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
+
+                CalliopeSQLiteOpenHelper db = new CalliopeSQLiteOpenHelper(getActivity());
+                try {
+                    Profile currentProfile = db.getActiveProfile();
+                    profileNameView.setText(currentProfile.getName());
+                    profileNameView.setText(currentProfile.getIdentifier());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                db.close();
+
 
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing

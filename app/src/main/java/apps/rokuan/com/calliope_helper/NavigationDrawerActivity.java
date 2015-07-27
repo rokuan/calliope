@@ -1,7 +1,6 @@
 package apps.rokuan.com.calliope_helper;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -113,9 +112,17 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
     @Override
     public void onBackPressed(){
         if(mNavigationDrawerFragment.isDrawerOpen()){
-            mNavigationDrawerFragment.close();
+            closeDrawer();
         } else {
             super.onBackPressed();
         }
+    }
+
+    protected boolean isDrawerOpen(){
+        return mNavigationDrawerFragment.isDrawerOpen();
+    }
+
+    protected void closeDrawer(){
+        mNavigationDrawerFragment.close();
     }
 }

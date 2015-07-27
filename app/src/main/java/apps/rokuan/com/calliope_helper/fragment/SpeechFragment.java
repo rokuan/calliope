@@ -1,7 +1,13 @@
 package apps.rokuan.com.calliope_helper.fragment;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -12,12 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 
 import java.util.ArrayList;
 
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
+import apps.rokuan.com.calliope_helper.service.ConnectionService;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,6 +37,22 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
     private SpeechRecognizer speech;
     private Intent recognizerIntent;
     private CalliopeSQLiteOpenHelper db;
+
+    private boolean bound = false;
+    private Messenger serviceMessenger;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            serviceMessenger = new Messenger(service);
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            serviceMessenger = null;
+            bound = false;
+        }
+    };
 
     @Bind(R.id.recognized_text) protected TextView resultText;
     @Bind(R.id.object_json) protected TextView jsonText;
@@ -53,17 +77,22 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
     public void onResume(){
         super.onResume();
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        //((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
         speech = SpeechRecognizer.createSpeechRecognizer(this.getActivity());
         speech.setRecognitionListener(this);
 
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
+
+        Intent serviceIntent = new Intent(this.getActivity().getApplicationContext(), ConnectionService.class);
+        this.getActivity().bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     public void onPause(){
         super.onPause();
+
+        this.getActivity().unbindService(serviceConnection);
 
         if(speech != null){
             speech.destroy();
@@ -125,7 +154,11 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
             resultText.setText(Character.toUpperCase(result.charAt(0)) + rightPart);
 
             if(object != null) {
-                jsonText.setText(InterpretationObject.toJSON(object));
+                String json = InterpretationObject.toJSON(object);
+                jsonText.setText(json);
+
+                Message jsonMessage = Message.obtain(null, ConnectionService.JSON_MESSAGE, json);
+                serviceMessenger.send(jsonMessage);
             } else {
                 jsonText.setText("ERROR");
             }

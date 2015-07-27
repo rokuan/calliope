@@ -1,10 +1,8 @@
 package apps.rokuan.com.calliope_helper;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import apps.rokuan.com.calliope_helper.fragment.ConnectionFragment;
 import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
@@ -17,6 +15,7 @@ import apps.rokuan.com.calliope_helper.fragment.ProfilesFragment;
  */
 public class ConnectionActivity extends NavigationDrawerActivity {
     private static final String BACK_STACK_NAME = "connectionBackStack";
+    private int currentSelectedPosition = 0;
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -26,10 +25,19 @@ public class ConnectionActivity extends NavigationDrawerActivity {
             fragmentManager.popBackStack();
         }
 
-        fragmentManager.beginTransaction()
-                .add(R.id.container, PlaceholderConnectionFragment.newInstance(position + 1))
-                .addToBackStack(BACK_STACK_NAME)
-                .commit();
+        if(position >= NavigationDrawerFragment.OBJECTS_SECTION && position == currentSelectedPosition){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, PlaceholderConnectionFragment.newInstance(position + 1))
+                    .addToBackStack(BACK_STACK_NAME)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .add(R.id.container, PlaceholderConnectionFragment.newInstance(position + 1))
+                    .addToBackStack(BACK_STACK_NAME)
+                    .commit();
+        }
+
+        currentSelectedPosition = position;
     }
 
     @Override
