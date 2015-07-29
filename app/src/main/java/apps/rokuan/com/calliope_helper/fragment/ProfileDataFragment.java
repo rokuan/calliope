@@ -21,6 +21,7 @@ public class ProfileDataFragment extends PlaceholderFragment {
     public static final int OBJECTS_TAB = 0;
     public static final int PLACES_TAB = 1;
     public static final int PEOPLE_TAB = 2;
+    public static final int MODES_TAB = 3;
 
     public static final String ARG_DATA_INITIAL_TAB = "initial_tab";
 
@@ -33,16 +34,6 @@ public class ProfileDataFragment extends PlaceholderFragment {
 
         pagerAdapter = new ProfileDataPagerAdapter(this.getChildFragmentManager(), this.getActivity());
         mViewPager = (ViewPager) mainView.findViewById(R.id.pager);
-        /*mViewPager.setOnPageChangeListener(
-                new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        // When swiping between pages, select the
-                        // corresponding tab.
-                        //actionBar.setSelectedNavigationItem(position);
-                    }
-                }
-        );*/
         mViewPager.setAdapter(pagerAdapter);
 
         Bundle args = this.getArguments();
@@ -71,21 +62,19 @@ public class ProfileDataFragment extends PlaceholderFragment {
         public Fragment getItem(int position) {
             Fragment fragment;
 
-            Log.i("ProfileDataAdapter", "getItem");
-
             switch(position){
                 case OBJECTS_TAB:
                     fragment = new ObjectsFragment();
-                    Log.i("ProfileDataAdapter", "objects tab");
                     break;
                 case PLACES_TAB:
                     fragment = new PlacesFragment();
-                    Log.i("ProfileDataAdapter", "places tab");
                     break;
                 case PEOPLE_TAB:
-                default:
                     fragment = new PeopleFragment();
-                    Log.i("ProfileDataAdapter", "people tab");
+                    break;
+                case MODES_TAB:
+                default:
+                    fragment = new ModesFragment();
                     break;
             }
 

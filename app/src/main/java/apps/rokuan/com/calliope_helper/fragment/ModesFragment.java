@@ -3,7 +3,6 @@ package apps.rokuan.com.calliope_helper.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,51 +16,51 @@ import java.util.List;
 
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
-import apps.rokuan.com.calliope_helper.db.CustomProfilePlace;
+import apps.rokuan.com.calliope_helper.db.CustomProfileMode;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by LEBEAU Christophe on 17/07/15.
+ * Created by LEBEAU Christophe on 29/07/15.
  */
-public class PlacesFragment extends Fragment {
+public class ModesFragment extends Fragment {
     private CalliopeSQLiteOpenHelper db;
-    private ProfilePlaceAdapter adapter;
+    private ProfileModeAdapter adapter;
 
-    @Bind(R.id.place_form_name) protected EditText placeNameView;
-    @Bind(R.id.place_form_code) protected EditText placeCodeView;
-    @Bind(R.id.fragment_data_places_list) protected ListView placesList;
+    @Bind(R.id.mode_form_text) protected EditText modeValueView;
+    @Bind(R.id.mode_form_code) protected EditText modeCodeView;
+    @Bind(R.id.fragment_data_modes_list) protected ListView modesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
-        View v = inflater.inflate(R.layout.fragment_data_places, parent, false);
+        View v = inflater.inflate(R.layout.fragment_data_modes, parent, false);
         ButterKnife.bind(this, v);
         return v;
     }
 
-    @OnClick(R.id.place_form_save)
-    public void savePlace(){
-        String placeName = placeNameView.getText().toString();
-        String placeCode = placeCodeView.getText().toString();
+    @OnClick(R.id.mode_form_save)
+    public void saveMode(){
+        String modeValue = modeValueView.getText().toString();
+        String modeCode = modeCodeView.getText().toString();
 
-        if(placeName.isEmpty()){
-            Toast.makeText(this.getActivity(), "Champ NOM obligatoire", Toast.LENGTH_SHORT).show();
+        if(modeValue.isEmpty()){
+            Toast.makeText(this.getActivity(), "Champ VALEUR obligatoire", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(placeCode.isEmpty()){
+        if(modeCode.isEmpty()){
             Toast.makeText(this.getActivity(), "Champ CODE obligatoire", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        CustomProfilePlace place = new CustomProfilePlace(placeName, placeCode);
+        CustomProfileMode mode = new CustomProfileMode(modeValue, modeCode);
 
-        if(db.addCustomPlace(place)){
+        if(db.addCustomMode(mode)){
             // TODO: afficher un message de reussite
-            placeNameView.getText().clear();
-            placeCodeView.getText().clear();
-            adapter.add(place);
+            modeValueView.getText().clear();
+            modeCodeView.getText().clear();
+            adapter.add(mode);
             adapter.notifyDataSetChanged();
         } else {
             // TODO; afficher un message d'erreur
@@ -72,8 +71,8 @@ public class PlacesFragment extends Fragment {
     public void onResume(){
         super.onResume();
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
-        adapter = new ProfilePlaceAdapter(this.getActivity(), db.queryProfilePlaces(""));
-        placesList.setAdapter(adapter);
+        adapter = new ProfileModeAdapter(this.getActivity(), db.queryProfileModes(""));
+        modesList.setAdapter(adapter);
     }
 
     @Override
@@ -83,10 +82,10 @@ public class PlacesFragment extends Fragment {
         db = null;
     }
 
-    class ProfilePlaceAdapter extends ArrayAdapter<CustomProfilePlace> {
+    class ProfileModeAdapter extends ArrayAdapter<CustomProfileMode> {
         private LayoutInflater inflater;
 
-        public ProfilePlaceAdapter(Context context, List<CustomProfilePlace> objects) {
+        public ProfileModeAdapter(Context context, List<CustomProfileMode> objects) {
             super(context, R.layout.profile_object_item, objects);
             inflater = LayoutInflater.from(context);
         }
@@ -94,17 +93,17 @@ public class PlacesFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = convertView;
-            CustomProfilePlace place = this.getItem(position);
+            CustomProfileMode mode = this.getItem(position);
 
             if(v == null){
                 v = inflater.inflate(R.layout.profile_object_item, parent, false);
             }
 
-            TextView objectValue = (TextView)v.findViewById(R.id.profile_object_item_value);
-            TextView objectCode = (TextView)v.findViewById(R.id.profile_object_item_code);
+            TextView modeValue = (TextView)v.findViewById(R.id.profile_object_item_value);
+            TextView modeCode = (TextView)v.findViewById(R.id.profile_object_item_code);
 
-            objectValue.setText(place.getName());
-            objectCode.setText(place.getCode());
+            modeValue.setText(mode.getContent());
+            modeCode.setText(mode.getCode());
 
             return v;
         }

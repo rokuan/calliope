@@ -18,7 +18,7 @@ import apps.rokuan.com.calliope_helper.fragment.ProfilesFragment;
  * Created by LEBEAU Christophe on 24/07/15.
  */
 public class ConnectionActivity extends NavigationDrawerActivity {
-    private static final String BACK_STACK_NAME = "connectionBackStack";
+    //private static final String BACK_STACK_NAME = "connectionBackStack";
     private int currentSelectedPosition = 0;
 
     @Override
@@ -74,6 +74,7 @@ public class ConnectionActivity extends NavigationDrawerActivity {
                 case 4:
                 case 5:
                 case 6:
+                case 7:
                 default:
                     args.putInt(ProfileDataFragment.ARG_DATA_INITIAL_TAB, sectionNumber - 4);
                     fragment = new ProfileDataFragment();

@@ -74,7 +74,6 @@ public class ObjectsFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        Log.i("ObjectsFragment", "resume");
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
         adapter = new ProfileObjectAdapter(this.getActivity(), db.queryProfileObjects(""));
         objectsList.setAdapter(adapter);

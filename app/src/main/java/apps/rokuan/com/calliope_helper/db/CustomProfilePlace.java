@@ -12,6 +12,14 @@ public class CustomProfilePlace extends CustomPlace implements ProfileRelated {
     @DatabaseField(columnName = Profile.PROFILE_COLUMN_NAME, foreign = true, index = true)
     private Profile profile;
 
+    public CustomProfilePlace(){
+
+    }
+
+    public CustomProfilePlace(String name, String code){
+        super(name, code);
+    }
+
     @Override
     public void setProfile(Profile p){
         profile = p;

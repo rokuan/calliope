@@ -19,6 +19,7 @@
         <item>Objects</item>
         <item>Places</item>
         <item>People</item>
+        <item>Modes</item>
     </string-array>
 
     <string-array name="sections_icons">
@@ -28,10 +29,16 @@
         <item>@drawable/ic_memory_white_24dp</item>
         <item>@drawable/ic_place_white_24dp</item>
         <item>@drawable/ic_person_white_24dp</item>
+        <item>@drawable/ic_settings_applications_white_24dp</item>
     </string-array>
 
-    <string name="object_text_hint">Text</string>
-    <string name="object_code_hint">Code</string>
+    <string name="exit_activity">Are you sure you want to disconnect ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="text_field_hint">Text</string>
+    <string name="code_field_hint">Code</string>
+    <string name="name_field_hint">Name</string>
 
     <string name="wifi_address_hint">Address</string>
     <string name="wifi_port_hint">Port</string>
@@ -50,5 +57,6 @@
         <item>Objects</item>
         <item>Places</item>
         <item>People</item>
+        <item>Modes</item>
     </string-array>
 </resources>

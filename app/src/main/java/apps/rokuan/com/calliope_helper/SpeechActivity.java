@@ -1,20 +1,13 @@
 package apps.rokuan.com.calliope_helper;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
-import apps.rokuan.com.calliope_helper.fragment.ConnectionFragment;
 import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileDataFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileStoreFragment;
@@ -24,20 +17,24 @@ import apps.rokuan.com.calliope_helper.service.ConnectionService;
 
 
 public class SpeechActivity extends NavigationDrawerActivity {
-    private static final String BACK_STACK_NAME = "speechBackStack";
+    //private static final String BACK_STACK_NAME = "speechBackStack";
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragmentToAdd = PlaceholderSpeechFragment.newInstance(position + 1);
 
         if(position == 0) {
-            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, fragmentToAdd)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .add(R.id.container, fragmentToAdd)
+                    .addToBackStack(null)
+                    .commit();
         }
-
-        fragmentManager.beginTransaction()
-                .add(R.id.container, PlaceholderSpeechFragment.newInstance(position + 1))
-                .addToBackStack(BACK_STACK_NAME)
-                .commit();
     }
 
     @Override
@@ -61,30 +58,19 @@ public class SpeechActivity extends NavigationDrawerActivity {
             closeDrawer();
         } else if(getSupportFragmentManager().getBackStackEntryCount() == 1) {
             new AlertDialog.Builder(this)
-                    .setMessage("Are you sure you want to exit?")
+                    .setMessage(this.getString(R.string.exit_activity))
                     .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             finish();
                         }
                     })
-                    .setNegativeButton("No", null)
+                    .setNegativeButton(R.string.no, null)
                     .show();
         } else {
             super.onBackPressed();
         }
     }
-
-    /*@Override
-    protected void onResume(){
-        super.onResume();
-    }*/
-
-    /*@Override
-    protected void onPause(){
-        super.onPause();
-        this.unbindService(serviceConnection);
-    }*/
 
     @Override
     protected void onDestroy(){
@@ -110,6 +96,7 @@ public class SpeechActivity extends NavigationDrawerActivity {
                 case 4:
                 case 5:
                 case 6:
+                case 7:
                 default:
                     fragment = new ProfileDataFragment();
                     args.putInt(ProfileDataFragment.ARG_DATA_INITIAL_TAB, sectionNumber - 4);

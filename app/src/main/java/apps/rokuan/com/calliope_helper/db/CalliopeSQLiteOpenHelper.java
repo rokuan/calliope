@@ -19,19 +19,25 @@ import com.rokuan.calliopecore.parser.WordBuffer;
 import com.rokuan.calliopecore.sentence.Action;
 import com.rokuan.calliopecore.sentence.CityInfo;
 import com.rokuan.calliopecore.sentence.CountryInfo;
+import com.rokuan.calliopecore.sentence.CustomMode;
 import com.rokuan.calliopecore.sentence.CustomObject;
+import com.rokuan.calliopecore.sentence.CustomPerson;
 import com.rokuan.calliopecore.sentence.CustomPlace;
 import com.rokuan.calliopecore.sentence.LanguageInfo;
 import com.rokuan.calliopecore.sentence.PlacePreposition;
+import com.rokuan.calliopecore.sentence.PurposePreposition;
 import com.rokuan.calliopecore.sentence.TimePreposition;
 import com.rokuan.calliopecore.sentence.Verb;
 import com.rokuan.calliopecore.sentence.VerbConjugation;
+import com.rokuan.calliopecore.sentence.WayPreposition;
 import com.rokuan.calliopecore.sentence.Word;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 import com.rokuan.calliopecore.sentence.structure.data.CountConverter;
 import com.rokuan.calliopecore.sentence.structure.data.DateConverter;
-import com.rokuan.calliopecore.sentence.structure.data.place.PlaceObject;
-import com.rokuan.calliopecore.sentence.structure.data.time.TimeObject;
+import com.rokuan.calliopecore.sentence.structure.data.place.PlaceAdverbial;
+import com.rokuan.calliopecore.sentence.structure.data.purpose.PurposeAdverbial;
+import com.rokuan.calliopecore.sentence.structure.data.time.TimeAdverbial;
+import com.rokuan.calliopecore.sentence.structure.way.WayAdverbial;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,11 +79,15 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     };
     private static final Class<?>[] PROFILE_CLASSES = {
             CustomProfileObject.class,
-            CustomProfilePlace.class
+            CustomProfilePlace.class,
+            CustomProfilePerson.class,
+            CustomProfileMode.class
     };
     private static final String[] PROFILE_RELATED_COLUMN_NAMES = {
             CustomObject.OBJECT_FIELD_NAME,
-            CustomPlace.PLACE_FIELD_NAME
+            CustomPlace.PLACE_FIELD_NAME,
+            CustomPerson.PERSON_FIELD_NAME,
+            CustomMode.MODE_FIELD_NAME
     };
 
     private static final String DB_NAME = "calliope_helper";
@@ -103,10 +113,12 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             TableUtils.createTable(connectionSource, VerbConjugation.class);
             TableUtils.createTable(connectionSource, PlacePreposition.class);
             TableUtils.createTable(connectionSource, TimePreposition.class);
+            TableUtils.createTable(connectionSource, WayPreposition.class);
+            TableUtils.createTable(connectionSource, PurposePreposition.class);
             TableUtils.createTable(connectionSource, CustomProfileObject.class);
             TableUtils.createTable(connectionSource, CustomProfilePlace.class);
-            /*TableUtils.createTable(connectionSource, CustomObject.class);
-            TableUtils.createTable(connectionSource, CustomPlace.class);*/
+            TableUtils.createTable(connectionSource, CustomProfilePerson.class);
+            TableUtils.createTable(connectionSource, CustomProfileMode.class);
 
             defaultBus.post(new DatabaseEvent("Profiles"));
             loadProfiles(connectionSource);
@@ -125,6 +137,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             defaultBus.post(new DatabaseEvent("Autres"));
             loadPlacePrepositions(connectionSource);
             loadTimePrepositions(connectionSource);
+            loadWayPrepositions(connectionSource);
+            loadPurposePrepositions(connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -278,7 +292,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
 
-            dao.create(new PlacePreposition(fields[0], PlaceObject.PlaceContext.valueOf(fields[1])));
+            dao.create(new PlacePreposition(fields[0], PlaceAdverbial.PlaceContext.valueOf(fields[1])));
         }
 
         in.close();
@@ -295,7 +309,41 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
 
-            dao.create(new TimePreposition(fields[0], TimeObject.DateContext.valueOf(fields[1])));
+            dao.create(new TimePreposition(fields[0], TimeAdverbial.DateContext.valueOf(fields[1])));
+        }
+
+        in.close();
+        sc.close();
+    }
+
+    private void loadWayPrepositions(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("way_prepositions.txt");
+        Scanner sc = new Scanner(in);
+        Dao<WayPreposition, String> dao = DaoManager.createDao(connectionSource, WayPreposition.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new WayPreposition(fields[0], WayAdverbial.WayContext.valueOf(fields[1])));
+        }
+
+        in.close();
+        sc.close();
+    }
+
+    private void loadPurposePrepositions(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("purpose_prepositions.txt");
+        Scanner sc = new Scanner(in);
+        Dao<PurposePreposition, String> dao = DaoManager.createDao(connectionSource, PurposePreposition.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new PurposePreposition(fields[0], PurposeAdverbial.PurposeContext.valueOf(fields[1])));
         }
 
         in.close();
@@ -303,28 +351,26 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     }
 
     public List<CustomProfileObject> queryProfileObjects(String queryString){
-        /*try {
-            Dao<CustomProfileObject, Integer> objectsDao = DaoManager.createDao(this.getConnectionSource(), CustomProfileObject.class);
-            String currentProfile = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
-                    .getString(Profile.ACTIVE_PROFILE_KEY, "default");
-            QueryBuilder builder = objectsDao.queryBuilder();
-            Where where = builder.where();
-
-            where.like(CustomObject.OBJECT_FIELD_NAME, "%" + queryString + "%")
-                    .and()
-                    .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
-            objectsDao.query(where.prepare());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
         return (List<CustomProfileObject>)queryProfileData(CustomProfileObject.class, CustomObject.OBJECT_FIELD_NAME, queryString);
+    }
+
+    public List<CustomProfilePlace> queryProfilePlaces(String queryString){
+        return (List<CustomProfilePlace>)queryProfileData(CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, queryString);
+    }
+
+    public List<CustomProfilePerson> queryProfilePeople(String queryString){
+        return (List<CustomProfilePerson>)queryProfileData(CustomProfilePerson.class, CustomPerson.PERSON_FIELD_NAME, queryString);
+    }
+
+    public List<CustomProfileMode> queryProfileModes(String queryString){
+        return (List<CustomProfileMode>)queryProfileData(CustomProfileMode.class, CustomMode.MODE_FIELD_NAME, queryString);
     }
 
     private List<?> queryProfileData(Class<?> daoClass, String queryField, String queryValue){
         try {
             Dao<?, ?> dataDao = DaoManager.createDao(this.getConnectionSource(), daoClass);
             String currentProfile = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
-                    .getString(Profile.ACTIVE_PROFILE_KEY, "default");
+                    .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
             QueryBuilder builder = dataDao.queryBuilder();
             Where where = builder.where();
 
@@ -340,14 +386,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
     public Profile getActiveProfile() throws SQLException {
         String currentProfileId = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
-                .getString(Profile.ACTIVE_PROFILE_KEY, "default");
+                .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
         Dao<Profile, String> profileDao = DaoManager.createDao(this.getConnectionSource(), Profile.class);
         return profileDao.queryForId(currentProfileId);
     }
 
     public boolean addCustomObject(CustomProfileObject object){
         try {
-            Dao<CustomProfileObject, Integer> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileObject.class);
+            Dao<CustomProfileObject, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileObject.class);
             object.setProfile(getActiveProfile());
             return (dao.create(object) >= 0);
         } catch (SQLException e) {
@@ -358,9 +404,31 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
     public boolean addCustomPlace(CustomProfilePlace place){
         try {
-            Dao<CustomProfilePlace, Integer> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePlace.class);
+            Dao<CustomProfilePlace, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePlace.class);
             place.setProfile(getActiveProfile());
             return (dao.create(place) >= 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addCustomPerson(CustomProfilePerson person){
+        try {
+            Dao<CustomProfilePerson, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePerson.class);
+            person.setProfile(getActiveProfile());
+            return (dao.create(person) >= 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addCustomMode(CustomProfileMode mode){
+        try {
+            Dao<CustomProfileMode, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileMode.class);
+            mode.setProfile(getActiveProfile());
+            return (dao.create(mode) >= 0);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -515,6 +583,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         CustomPlace place = findCustomPlace(q);
         PlacePreposition placePreposition = findPlacePreposition(q);
         TimePreposition timePreposition = findTimePreposition(q);
+        WayPreposition wayPreposition = findWayPreposition(q);
+        PurposePreposition purposePreposition = findPurposePreposition(q);
         VerbConjugation conjugation = findConjugation(q);
 
         if(Character.isUpperCase(q.charAt(0))){
@@ -555,6 +625,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             types.add(Word.WordType.TIME_PREPOSITION);
         }
 
+        if(wayPreposition != null){
+            types.add(Word.WordType.WAY_PREPOSITION);
+        }
+
+        if(purposePreposition != null){
+            types.add(Word.WordType.PURPOSE_PREPOSITION);
+        }
+
         if(conjugation != null){
             types.add(Word.WordType.VERB);
 
@@ -587,6 +665,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
             if(timePreposition != null){
                 result.setDatePreposition(timePreposition.getTimePreposition());
+            }
+
+            if(wayPreposition != null){
+                result.setWayPreposition(wayPreposition.getWayPreposition());
+            }
+
+            if(purposePreposition != null){
+                result.setPurposePreposition(purposePreposition.getPurposePreposition());
             }
         }
 
@@ -668,17 +754,15 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return queryFirst(this, TimePreposition.class, TimePreposition.VALUE_FIELD_NAME, q);
     }
 
+    public WayPreposition findWayPreposition(String q) {
+        return queryFirst(this, WayPreposition.class, WayPreposition.VALUE_FIELD_NAME, q);
+    }
+
+    public PurposePreposition findPurposePreposition(String q) {
+        return queryFirst(this, PurposePreposition.class, PurposePreposition.VALUE_FIELD_NAME, q);
+    }
+
     public VerbConjugation findConjugation(String q){
-        /*VerbConjugation conjugation  = queryFirst(this, VerbConjugation.class, VerbConjugation.VALUE_FIELD_NAME, q);
-
-        try {
-            Dao<Verb, String> verbDao = DaoManager.createDao(this.getConnectionSource(), Verb.class);
-            verbDao.refresh(conjugation.getVerb());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return conjugation;*/
         return queryFirst(this, VerbConjugation.class, VerbConjugation.VALUE_FIELD_NAME, q);
     }
 

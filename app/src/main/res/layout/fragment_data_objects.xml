@@ -3,45 +3,76 @@
     android:background="#CCCCCC"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+    <LinearLayout
         android:background="#FFFFFF"
         android:layout_margin="8dp"
-        android:padding="@dimen/form_padding"
+        android:padding="@dimen/small_padding"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_layout1"
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/object_form_text"
-            android:hint="@string/object_text_hint"
-            android:singleLine="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <ImageView
+                android:src="@drawable/ic_memory_black_48dp"
+                android:layout_marginRight="@dimen/small_padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/object_form_text"
+                        android:hint="@string/object_text_hint"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/text_layout2"
-            android:layout_below="@+id/text_layout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/object_form_code"
-            android:hint="@string/object_code_hint"
-            android:singleLine="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_layout2"
+                    android:layout_below="@+id/text_layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/object_form_code"
+                        android:hint="@string/object_code_hint"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout> -->
+                    <EditText
+                        android:id="@+id/object_form_text"
+                        android:hint="@string/text_field_hint"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <EditText
+                        android:id="@+id/object_form_code"
+                        android:layout_below="@+id/object_form_text"
+                        android:hint="@string/code_field_hint"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/object_form_save"
             android:textAllCaps="true"
             android:text="@string/save_data"
-            android:layout_below="@+id/text_layout2"
-            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </RelativeLayout>
+    </LinearLayout>
     <ListView
         android:id="@+id/fragment_data_objects_list"
         android:background="#FFFFFF"

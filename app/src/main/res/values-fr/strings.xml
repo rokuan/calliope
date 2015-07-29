@@ -20,10 +20,16 @@
         <item>Objets</item>
         <item>Lieux</item>
         <item>Personnes</item>
+        <item>Modes</item>
     </string-array>
 
-    <string name="object_text_hint">Texte</string>
-    <string name="object_code_hint">Code</string>
+    <string name="exit_activity">Voulez-vous vous deconnecter ?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+
+    <string name="text_field_hint">Texte</string>
+    <string name="code_field_hint">Code</string>
+    <string name="name_field_hint">Nom</string>
 
     <string name="wifi_address_hint">Adresse</string>
     <string name="wifi_port_hint">Port</string>
@@ -42,5 +48,6 @@
         <item>Objets</item>
         <item>Lieux</item>
         <item>Personnes</item>
+        <item>Modes</item>
     </string-array>
 </resources>

@@ -1,0 +1,3 @@
+pour;TO
+afin de;TO
+afin d;TO
