@@ -1,4 +1,4 @@
-package apps.rokuan.com.calliope_helper;
+package apps.rokuan.com.calliope_helper.activity;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import java.sql.SQLException;
 
+import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.Profile;
 import butterknife.Bind;

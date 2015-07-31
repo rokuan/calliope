@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_color"
-    tools:context="apps.rokuan.com.calliope_helper.NavigationDrawerFragment">
+    tools:context="apps.rokuan.com.calliope_helper.activity.NavigationDrawerFragment">
     <LinearLayout
         android:id="@+id/profile_layout"
         android:gravity="center_vertical"

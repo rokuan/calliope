@@ -1,13 +1,11 @@
-package apps.rokuan.com.calliope_helper;
+package apps.rokuan.com.calliope_helper.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
-import java.util.List;
-
+import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.fragment.ConnectionFragment;
 import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileDataFragment;

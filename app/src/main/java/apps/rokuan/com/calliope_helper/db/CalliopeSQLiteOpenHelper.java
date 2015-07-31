@@ -366,6 +366,16 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return (List<CustomProfileMode>)queryProfileData(CustomProfileMode.class, CustomMode.MODE_FIELD_NAME, queryString);
     }
 
+    public List<Profile> queryProfiles(){
+        try {
+            Dao<Profile, String> dao = DaoManager.createDao(this.getConnectionSource(), Profile.class);
+            return dao.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     private List<?> queryProfileData(Class<?> daoClass, String queryField, String queryValue){
         try {
             Dao<?, ?> dataDao = DaoManager.createDao(this.getConnectionSource(), daoClass);
@@ -711,6 +721,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                     where.like(PROFILE_RELATED_COLUMN_NAMES[i], q + "%")
                             .and()
                             .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
+
+
 
                     exists = (where.countOf() > 0);
 

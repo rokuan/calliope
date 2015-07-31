@@ -1,4 +1,4 @@
-package apps.rokuan.com.calliope_helper;
+package apps.rokuan.com.calliope_helper.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
+import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileDataFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileStoreFragment;

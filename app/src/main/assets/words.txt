@@ -1,6 +1,3 @@
-aa;COMMON_NAME
-ab absurdo;ADVERB
-abaca;COMMON_NAME
 abaisse-langue;COMMON_NAME
 abaissement;COMMON_NAME
 abaisse;COMMON_NAME,VERB
@@ -9,7 +6,6 @@ abalones;COMMON_NAME
 abandonneurs;COMMON_NAME
 abandon;COMMON_NAME
 abandons;COMMON_NAME
-abaque;COMMON_NAME
 abatage;COMMON_NAME
 abatis;COMMON_NAME
 abat-jour;COMMON_NAME
@@ -30,7 +26,6 @@ abattoirs;COMMON_NAME
 abattures;COMMON_NAME
 abattus;VERB,ADJECTIVE,COMMON_NAME
 abattu;VERB,ADJECTIVE,COMMON_NAME
-abbatiale;ADJECTIVE,COMMON_NAME
 abbaye;COMMON_NAME,PLACE_TYPE
 abbayes;COMMON_NAME,PLACE_TYPE
 abbesse;COMMON_NAME
@@ -51,7 +46,6 @@ abeilles;COMMON_NAME
 aber;COMMON_NAME
 aberration;COMMON_NAME
 aberrations;COMMON_NAME
-ab initio;ADVERB
 abjectement;ADVERB
 abjection;COMMON_NAME
 abjections;COMMON_NAME
@@ -93,22 +87,16 @@ abords;COMMON_NAME
 aborigène;ADJECTIVE,COMMON_NAME
 aborigènes;ADJECTIVE,COMMON_NAME
 abornement;COMMON_NAME
-abouchements;COMMON_NAME
-aboulie;COMMON_NAME
-aboulique;COMMON_NAME
-abounas;COMMON_NAME
 aboutissants;COMMON_NAME
 aboutissant;VERB,COMMON_NAME
 aboutissement;COMMON_NAME
 about;COMMON_NAME
-ab ovo;ADVERB
 aboyeur;ADJECTIVE,COMMON_NAME
 aboyeurs;ADJECTIVE,COMMON_NAME
 abracadabra;COMMON_NAME
 abrasif;ADJECTIVE,COMMON_NAME
 abrasifs;ADJECTIVE,COMMON_NAME
 abrasion;COMMON_NAME
-abraxas;COMMON_NAME
 abreuvage;COMMON_NAME
 abreuvoir;COMMON_NAME
 abreuvoirs;COMMON_NAME
@@ -136,7 +124,6 @@ abrutisseur;COMMON_NAME
 abréviation;COMMON_NAME
 abréviations;COMMON_NAME
 abscisse;COMMON_NAME
-abscission;COMMON_NAME
 absence;COMMON_NAME
 absences;COMMON_NAME
 absent;ADJECTIVE,COMMON_NAME
@@ -145,9 +132,6 @@ absentes;ADJECTIVE,COMMON_NAME,VERB
 absentéisme;COMMON_NAME
 absentéiste;ADJECTIVE,COMMON_NAME
 absents;ADJECTIVE,COMMON_NAME
-abside;COMMON_NAME
-absides;COMMON_NAME
-absidiole;COMMON_NAME
 absinthe;COMMON_NAME
 absolu;ADJECTIVE,COMMON_NAME
 absolument;ADVERB
@@ -158,7 +142,6 @@ absorbant;ADJECTIVE,COMMON_NAME,VERB
 absorbeur;COMMON_NAME
 absorption;COMMON_NAME
 absorptions;COMMON_NAME
-absoute;VERB,ADJECTIVE,COMMON_NAME
 abstentionniste;COMMON_NAME
 abstentionnistes;COMMON_NAME
 abstention;COMMON_NAME
@@ -199,8 +182,6 @@ académiquement;ADVERB
 académisme;COMMON_NAME
 acajou;ADJECTIVE,COMMON_NAME
 acajous;COMMON_NAME
-acanthe;COMMON_NAME
-acanthes;COMMON_NAME
 a capella;ADVERB
 a cappella;ADVERB
 acariens;COMMON_NAME
@@ -208,9 +189,6 @@ accablement;COMMON_NAME
 accablements;COMMON_NAME
 accalmie;COMMON_NAME
 accalmies;COMMON_NAME
-accastillage;COMMON_NAME
-accastillages;COMMON_NAME
-accelerando;ADVERB
 accenteur;COMMON_NAME
 accent;COMMON_NAME
 accents;COMMON_NAME
@@ -223,7 +201,6 @@ acceptions;COMMON_NAME,VERB
 accesseurs;COMMON_NAME
 accessibilité;COMMON_NAME
 accession;COMMON_NAME
-accessit;COMMON_NAME
 accessoire;ADJECTIVE,COMMON_NAME
 accessoirement;ADVERB
 accessoires;ADJECTIVE,COMMON_NAME
@@ -270,17 +247,11 @@ accord;COMMON_NAME
 accordéoniste;COMMON_NAME
 accordéonistes;COMMON_NAME
 accordéon;COMMON_NAME
-accordo;COMMON_NAME
 accordéons;COMMON_NAME
 accords;COMMON_NAME
 accordés;VERB,COMMON_NAME
 accordé;VERB,COMMON_NAME
-accores;COMMON_NAME
 accostage;COMMON_NAME
-accotement;COMMON_NAME
-accotements;COMMON_NAME
-accotoirs;COMMON_NAME
-accotés;VERB,COMMON_NAME
 accouchement;COMMON_NAME
 accouchements;COMMON_NAME
 accouchées;COMMON_NAME
@@ -313,7 +284,6 @@ accrocs;COMMON_NAME
 accroissement;COMMON_NAME
 accros;ADJECTIVE,COMMON_NAME
 accroupissement;COMMON_NAME
-accrétion;COMMON_NAME
 accrue;VERB,ADJECTIVE,COMMON_NAME
 accès;COMMON_NAME
 accueil;COMMON_NAME
@@ -337,9 +307,7 @@ accusés;VERB,ADJECTIVE,COMMON_NAME
 accusé;VERB,ADJECTIVE,COMMON_NAME
 ace;COMMON_NAME
 acerbité;COMMON_NAME
-acetabulum;COMMON_NAME
 achalandage;COMMON_NAME
-achards;COMMON_NAME
 acharnement;COMMON_NAME
 acharnements;COMMON_NAME
 achat;COMMON_NAME
@@ -352,11 +320,6 @@ acheteurs;COMMON_NAME
 acheteuse;COMMON_NAME
 acheteuses;COMMON_NAME
 achillée;COMMON_NAME
-achélème;COMMON_NAME
-achélèmes;COMMON_NAME
-achondroplasie;COMMON_NAME
-achondroplasies;COMMON_NAME
-achoppement;COMMON_NAME
 achèvement;COMMON_NAME
 achèvements;COMMON_NAME
 acide;ADJECTIVE,COMMON_NAME
@@ -378,14 +341,12 @@ acolytes;COMMON_NAME
 acompte;COMMON_NAME
 acomptes;COMMON_NAME
 aconiers;COMMON_NAME
-aconit;COMMON_NAME
 a contrario;ADVERB
 acouphène;COMMON_NAME
 acoustique;ADJECTIVE,COMMON_NAME
 acoustiques;ADJECTIVE,COMMON_NAME
 acéphale;ADJECTIVE,COMMON_NAME
 acéphales;COMMON_NAME
-acqua-toffana;COMMON_NAME
 acquiescement;COMMON_NAME
 acquiescements;COMMON_NAME
 acquis;ADJECTIVE,COMMON_NAME,VERB
@@ -398,8 +359,6 @@ acquittés;VERB,ADJECTIVE,COMMON_NAME
 acquitté;VERB,ADJECTIVE,COMMON_NAME
 acquéreur;COMMON_NAME
 acquéreurs;COMMON_NAME
-acquêt;COMMON_NAME
-acquêts;COMMON_NAME
 acra;COMMON_NAME
 acre;COMMON_NAME
 acres;COMMON_NAME
@@ -418,7 +377,6 @@ acrostiche;COMMON_NAME
 acrotère;COMMON_NAME
 acrylique;ADJECTIVE,COMMON_NAME
 acryliques;ADJECTIVE,COMMON_NAME
-acrylonitrile;COMMON_NAME
 acétate;COMMON_NAME
 acte;COMMON_NAME
 actes;COMMON_NAME
@@ -465,14 +423,11 @@ acupuncture;COMMON_NAME
 adage;COMMON_NAME
 adages;COMMON_NAME
 adagio;ADVERB,COMMON_NAME
-ada;COMMON_NAME
 adaptabilité;COMMON_NAME
 adaptateur;COMMON_NAME
 adaptateurs;COMMON_NAME
 adaptation;COMMON_NAME
 adaptations;COMMON_NAME
-addenda;COMMON_NAME
-addendum;COMMON_NAME
 addiction;COMMON_NAME
 additif;ADJECTIVE,COMMON_NAME
 additifs;ADJECTIVE,COMMON_NAME
@@ -496,10 +451,7 @@ adhésion;COMMON_NAME
 adhésions;COMMON_NAME
 adieu;COMMON_NAME,ONOMATOPEIA
 adieux;COMMON_NAME
-ad infinitum;ADVERB
 adiposité;COMMON_NAME
-adja;COMMON_NAME
-adjas;COMMON_NAME
 adjectif;ADJECTIVE,COMMON_NAME
 adjectifs;COMMON_NAME
 adjointes;COMMON_NAME
@@ -514,15 +466,10 @@ adjudants-chefs;COMMON_NAME
 adjudants;COMMON_NAME
 adjudication;COMMON_NAME
 adjudications;COMMON_NAME
-adjupète;COMMON_NAME
-adjupètes;COMMON_NAME
 adjuration;COMMON_NAME
 adjurations;COMMON_NAME
 adjutrice;COMMON_NAME
 adjuvants;ADJECTIVE,COMMON_NAME
-ad libitum;ADVERB
-ad limina;ADVERB
-ad majorem dei gloriam;ADVERB
 administrateur;COMMON_NAME
 administrateurs;COMMON_NAME
 administratif;ADJECTIVE,COMMON_NAME
@@ -550,19 +497,16 @@ admissibles;ADJECTIVE,COMMON_NAME
 admission;COMMON_NAME
 admissions;COMMON_NAME
 admis;VERB,ADJECTIVE,COMMON_NAME
-admixtion;COMMON_NAME
 admonestation;COMMON_NAME
 admonestations;COMMON_NAME
 admonition;COMMON_NAME
 admonitions;COMMON_NAME
 adénine;COMMON_NAME
-adénocarcinome;COMMON_NAME
 aïd;COMMON_NAME
 adénome;COMMON_NAME
 adénopathie;COMMON_NAME
 adénosine;COMMON_NAME
 adénovirus;COMMON_NAME
-ad nutum;ADVERB
 adobe;COMMON_NAME
 adolescence;COMMON_NAME
 adolescences;COMMON_NAME
@@ -597,7 +541,6 @@ adoucissement;COMMON_NAME
 adoucissements;COMMON_NAME
 adoucisseur;COMMON_NAME
 adoucisseurs;COMMON_NAME
-ad patres;ADVERB
 adp;COMMON_NAME
 adéquatement;ADVERB
 adéquation;COMMON_NAME
@@ -626,7 +569,6 @@ adversaire;COMMON_NAME
 adversaires;COMMON_NAME
 adversité;COMMON_NAME
 adversités;COMMON_NAME
-ad vitam aeternam;ADVERB
 aegipans;COMMON_NAME
 aïeule;COMMON_NAME
 aïeules;COMMON_NAME
@@ -808,7 +750,6 @@ aggravée;VERB,COMMON_NAME
 aghas;COMMON_NAME
 agilité;COMMON_NAME
 agilités;COMMON_NAME
-a giorno;ADVERB
 agios;COMMON_NAME
 agioteur;COMMON_NAME
 agissement;COMMON_NAME
@@ -1107,7 +1048,6 @@ al dente;ADVERB
 alderman;COMMON_NAME
 aldéhyde;COMMON_NAME
 aldol;COMMON_NAME
-alea jacta est;ADVERB
 ale;COMMON_NAME
 alentour;ADVERB
 alentours;COMMON_NAME
@@ -1656,7 +1596,6 @@ ancestralement;ADVERB
 ancestralité;COMMON_NAME
 anche;COMMON_NAME
 anchilops;COMMON_NAME
-anch'io son pittore;ADVERB
 anchoïade;COMMON_NAME
 anchois;COMMON_NAME
 ancien;ADJECTIVE,COMMON_NAME
@@ -4782,7 +4721,6 @@ beigne;COMMON_NAME
 beignes;COMMON_NAME
 beignet;COMMON_NAME
 beignets;COMMON_NAME
-bel canto;COMMON_NAME
 belette;COMMON_NAME
 belettes;COMMON_NAME
 belge;ADJECTIVE,COMMON_NAME
@@ -6604,7 +6542,6 @@ brièveté;COMMON_NAME
 brize;COMMON_NAME
 brûlage;COMMON_NAME
 brûle-gueule;COMMON_NAME
-à brûle-pourpoint;ADVERB
 brûlées;VERB,ADJECTIVE,COMMON_NAME
 brûleur;COMMON_NAME
 brûleurs;COMMON_NAME
@@ -6869,7 +6806,6 @@ budgétairement;ADVERB
 budgétisation;COMMON_NAME
 budgétivores;COMMON_NAME
 buée;COMMON_NAME
-buen retiro;COMMON_NAME
 buées;COMMON_NAME
 buffalo;COMMON_NAME
 buffet;COMMON_NAME
@@ -7836,7 +7772,6 @@ capucin;COMMON_NAME
 capucino;COMMON_NAME
 capucins;COMMON_NAME
 capulet;COMMON_NAME
-caput mortuum;COMMON_NAME
 caquelon;COMMON_NAME
 caïque;COMMON_NAME
 caque;COMMON_NAME
@@ -8279,7 +8214,6 @@ castrisme;COMMON_NAME
 casuel;ADJECTIVE,COMMON_NAME
 casuistes;COMMON_NAME
 casuistique;ADJECTIVE,COMMON_NAME
-casus belli;COMMON_NAME
 catachrèse;COMMON_NAME
 cataclysme;COMMON_NAME
 cataclysmes;COMMON_NAME
@@ -9551,7 +9485,6 @@ chopines;COMMON_NAME
 chopper;COMMON_NAME,VERB
 choppers;COMMON_NAME
 échoppes;COMMON_NAME,PLACE_TYPE
-chop suey;COMMON_NAME
 choral;ADJECTIVE,COMMON_NAME
 chorale;ADJECTIVE,COMMON_NAME
 chorales;ADJECTIVE,COMMON_NAME
@@ -12174,7 +12107,6 @@ corps;COMMON_NAME
 corpulence;COMMON_NAME
 corpuscule;COMMON_NAME
 corpuscules;COMMON_NAME
-corpus delicti;COMMON_NAME
 corpus;COMMON_NAME
 corral;COMMON_NAME
 corrals;COMMON_NAME
@@ -14103,24 +14035,19 @@ dealer;COMMON_NAME,VERB
 dealers;COMMON_NAME
 deal;COMMON_NAME
 deals;COMMON_NAME
-de amicis;COMMON_NAME
 de;DEFINITE_ARTICLE,PREPOSITION,PREPOSITION_FROM,PREPOSITION_OF
-de auditu;ADVERB
 debater;COMMON_NAME
 debout;ADVERB
 decca;COMMON_NAME
 deck;COMMON_NAME
 decrescendo;ADVERB,COMMON_NAME
 dedans;ADVERB,COMMON_NAME
-de facto;ADVERB
 degré;COMMON_NAME
 degrés;COMMON_NAME
-de guingois;ADVERB
 dehors;ADVERB,COMMON_NAME,ONOMATOPEIA
 delà;ADVERB
 delco;COMMON_NAME
 delirium;COMMON_NAME
-delirium tremens;COMMON_NAME
 della francesca;COMMON_NAME
 della porta;COMMON_NAME
 della robbia;COMMON_NAME
@@ -14336,9 +14263,6 @@ dents;COMMON_NAME
 denture;COMMON_NAME
 dentures;COMMON_NAME
 édenté;VERB,ADJECTIVE,COMMON_NAME
-deo gratias;COMMON_NAME
-de plano;ADVERB
-de profundis;COMMON_NAME
 depuis;ADVERB,PREPOSITION
 derby;COMMON_NAME
 derbys;COMMON_NAME
@@ -14373,7 +14297,6 @@ derrières;COMMON_NAME
 ders;COMMON_NAME
 derviche;COMMON_NAME
 derviches;COMMON_NAME
-de santis;COMMON_NAME
 des;INDEFINITE_ARTICLE
 descamisados;COMMON_NAME
 descendance;COMMON_NAME
@@ -14806,7 +14729,6 @@ diem;COMMON_NAME
 die;COMMON_NAME
 diesel;COMMON_NAME
 diesels;COMMON_NAME
-dies irae;COMMON_NAME
 dieu;COMMON_NAME
 dieu-roi;COMMON_NAME
 dieux;COMMON_NAME
@@ -14857,7 +14779,6 @@ dignitaire;COMMON_NAME
 dignitaires;COMMON_NAME
 dignité;COMMON_NAME
 dignités;COMMON_NAME
-dignus est intrare;ADVERB
 digression;COMMON_NAME
 digressions;COMMON_NAME
 digue;COMMON_NAME
@@ -16555,7 +16476,6 @@ eau;COMMON_NAME
 eaux-de-vie;COMMON_NAME
 eaux-fortes;COMMON_NAME
 eaux;COMMON_NAME
-ecce homo;ADVERB
 ecchymose;COMMON_NAME
 ecchymoses;COMMON_NAME
 ecclésiastique;ADJECTIVE,COMMON_NAME
@@ -22663,7 +22583,6 @@ happe;COMMON_NAME,VERB
 happeurs;COMMON_NAME
 happy end;COMMON_NAME
 happy ends;COMMON_NAME
-happy few;COMMON_NAME
 haptoglobine;COMMON_NAME
 haquenée;COMMON_NAME
 haque;COMMON_NAME
@@ -22920,7 +22839,6 @@ hibernation;COMMON_NAME
 hibiscus;COMMON_NAME
 hibou;COMMON_NAME
 hiboux;COMMON_NAME
-hic et nunc;ADVERB
 hickory;COMMON_NAME
 hic;COMMON_NAME
 hidalgo;COMMON_NAME
@@ -24134,8 +24052,6 @@ impureté;COMMON_NAME
 impuretés;COMMON_NAME
 imputation;COMMON_NAME
 imputations;COMMON_NAME
-in absentia;ADVERB
-in abstracto;ADVERB
 inaccessibilité;COMMON_NAME
 inaccomplissement;COMMON_NAME
 inachèvement;COMMON_NAME
@@ -24153,7 +24069,6 @@ inadéquation;COMMON_NAME
 inadvertance;COMMON_NAME
 inadvertances;COMMON_NAME
 inanimation;COMMON_NAME
-in anima vili;ADVERB
 inanition;COMMON_NAME
 inanité;COMMON_NAME
 inapplication;COMMON_NAME
@@ -24184,7 +24099,6 @@ incarnation;COMMON_NAME
 incarnations;COMMON_NAME
 incartade;COMMON_NAME
 incartades;COMMON_NAME
-in cauda venenum;ADVERB
 incendiaire;ADJECTIVE,COMMON_NAME
 incendiaires;ADJECTIVE,COMMON_NAME
 incendie;COMMON_NAME,VERB
@@ -24492,7 +24406,6 @@ inexpérience;COMMON_NAME
 inexpériences;COMMON_NAME
 inexprimablement;ADVERB
 inexpugnablement;ADVERB
-in extenso;ADVERB
 in extremis;ADVERB
 inextricablement;ADVERB
 infaillibilité;COMMON_NAME
@@ -25229,7 +25142,6 @@ investiture;COMMON_NAME
 investitures;COMMON_NAME
 invincibilité;COMMON_NAME
 invinciblement;ADVERB
-in vino veritas;ADVERB
 inviolabilité;COMMON_NAME
 invisibilité;COMMON_NAME
 invisible;ADJECTIVE,COMMON_NAME
@@ -25271,7 +25183,6 @@ ipécas;COMMON_NAME
 ipomée;COMMON_NAME
 ippon;COMMON_NAME
 ipse;COMMON_NAME
-ipso facto;ADVERB
 irakien;ADJECTIVE,COMMON_NAME
 irakiens;ADJECTIVE,COMMON_NAME
 iranien;ADJECTIVE,COMMON_NAME
@@ -25391,7 +25302,6 @@ italienne;ADJECTIVE,COMMON_NAME
 italiennes;ADJECTIVE,COMMON_NAME
 italiens;ADJECTIVE,COMMON_NAME
 item;ADVERB,COMMON_NAME
-ite missa est;COMMON_NAME
 ithos;COMMON_NAME
 itinéraire;COMMON_NAME
 itinéraires;COMMON_NAME
@@ -27753,7 +27663,6 @@ lupanars;COMMON_NAME
 lupin;COMMON_NAME
 lupins;COMMON_NAME
 lupus;COMMON_NAME
-à lurelure;ADVERB
 lurex;COMMON_NAME
 lur;COMMON_NAME
 luronne;COMMON_NAME
@@ -29539,8 +29448,6 @@ mexico;ADVERB
 mezcal;COMMON_NAME
 mezzanine;COMMON_NAME
 mezzanines;COMMON_NAME
-mezza voce;ADVERB
-mezza-voce;ADVERB
 mezzo;ADVERB,COMMON_NAME
 mezzos;COMMON_NAME
 mezzo-soprano;COMMON_NAME
@@ -30014,7 +29921,6 @@ minuit;COMMON_NAME,DATE_UNIT_HOUR
 minuits;COMMON_NAME
 minuscule;ADJECTIVE,COMMON_NAME
 minuscules;ADJECTIVE,COMMON_NAME
-minus habens;COMMON_NAME
 minus;COMMON_NAME
 minutage;COMMON_NAME
 minute;COMMON_NAME,VERB,DATE_UNIT
@@ -30396,8 +30302,6 @@ modulation;COMMON_NAME
 modulations;COMMON_NAME
 module;COMMON_NAME,VERB
 modules;COMMON_NAME,VERB
-modus operandi;COMMON_NAME
-modus vivendi;COMMON_NAME
 moelle;COMMON_NAME
 moelles;COMMON_NAME
 moelleusement;ADVERB
@@ -30885,7 +30789,6 @@ motte;COMMON_NAME
 mottereau;COMMON_NAME
 mottes;COMMON_NAME
 motteux;COMMON_NAME
-motu proprio;ADVERB
 mot-valise;COMMON_NAME
 mou;ADJECTIVE,COMMON_NAME
 mouchachou;COMMON_NAME
@@ -31378,7 +31281,6 @@ mutantes;ADJECTIVE,COMMON_NAME
 mutants;ADJECTIVE,COMMON_NAME
 mutation;COMMON_NAME
 mutations;COMMON_NAME
-mutatis mutandis;ADVERB
 mutilation;COMMON_NAME
 mutilations;COMMON_NAME
 mutilés;VERB,ADJECTIVE,COMMON_NAME
@@ -31855,7 +31757,6 @@ neuvaine;COMMON_NAME
 neuvaines;COMMON_NAME
 neuvième;ADJECTIVE,COMMON_NAME,NUMERICAL_POSITION
 neuvièmes;ADJECTIVE,COMMON_NAME
-ne varietur;ADVERB
 neveu;COMMON_NAME
 neveux;COMMON_NAME
 news;COMMON_NAME
@@ -31970,7 +31871,6 @@ niguedouille;COMMON_NAME
 nihilisme;COMMON_NAME
 nihiliste;ADJECTIVE,COMMON_NAME
 nihilistes;ADJECTIVE,COMMON_NAME
-nihil obstat;ADVERB
 nikkei;COMMON_NAME
 nil;COMMON_NAME
 nimbe;COMMON_NAME
@@ -32817,7 +32717,6 @@ olivettes;COMMON_NAME
 olivier;COMMON_NAME
 oliviers;COMMON_NAME
 olivine;COMMON_NAME
-olla podrida;COMMON_NAME
 olmèques;COMMON_NAME
 oïl;COMMON_NAME
 oléoduc;COMMON_NAME
@@ -33272,7 +33171,6 @@ osselets;COMMON_NAME
 ossement;COMMON_NAME
 ossements;COMMON_NAME
 ossification;COMMON_NAME
-osso buco;COMMON_NAME
 ossuaire;COMMON_NAME
 ossuaires;COMMON_NAME
 ostensiblement;ADVERB
@@ -42868,7 +42766,6 @@ sections;COMMON_NAME
 sectorisation;COMMON_NAME
 secundo;ADVERB
 sedan;COMMON_NAME
-sedia gestatoria;COMMON_NAME
 sedums;COMMON_NAME
 seersucker;COMMON_NAME
 segment;COMMON_NAME
@@ -43268,7 +43165,6 @@ siciliens;ADJECTIVE,COMMON_NAME
 siècle;COMMON_NAME
 sicle;COMMON_NAME
 siècles;COMMON_NAME
-sic transit gloria mundi;ADVERB
 sida;COMMON_NAME
 sidas;COMMON_NAME
 side-car;COMMON_NAME,MEAN_OF_TRANSPORT
@@ -45695,7 +45591,6 @@ take-off;COMMON_NAME
 étalagiste;COMMON_NAME
 tala;COMMON_NAME
 talas;COMMON_NAME
-talavera de la reina;COMMON_NAME
 talbin;COMMON_NAME
 talbins;COMMON_NAME
 talc;COMMON_NAME
@@ -48198,7 +48093,6 @@ tétrarques;COMMON_NAME
 tétras;COMMON_NAME
 tétère;COMMON_NAME
 tétrodotoxine;COMMON_NAME
-tu autem;COMMON_NAME
 tubages;COMMON_NAME
 tuba;COMMON_NAME,VERB
 tubard;ADJECTIVE,COMMON_NAME
@@ -48630,9 +48524,7 @@ vadrouilleuse;COMMON_NAME
 vadrouilleuses;COMMON_NAME
 évadés;VERB,ADJECTIVE,COMMON_NAME
 évadé;VERB,ADJECTIVE,COMMON_NAME
-vae soli;ADVERB
 va-et-vient;COMMON_NAME
-vae victis;ADVERB
 vagabond;ADJECTIVE,COMMON_NAME
 vagabondage;COMMON_NAME
 vagabondages;COMMON_NAME
@@ -49894,7 +49786,6 @@ vulgarisations;COMMON_NAME
 vulgarité;COMMON_NAME
 vulgarités;COMMON_NAME
 vulgate;COMMON_NAME
-vulgum pecus;COMMON_NAME
 vulnérabilité;COMMON_NAME
 vulnéraire;ADJECTIVE,COMMON_NAME
 vulnéraires;COMMON_NAME

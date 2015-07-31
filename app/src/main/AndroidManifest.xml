@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoadingActivity"
+            android:name=".activity.LoadingActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -23,12 +23,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ConnectionActivity"
+            android:name=".activity.ConnectionActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".SpeechActivity"
+            android:name=".activity.SpeechActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait">
         </activity>

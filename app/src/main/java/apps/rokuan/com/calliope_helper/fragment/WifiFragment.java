@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import apps.rokuan.com.calliope_helper.R;
-import apps.rokuan.com.calliope_helper.SpeechActivity;
+import apps.rokuan.com.calliope_helper.activity.SpeechActivity;
 import apps.rokuan.com.calliope_helper.service.ConnectionService;
 import butterknife.Bind;
 import butterknife.ButterKnife;

@@ -1,0 +1,5 @@
+afin;ADVERB
+afin de;PREPOSITION
+afin d;PREPOSITION
+afin qu;CONJUNCTION
+afin que;CONJUNCTION

@@ -1,3 +1,6 @@
 pour;TO
 afin de;TO
 afin d;TO
+afin que;TO
+afin qu;TO
+de manière à;TO

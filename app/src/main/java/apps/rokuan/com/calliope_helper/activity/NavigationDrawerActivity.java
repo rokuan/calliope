@@ -1,4 +1,4 @@
-package apps.rokuan.com.calliope_helper;
+package apps.rokuan.com.calliope_helper.activity;
 
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
+import apps.rokuan.com.calliope_helper.R;
 
 /**
  * Created by LEBEAU Christophe on 24/07/15.
