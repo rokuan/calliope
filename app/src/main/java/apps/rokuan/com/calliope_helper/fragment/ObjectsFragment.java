@@ -31,6 +31,7 @@ import butterknife.OnClick;
 public class ObjectsFragment extends Fragment {
     private CalliopeSQLiteOpenHelper db;
     private ProfileObjectAdapter adapter;
+    private String profileId;
 
     @Bind(R.id.object_form_text) protected EditText objectValueView;
     @Bind(R.id.object_form_code) protected EditText objectCodeView;
@@ -39,6 +40,7 @@ public class ObjectsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_data_objects, parent, false);
+        profileId = this.getArguments().getString(ProfileDataFragment.EXTRA_PROFILE_KEY);
         ButterKnife.bind(this, v);
         return v;
     }
@@ -60,7 +62,7 @@ public class ObjectsFragment extends Fragment {
 
         CustomProfileObject object = new CustomProfileObject(objectValue, objectCode);
 
-        if(db.addCustomObject(object)){
+        if(db.addCustomObject(object, profileId)){
             // TODO: afficher un message de reussite
             objectValueView.getText().clear();
             objectCodeView.getText().clear();
@@ -75,7 +77,7 @@ public class ObjectsFragment extends Fragment {
     public void onResume(){
         super.onResume();
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
-        adapter = new ProfileObjectAdapter(this.getActivity(), db.queryProfileObjects(""));
+        adapter = new ProfileObjectAdapter(this.getActivity(), db.queryProfileObjects(profileId, ""));
         objectsList.setAdapter(adapter);
     }
 

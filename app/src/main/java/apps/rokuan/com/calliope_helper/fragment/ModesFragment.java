@@ -27,6 +27,7 @@ import butterknife.OnClick;
 public class ModesFragment extends Fragment {
     private CalliopeSQLiteOpenHelper db;
     private ProfileModeAdapter adapter;
+    private String profileId;
 
     @Bind(R.id.mode_form_text) protected EditText modeValueView;
     @Bind(R.id.mode_form_code) protected EditText modeCodeView;
@@ -35,6 +36,7 @@ public class ModesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_data_modes, parent, false);
+        profileId = this.getArguments().getString(ProfileDataFragment.EXTRA_PROFILE_KEY);
         ButterKnife.bind(this, v);
         return v;
     }
@@ -56,7 +58,7 @@ public class ModesFragment extends Fragment {
 
         CustomProfileMode mode = new CustomProfileMode(modeValue, modeCode);
 
-        if(db.addCustomMode(mode)){
+        if(db.addCustomMode(mode, profileId)){
             // TODO: afficher un message de reussite
             modeValueView.getText().clear();
             modeCodeView.getText().clear();
@@ -71,7 +73,7 @@ public class ModesFragment extends Fragment {
     public void onResume(){
         super.onResume();
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
-        adapter = new ProfileModeAdapter(this.getActivity(), db.queryProfileModes(""));
+        adapter = new ProfileModeAdapter(this.getActivity(), db.queryProfileModes(profileId, ""));
         modesList.setAdapter(adapter);
     }
 

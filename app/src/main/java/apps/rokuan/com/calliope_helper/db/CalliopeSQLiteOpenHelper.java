@@ -8,6 +8,8 @@ import android.util.Log;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
@@ -350,20 +352,20 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         sc.close();
     }
 
-    public List<CustomProfileObject> queryProfileObjects(String queryString){
-        return (List<CustomProfileObject>)queryProfileData(CustomProfileObject.class, CustomObject.OBJECT_FIELD_NAME, queryString);
+    public List<CustomProfileObject> queryProfileObjects(String profileId, String queryString){
+        return (List<CustomProfileObject>)queryProfileData(CustomProfileObject.class, CustomObject.OBJECT_FIELD_NAME, queryString, profileId);
     }
 
-    public List<CustomProfilePlace> queryProfilePlaces(String queryString){
-        return (List<CustomProfilePlace>)queryProfileData(CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, queryString);
+    public List<CustomProfilePlace> queryProfilePlaces(String profileId, String queryString){
+        return (List<CustomProfilePlace>)queryProfileData(CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, queryString, profileId);
     }
 
-    public List<CustomProfilePerson> queryProfilePeople(String queryString){
-        return (List<CustomProfilePerson>)queryProfileData(CustomProfilePerson.class, CustomPerson.PERSON_FIELD_NAME, queryString);
+    public List<CustomProfilePerson> queryProfilePeople(String profileId, String queryString){
+        return (List<CustomProfilePerson>)queryProfileData(CustomProfilePerson.class, CustomPerson.PERSON_FIELD_NAME, queryString, profileId);
     }
 
-    public List<CustomProfileMode> queryProfileModes(String queryString){
-        return (List<CustomProfileMode>)queryProfileData(CustomProfileMode.class, CustomMode.MODE_FIELD_NAME, queryString);
+    public List<CustomProfileMode> queryProfileModes(String profileId, String queryString){
+        return (List<CustomProfileMode>)queryProfileData(CustomProfileMode.class, CustomMode.MODE_FIELD_NAME, queryString, profileId);
     }
 
     public List<Profile> queryProfiles(){
@@ -376,17 +378,18 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    private List<?> queryProfileData(Class<?> daoClass, String queryField, String queryValue){
+    private List<?> queryProfileData(Class<?> daoClass, String queryField, String queryValue, String profileName){
         try {
             Dao<?, ?> dataDao = DaoManager.createDao(this.getConnectionSource(), daoClass);
-            String currentProfile = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
-                    .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
+            /*String currentProfile = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
+                    .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);*/
             QueryBuilder builder = dataDao.queryBuilder();
             Where where = builder.where();
 
             where.like(queryField, "%" + queryValue + "%")
                     .and()
-                    .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
+                    //.eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
+                    .eq(Profile.PROFILE_COLUMN_NAME, profileName);
             return dataDao.query(where.prepare());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -401,10 +404,34 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return profileDao.queryForId(currentProfileId);
     }
 
-    public boolean addCustomObject(CustomProfileObject object){
+    public Profile getProfile(String profileId) throws SQLException {
+        Dao<Profile, String> dao = DaoManager.createDao(this.getConnectionSource(), Profile.class);
+        return dao.queryForId(profileId);
+    }
+
+    public boolean deleteProfile(String profileId){
+        try {
+            Dao<Profile, String> dao = DaoManager.createDao(this.getConnectionSource(), Profile.class);
+
+            for(Class<?> profileRelatedClass: PROFILE_CLASSES){
+                Dao<?, ?> classDao = DaoManager.createDao(this.getConnectionSource(), profileRelatedClass);
+                DeleteBuilder builder = classDao.deleteBuilder();
+                builder.where().eq(Profile.PROFILE_COLUMN_NAME, profileId);
+                builder.delete();
+            }
+
+            return (dao.deleteById(profileId) >= 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addCustomObject(CustomProfileObject object, String profileId){
         try {
             Dao<CustomProfileObject, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileObject.class);
-            object.setProfile(getActiveProfile());
+            //object.setProfile(getActiveProfile());
+            object.setProfile(getProfile(profileId));
             return (dao.create(object) >= 0);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -412,10 +439,11 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    public boolean addCustomPlace(CustomProfilePlace place){
+    public boolean addCustomPlace(CustomProfilePlace place, String profileId){
         try {
             Dao<CustomProfilePlace, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePlace.class);
-            place.setProfile(getActiveProfile());
+            //place.setProfile(getActiveProfile());
+            place.setProfile(getProfile(profileId));
             return (dao.create(place) >= 0);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -423,10 +451,11 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    public boolean addCustomPerson(CustomProfilePerson person){
+    public boolean addCustomPerson(CustomProfilePerson person, String profileId){
         try {
             Dao<CustomProfilePerson, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePerson.class);
-            person.setProfile(getActiveProfile());
+            //person.setProfile(getActiveProfile());
+            person.setProfile(getProfile(profileId));
             return (dao.create(person) >= 0);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -434,10 +463,11 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    public boolean addCustomMode(CustomProfileMode mode){
+    public boolean addCustomMode(CustomProfileMode mode, String profileId){
         try {
             Dao<CustomProfileMode, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileMode.class);
-            mode.setProfile(getActiveProfile());
+            //mode.setProfile(getActiveProfile());
+            mode.setProfile(getProfile(profileId));
             return (dao.create(mode) >= 0);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -721,8 +751,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                     where.like(PROFILE_RELATED_COLUMN_NAMES[i], q + "%")
                             .and()
                             .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
-
-
 
                     exists = (where.countOf() > 0);
 

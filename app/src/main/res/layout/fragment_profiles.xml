@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_profiles_list"
-    android:background="#FFFFFF"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:choiceMode="singleChoice">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListView
+        android:id="@+id/fragment_profiles_list"
+        android:background="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice">
 
-</ListView>
+    </ListView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_profile"
+        android:src="@drawable/ic_add_white_48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        app:backgroundTint="@color/darker_primary_color"
+        app:fabSize="normal" />
+</FrameLayout>

@@ -17,6 +17,7 @@ import java.util.List;
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.CustomProfilePerson;
+import apps.rokuan.com.calliope_helper.db.Profile;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,6 +28,7 @@ import butterknife.OnClick;
 public class PeopleFragment extends Fragment {
     private CalliopeSQLiteOpenHelper db;
     private ProfilePersonAdapter adapter;
+    private String profileId;
 
     @Bind(R.id.person_form_name) protected EditText personNameView;
     @Bind(R.id.person_form_code) protected EditText personCodeView;
@@ -35,6 +37,7 @@ public class PeopleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_data_people, parent, false);
+        profileId = this.getArguments().getString(ProfileDataFragment.EXTRA_PROFILE_KEY);
         ButterKnife.bind(this, v);
         return v;
     }
@@ -51,7 +54,7 @@ public class PeopleFragment extends Fragment {
 
         CustomProfilePerson person = new CustomProfilePerson(personName, personCode);
 
-        if(db.addCustomPerson(person)){
+        if(db.addCustomPerson(person, profileId)){
             // TODO: afficher un message de reussite
             personNameView.getText().clear();
             personCodeView.getText().clear();
@@ -66,7 +69,7 @@ public class PeopleFragment extends Fragment {
     public void onResume(){
         super.onResume();
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
-        adapter = new ProfilePersonAdapter(this.getActivity(), db.queryProfilePeople(""));
+        adapter = new ProfilePersonAdapter(this.getActivity(), db.queryProfilePeople(profileId, ""));
         peopleList.setAdapter(adapter);
     }
 

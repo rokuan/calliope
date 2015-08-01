@@ -3,6 +3,7 @@ package apps.rokuan.com.calliope_helper.activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.app.Activity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -26,6 +27,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
@@ -44,6 +48,7 @@ public class NavigationDrawerFragment extends Fragment {
      * Remember the position of the selected item.
      */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+    private static final String STATE_POSITIONS_HISTORY = "navigation_drawer_positions_history";
 
     /**
      * Per the design guidelines, you should show the drawer on launch until the user manually
@@ -128,6 +133,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
         mDrawerListView.setAdapter(new MenuAdapter(getActionBar().getThemedContext()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         return mainView;
     }
 
@@ -179,7 +185,7 @@ public class NavigationDrawerFragment extends Fragment {
                     return;
                 }
 
-                CalliopeSQLiteOpenHelper db = new CalliopeSQLiteOpenHelper(getActivity());
+                /*CalliopeSQLiteOpenHelper db = new CalliopeSQLiteOpenHelper(getActivity());
                 try {
                     Profile currentProfile = db.getActiveProfile();
                     profileNameView.setText(currentProfile.getName());
@@ -187,7 +193,7 @@ public class NavigationDrawerFragment extends Fragment {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                db.close();
+                db.close();*/
 
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
@@ -221,6 +227,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
+
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }

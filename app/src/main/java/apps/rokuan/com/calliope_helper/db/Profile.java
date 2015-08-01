@@ -41,4 +41,13 @@ public class Profile {
     public String getIdentifier(){
         return profileId;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == this){
+            return true;
+        }
+
+        return (o instanceof Profile) && this.profileId.equals(((Profile)o).getIdentifier());
+    }
 }

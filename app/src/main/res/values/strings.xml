@@ -48,6 +48,7 @@
     <string name="connection">Connection</string>
     <string name="save_data">Save</string>
     <string name="back_message">Please click again to quit</string>
+    <string name="delete_profile_message">Delete this profile ?</string>
 
     <string name="store_section">Store</string>
     <string name="profiles_section">Profiles</string>

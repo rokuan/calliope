@@ -28,6 +28,7 @@ import butterknife.OnClick;
 public class PlacesFragment extends Fragment {
     private CalliopeSQLiteOpenHelper db;
     private ProfilePlaceAdapter adapter;
+    private String profileId;
 
     @Bind(R.id.place_form_name) protected EditText placeNameView;
     @Bind(R.id.place_form_code) protected EditText placeCodeView;
@@ -36,6 +37,7 @@ public class PlacesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_data_places, parent, false);
+        profileId = this.getArguments().getString(ProfileDataFragment.EXTRA_PROFILE_KEY);
         ButterKnife.bind(this, v);
         return v;
     }
@@ -57,7 +59,7 @@ public class PlacesFragment extends Fragment {
 
         CustomProfilePlace place = new CustomProfilePlace(placeName, placeCode);
 
-        if(db.addCustomPlace(place)){
+        if(db.addCustomPlace(place, profileId)){
             // TODO: afficher un message de reussite
             placeNameView.getText().clear();
             placeCodeView.getText().clear();
@@ -72,7 +74,7 @@ public class PlacesFragment extends Fragment {
     public void onResume(){
         super.onResume();
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
-        adapter = new ProfilePlaceAdapter(this.getActivity(), db.queryProfilePlaces(""));
+        adapter = new ProfilePlaceAdapter(this.getActivity(), db.queryProfilePlaces(profileId, ""));
         placesList.setAdapter(adapter);
     }
 

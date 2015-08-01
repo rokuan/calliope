@@ -39,6 +39,7 @@
     <string name="connection">Connexion</string>
     <string name="save_data">Enregistrer</string>
     <string name="back_message">Appuyez à nouveau pour quitter</string>
+    <string name="delete_profile_message">Supprimer ce profil ?</string>
 
     <string name="store_section">Store</string>
     <string name="profiles_section">Profiles</string>
