@@ -12,11 +12,14 @@ import android.widget.Button;
 import java.sql.SQLException;
 
 import apps.rokuan.com.calliope_helper.R;
+import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.Profile;
+import apps.rokuan.com.calliope_helper.event.ProfileEvent;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by LEBEAU Christophe on 01/08/15.
@@ -33,10 +36,12 @@ public class ProfileInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View mainView = inflater.inflate(R.layout.fragment_profile_info, parent, false);
 
-        Bundle args = this.getArguments();
+        if(this.getArguments() != null) {
+            Bundle args = this.getArguments();
 
-        if(args.containsKey(ProfileDataFragment.EXTRA_PROFILE_KEY)){
-            profileId = args.getString(ProfileDataFragment.EXTRA_PROFILE_KEY);
+            if (args.containsKey(ProfileActivity.EXTRA_PROFILE_KEY)) {
+                profileId = args.getString(ProfileActivity.EXTRA_PROFILE_KEY);
+            }
         }
 
         ButterKnife.bind(this, mainView);
@@ -51,11 +56,18 @@ public class ProfileInfoFragment extends Fragment {
                 .apply();
         selectButton.setEnabled(false);
         // TODO: notifier du changement de profil
+        EventBus.getDefault().post(new ProfileEvent(profile));
     }
 
     @OnClick(R.id.see_profile)
     public void seeProfile(){
+        ProfileDataFragment fragment = new ProfileDataFragment();
+        fragment.setArguments(this.getArguments());
 
+        this.getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @OnClick(R.id.delete_profile)

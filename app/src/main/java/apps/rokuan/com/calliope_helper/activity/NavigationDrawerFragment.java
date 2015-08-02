@@ -34,8 +34,10 @@ import java.util.List;
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.Profile;
+import apps.rokuan.com.calliope_helper.event.ProfileEvent;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -84,6 +86,8 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private EventBus mBus = EventBus.getDefault();
+    private Profile mCurrentProfile;
 
     public NavigationDrawerFragment() {
 
@@ -185,16 +189,6 @@ public class NavigationDrawerFragment extends Fragment {
                     return;
                 }
 
-                /*CalliopeSQLiteOpenHelper db = new CalliopeSQLiteOpenHelper(getActivity());
-                try {
-                    Profile currentProfile = db.getActiveProfile();
-                    profileNameView.setText(currentProfile.getName());
-                    profileNameView.setText(currentProfile.getIdentifier());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                db.close();*/
-
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
                     // the navigation drawer automatically in the future.
@@ -260,6 +254,39 @@ public class NavigationDrawerFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mBus.register(this);
+
+        CalliopeSQLiteOpenHelper db = new CalliopeSQLiteOpenHelper(this.getActivity());
+        try {
+            Profile activeProfile = db.getActiveProfile();
+            setCurrentProfile(activeProfile);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        db.close();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mBus.unregister(this);
+    }
+
+    public void onEvent(ProfileEvent event){
+        setCurrentProfile(event.getProfile());
+    }
+
+    private void setCurrentProfile(Profile p){
+        if(p != null) {
+            mCurrentProfile = p;
+            profileNameView.setText(p.getName());
+            profileCodeView.setText(p.getIdentifier());
+        }
     }
 
     @Override

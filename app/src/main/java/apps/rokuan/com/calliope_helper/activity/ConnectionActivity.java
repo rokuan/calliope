@@ -15,9 +15,25 @@ import apps.rokuan.com.calliope_helper.fragment.ProfilesFragment;
 /**
  * Created by LEBEAU Christophe on 24/07/15.
  */
-public class ConnectionActivity extends NavigationDrawerActivity {
-    //private static final String BACK_STACK_NAME = "connectionBackStack";
-    private int currentSelectedPosition = 0;
+public class ConnectionActivity extends NavigationDrawerActivity implements FragmentManager.OnBackStackChangedListener {
+    @Override
+    protected void onResume(){
+        super.onResume();
+        this.getSupportFragmentManager().addOnBackStackChangedListener(this);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        this.getSupportFragmentManager().removeOnBackStackChangedListener(this);
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        if(this.getSupportFragmentManager().getBackStackEntryCount() == 0){
+            this.finish();
+        }
+    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -35,8 +51,6 @@ public class ConnectionActivity extends NavigationDrawerActivity {
                     .addToBackStack(null)
                     .commit();
         }
-
-        currentSelectedPosition = position;
     }
 
     @Override

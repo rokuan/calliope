@@ -3,8 +3,11 @@
     <string name="app_name">Calliope - Helper</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Paramètres</string>
     <string name="title_activity_home">HomeActivity</string>
+
+    <string name="action_settings">Paramètres</string>
+    <string name="action_save">Enregistrer</string>
+    <string name="action_cancel">Annuler</string>
 
     <string name="title_section1">Accueil</string>
     <string name="title_section2">Profile Store</string>

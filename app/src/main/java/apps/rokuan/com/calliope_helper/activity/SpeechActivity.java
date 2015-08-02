@@ -18,8 +18,6 @@ import apps.rokuan.com.calliope_helper.service.ConnectionService;
 
 
 public class SpeechActivity extends NavigationDrawerActivity {
-    //private static final String BACK_STACK_NAME = "speechBackStack";
-
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -18,8 +18,6 @@ import de.greenrobot.event.EventBus;
 
 
 public class LoadingActivity extends AppCompatActivity {
-    public static final int RESULT_LEAVE_APPLICATION = 1;
-
     private EventBus bus = EventBus.getDefault();
 
     @Bind(R.id.table_message) protected TextView messageView;
@@ -42,11 +40,9 @@ public class LoadingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result){
             Intent i = new Intent(activity, ConnectionActivity.class);
-            //activity.startActivityForResult(i, RESULT_LEAVE_APPLICATION);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             activity.startActivity(i);
-            //activity.finish();
         }
     }
 
@@ -109,10 +105,4 @@ public class LoadingActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        // TODO: verifier les autres cas de resultats
-        this.finish();
-    }*/
 }

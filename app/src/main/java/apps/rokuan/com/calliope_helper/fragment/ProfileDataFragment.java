@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import apps.rokuan.com.calliope_helper.R;
+import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.Profile;
 
@@ -24,7 +25,6 @@ public class ProfileDataFragment extends PlaceholderFragment {
     public static final int PEOPLE_TAB = 2;
     public static final int MODES_TAB = 3;
 
-    public static final String EXTRA_PROFILE_KEY = "profile_to_display";
     public static final String ARG_DATA_INITIAL_TAB = "initial_tab";
 
     private ViewPager mViewPager;
@@ -42,8 +42,8 @@ public class ProfileDataFragment extends PlaceholderFragment {
 
         Bundle args = this.getArguments();
 
-        if(args.containsKey(EXTRA_PROFILE_KEY)){
-            profileId = args.getString(EXTRA_PROFILE_KEY);
+        if(args.containsKey(ProfileActivity.EXTRA_PROFILE_KEY)){
+            profileId = args.getString(ProfileActivity.EXTRA_PROFILE_KEY);
         } else {
             profileId = this.getActivity().getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
                     .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
@@ -90,7 +90,7 @@ public class ProfileDataFragment extends PlaceholderFragment {
             }
 
             Bundle args = new Bundle();
-            args.putString(EXTRA_PROFILE_KEY, profileId);
+            args.putString(ProfileActivity.EXTRA_PROFILE_KEY, profileId);
             fragment.setArguments(args);
 
             return fragment;

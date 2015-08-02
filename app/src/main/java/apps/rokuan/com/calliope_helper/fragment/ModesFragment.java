@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import apps.rokuan.com.calliope_helper.R;
+import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.CustomProfileMode;
 import butterknife.Bind;
@@ -36,7 +37,7 @@ public class ModesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_data_modes, parent, false);
-        profileId = this.getArguments().getString(ProfileDataFragment.EXTRA_PROFILE_KEY);
+        profileId = this.getArguments().getString(ProfileActivity.EXTRA_PROFILE_KEY);
         ButterKnife.bind(this, v);
         return v;
     }

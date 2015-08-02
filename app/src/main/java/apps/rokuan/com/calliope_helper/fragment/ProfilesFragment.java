@@ -1,6 +1,7 @@
 package apps.rokuan.com.calliope_helper.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import apps.rokuan.com.calliope_helper.R;
+import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.Profile;
 import butterknife.Bind;
@@ -39,10 +41,9 @@ public class ProfilesFragment extends PlaceholderFragment {
 
     @OnClick(R.id.add_profile)
     public void createProfile(){
-        this.getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new ProfileEditFragment())
-                .addToBackStack(null)
-                .commit();
+        Intent i = new Intent(getActivity(), ProfileActivity.class);
+        i.putExtra(ProfileActivity.EXTRA_SECTION_KEY, ProfileActivity.PROFILE_EDIT_SECTION);
+        startActivity(i);
     }
 
     @Override
@@ -55,16 +56,13 @@ public class ProfilesFragment extends PlaceholderFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Profile selectedProfile = adapter.getItem(position);
-                ProfileInfoFragment fragment = new ProfileInfoFragment();
                 Bundle args = new Bundle();
+                args.putString(ProfileActivity.EXTRA_PROFILE_KEY, selectedProfile.getIdentifier());
 
-                args.putString(ProfileDataFragment.EXTRA_PROFILE_KEY, selectedProfile.getIdentifier());
-                fragment.setArguments(args);
-
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container, fragment)
-                        .addToBackStack(null)
-                        .commit();
+                Intent i = new Intent(getActivity(), ProfileActivity.class);
+                i.putExtra(ProfileActivity.EXTRA_PROFILE_BUNDLE_KEY, args);
+                i.putExtra(ProfileActivity.EXTRA_SECTION_KEY, ProfileActivity.PROFILE_INFO_SECTION);
+                startActivity(i);
             }
         });
         try {

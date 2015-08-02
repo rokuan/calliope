@@ -52,6 +52,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import apps.rokuan.com.calliope_helper.event.ProfileEvent;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -381,19 +382,26 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     private List<?> queryProfileData(Class<?> daoClass, String queryField, String queryValue, String profileName){
         try {
             Dao<?, ?> dataDao = DaoManager.createDao(this.getConnectionSource(), daoClass);
-            /*String currentProfile = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
-                    .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);*/
             QueryBuilder builder = dataDao.queryBuilder();
             Where where = builder.where();
 
             where.like(queryField, "%" + queryValue + "%")
                     .and()
-                    //.eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
                     .eq(Profile.PROFILE_COLUMN_NAME, profileName);
             return dataDao.query(where.prepare());
         } catch (SQLException e) {
             e.printStackTrace();
             return new ArrayList();
+        }
+    }
+
+    public boolean addProfile(Profile p){
+        try {
+            Dao<Profile, String> dao = DaoManager.createDao(this.getConnectionSource(), Profile.class);
+            return (dao.create(p) >= 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -412,6 +420,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public boolean deleteProfile(String profileId){
         try {
             Dao<Profile, String> dao = DaoManager.createDao(this.getConnectionSource(), Profile.class);
+            boolean result;
 
             for(Class<?> profileRelatedClass: PROFILE_CLASSES){
                 Dao<?, ?> classDao = DaoManager.createDao(this.getConnectionSource(), profileRelatedClass);
@@ -420,7 +429,22 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 builder.delete();
             }
 
-            return (dao.deleteById(profileId) >= 0);
+            result = (dao.deleteById(profileId) >= 0);
+
+            if(result){
+                String currentProfileId = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
+                        .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
+
+                if(profileId.equals(currentProfileId)){
+                    // Choisir un profil actif de remplacement
+                    context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0).edit()
+                            .putString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE)
+                            .apply();
+                    EventBus.getDefault().post(new ProfileEvent(getActiveProfile()));
+                }
+            }
+
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

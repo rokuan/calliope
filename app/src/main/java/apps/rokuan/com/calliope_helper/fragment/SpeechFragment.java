@@ -11,14 +11,12 @@ import android.os.Messenger;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 
 import java.util.ArrayList;
@@ -59,7 +57,7 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
-        View mainView = inflater.inflate(R.layout.fragment_home, parent, false);
+        View mainView = inflater.inflate(R.layout.fragment_speech, parent, false);
 
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
