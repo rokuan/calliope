@@ -49,9 +49,9 @@ public class ProfileDataFragment extends PlaceholderFragment {
                     .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
         }
 
-        if(args.containsKey(ARG_DATA_INITIAL_TAB)){
+        /*if(args.containsKey(ARG_DATA_INITIAL_TAB)){
             mViewPager.setCurrentItem(args.getInt(ARG_DATA_INITIAL_TAB));
-        }
+        }*/
 
         return mainView;
     }

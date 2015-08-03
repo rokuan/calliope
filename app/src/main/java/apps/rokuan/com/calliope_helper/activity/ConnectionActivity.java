@@ -84,11 +84,11 @@ public class ConnectionActivity extends NavigationDrawerActivity implements Frag
                     fragment = new ProfilesFragment();
                     break;
                 case 4:
-                case 5:
+                /*case 5:
                 case 6:
-                case 7:
+                case 7:*/
                 default:
-                    args.putInt(ProfileDataFragment.ARG_DATA_INITIAL_TAB, sectionNumber - 4);
+                    //args.putInt(ProfileDataFragment.ARG_DATA_INITIAL_TAB, sectionNumber - 4);
                     fragment = new ProfileDataFragment();
                     break;
             }

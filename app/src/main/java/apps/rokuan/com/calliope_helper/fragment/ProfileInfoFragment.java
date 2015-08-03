@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.sql.SQLException;
 
@@ -29,6 +31,9 @@ public class ProfileInfoFragment extends Fragment {
     private Profile profile;
     private CalliopeSQLiteOpenHelper db;
 
+    @Bind(R.id.profile_info_icon) protected ImageView profileImageView;
+    @Bind(R.id.profile_info_name) protected TextView profileNameView;
+    @Bind(R.id.profile_info_id) protected TextView profileIdView;
     @Bind(R.id.select_profile) protected Button selectButton;
     @Bind(R.id.delete_profile) protected Button deleteButton;
 
@@ -96,6 +101,10 @@ public class ProfileInfoFragment extends Fragment {
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
         try {
             profile = db.getProfile(profileId);
+
+            profileImageView.setImageBitmap(profile.getIcon());
+            profileNameView.setText(profile.getName());
+            profileIdView.setText(profile.getIdentifier());
 
             String currentProfileId = this.getActivity().getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
                     .getString(Profile.ACTIVE_PROFILE_KEY, null);

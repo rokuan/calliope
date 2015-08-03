@@ -28,6 +28,7 @@ public class ConnectionService extends Service {
             switch (msg.what) {
                 case BLUETOOTH_CONNECTION:
                     socket = new BluetoothDataSocket((BluetoothSocket)msg.obj);
+                    Log.i("ConnectionService", "BluetoothDataSocket connected");
                     break;
                 case INTERNET_CONNECTION:
                     socket = new WifiDataSocket((Socket)msg.obj);

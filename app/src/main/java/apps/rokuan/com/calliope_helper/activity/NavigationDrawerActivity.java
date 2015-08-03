@@ -23,7 +23,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    //private CharSequence mTitle;
+    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        //mTitle = getTitle();
+        mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -50,6 +50,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
     }*/
 
     public void onSectionAttached(int number) {
+        mTitle = getResources().getStringArray(R.array.sections)[number - 1];
         /*switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
@@ -78,7 +79,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        //actionBar.setTitle(mTitle);
+        actionBar.setTitle(mTitle);
     }
 
     @Override

@@ -2,16 +2,16 @@
 <resources>
     <string name="app_name">Calliope - Helper</string>
 
-    <string name="hello_world">Hello world!</string>
+    <!-- <string name="hello_world">Hello world!</string> -->
     <string name="title_activity_home">HomeActivity</string>
 
     <string name="action_settings">Paramètres</string>
     <string name="action_save">Enregistrer</string>
     <string name="action_cancel">Annuler</string>
 
-    <string name="title_section1">Accueil</string>
+    <!-- <string name="title_section1">Accueil</string>
     <string name="title_section2">Profile Store</string>
-    <string name="title_section3">Profils</string>
+    <string name="title_section3">Profils</string> -->
 
     <string name="navigation_drawer_open">Ouvrir le volet de navigation</string>
     <string name="navigation_drawer_close">Fermer le volet de navigation</string>
@@ -20,10 +20,11 @@
         <item>Accueil</item>
         <item>Store</item>
         <item>Profils</item>
-        <item>Objets</item>
+        <item>Données</item>
+        <!-- <item>Objets</item>
         <item>Lieux</item>
         <item>Personnes</item>
-        <item>Modes</item>
+        <item>Modes</item> -->
     </string-array>
 
     <string name="exit_activity">Voulez-vous vous deconnecter ?</string>
@@ -33,19 +34,24 @@
     <string name="text_field_hint">Texte</string>
     <string name="code_field_hint">Code</string>
     <string name="name_field_hint">Nom</string>
+    <string name="id_field_hint">ID</string>
 
     <string name="wifi_address_hint">Adresse</string>
     <string name="wifi_port_hint">Port</string>
     <string name="wifi_password_hint">Mot de passe interne</string>
     <string name="wifi_disabled">Veuillez activer le wi-fi pour continuer</string>
+    <string name="bluetooth_disabled">Veuillez activer le bluetooth pour continuer</string>
 
     <string name="connection">Connexion</string>
     <string name="save_data">Enregistrer</string>
     <string name="back_message">Appuyez à nouveau pour quitter</string>
     <string name="delete_profile_message">Supprimer ce profil ?</string>
+    <string name="scan_devices">Rechercher des périphériques</string>
 
+    <string name="connection_section">Connexion</string>
+    <string name="speech_section">Calliope</string>
     <string name="store_section">Store</string>
-    <string name="profiles_section">Profiles</string>
+    <string name="profiles_section">Profils</string>
     <string name="data_section">Données</string>
 
     <string-array name="profile_data_sections">
@@ -54,4 +60,8 @@
         <item>Personnes</item>
         <item>Modes</item>
     </string-array>
+
+    <string name="profile_delete">Supprimer</string>
+    <string name="profile_select">Activer</string>
+    <string name="profile_check">Voir</string>
 </resources>

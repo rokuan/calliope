@@ -55,6 +55,8 @@
         </android.support.design.widget.TextInputLayout>
         <Button
             android:id="@+id/wifi_connect"
+            android:background="@drawable/white_button_bgd"
+            android:textColor="@color/primary_color"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/form_input_top_margin"
             android:text="@string/connection"

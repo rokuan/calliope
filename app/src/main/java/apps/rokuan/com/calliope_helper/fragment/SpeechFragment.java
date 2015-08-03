@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
@@ -32,6 +33,10 @@ import butterknife.OnClick;
  * Created by LEBEAU Christophe on 17/07/15.
  */
 public class SpeechFragment extends PlaceholderFragment implements RecognitionListener {
+    public static final int SPEECH_FRAME = 0;
+    public static final int SOUND_FRAME = 1;
+    public static final int PARSE_FRAME = 2;
+
     private SpeechRecognizer speech;
     private Intent recognizerIntent;
     private CalliopeSQLiteOpenHelper db;
@@ -54,10 +59,15 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
 
     @Bind(R.id.recognized_text) protected TextView resultText;
     @Bind(R.id.object_json) protected TextView jsonText;
+    @Bind({ R.id.speech_frame, R.id.sound_frame, R.id.parse_frame }) protected List<View> frames;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
-        View mainView = inflater.inflate(R.layout.fragment_speech, parent, false);
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+        if(!SpeechRecognizer.isRecognitionAvailable(this.getActivity())){
+            // TODO: afficher une dialog qui redirige l'utilisateur vers un STT
+        }
 
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
@@ -65,17 +75,19 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getActivity().getPackageName());
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
+        View mainView = inflater.inflate(R.layout.fragment_speech, parent, false);
         ButterKnife.bind(this, mainView);
-
+        switchToFrame(SPEECH_FRAME);
         return mainView;
     }
 
     @Override
     public void onResume(){
         super.onResume();
-
-        //((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
         speech = SpeechRecognizer.createSpeechRecognizer(this.getActivity());
         speech.setRecognitionListener(this);
@@ -105,7 +117,18 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
 
     @OnClick(R.id.speech_button)
     public void startSpeechRecognition(){
+        switchToFrame(SOUND_FRAME);
         speech.startListening(recognizerIntent);
+    }
+
+    private void switchToFrame(int frameIndex){
+        frames.get(frameIndex).setVisibility(View.VISIBLE);
+
+        for(int i=0; i<frames.size(); i++){
+            if(i != frameIndex){
+                frames.get(i).setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @Override
@@ -142,12 +165,15 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
     public void onResults(Bundle results) {
         ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
-        Log.i("HomeFragment", "SpeechResults");
-
         try{
             String result = data.get(0);
             String rightPart = result.length() > 1 ? result.substring(1) : "";
+
+            switchToFrame(PARSE_FRAME);
+
             InterpretationObject object = db.parseText(result);
+
+            switchToFrame(SPEECH_FRAME);
 
             resultText.setText(Character.toUpperCase(result.charAt(0)) + rightPart);
 
@@ -162,6 +188,8 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
             }
         }catch(Exception e){
             e.printStackTrace();
+        } finally {
+            switchToFrame(SPEECH_FRAME);
         }
     }
 

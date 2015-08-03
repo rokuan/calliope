@@ -38,6 +38,7 @@ import apps.rokuan.com.calliope_helper.event.ProfileEvent;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -76,14 +77,15 @@ public class NavigationDrawerFragment extends Fragment {
     public static final int PEOPLE_SECTION = 5;
 
     private DrawerLayout mDrawerLayout;
-    //private ListView mDrawerListView;
     private View mFragmentContainerView;
 
     @Bind(R.id.menu_list) protected ListView mDrawerListView;
+    @Bind(R.id.profile_icon) protected CircleImageView profileIconView;
     @Bind(R.id.profile_name) protected TextView profileNameView;
     @Bind(R.id.profile_code) protected TextView profileCodeView;
 
     private int mCurrentSelectedPosition = 0;
+    private ArrayList<Integer> mPositionsHistory = new ArrayList<>();
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private EventBus mBus = EventBus.getDefault();
@@ -104,6 +106,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            mPositionsHistory = savedInstanceState.getIntegerArrayList(STATE_POSITIONS_HISTORY);
             mFromSavedInstanceState = true;
         }
 
@@ -116,6 +119,22 @@ public class NavigationDrawerFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
+
+        this.getActivity().getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                if (fragmentManager.getBackStackEntryCount() < mPositionsHistory.size()) {
+                    mPositionsHistory.remove(mPositionsHistory.size() - 1);
+                    try {
+                        navigateToPosition(mPositionsHistory.get(mPositionsHistory.size() - 1));
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -221,6 +240,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
+        mPositionsHistory.add(position);
 
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
@@ -231,6 +251,14 @@ public class NavigationDrawerFragment extends Fragment {
         close();
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
+        }
+    }
+
+    private void navigateToPosition(int position){
+        mCurrentSelectedPosition = position;
+
+        if (mDrawerListView != null) {
+            mDrawerListView.setItemChecked(position, true);
         }
     }
 
@@ -284,6 +312,7 @@ public class NavigationDrawerFragment extends Fragment {
     private void setCurrentProfile(Profile p){
         if(p != null) {
             mCurrentProfile = p;
+            profileIconView.setImageBitmap(p.getIcon());
             profileNameView.setText(p.getName());
             profileCodeView.setText(p.getIdentifier());
         }
@@ -293,6 +322,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        outState.putIntegerArrayList(STATE_POSITIONS_HISTORY, mPositionsHistory);
     }
 
     @Override

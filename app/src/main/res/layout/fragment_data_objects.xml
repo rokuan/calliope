@@ -67,6 +67,8 @@
 
         <Button
             android:id="@+id/object_form_save"
+            android:background="@drawable/white_button_bgd"
+            android:textColor="@color/primary_color"
             android:textAllCaps="true"
             android:text="@string/save_data"
             android:layout_gravity="right"

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -30,6 +31,12 @@ public class ConnectionFragment extends PlaceholderFragment {
         viewPager.setAdapter(new ConnectionPagerAdapter(this.getChildFragmentManager()));
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.connection_section);
     }
 
     public class ConnectionPagerAdapter extends FragmentPagerAdapter {

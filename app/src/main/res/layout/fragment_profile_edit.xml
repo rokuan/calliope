@@ -22,7 +22,7 @@
         <EditText
             android:id="@+id/profile_edit_identifier"
             android:layout_marginTop="@dimen/form_input_top_margin"
-            android:hint="@string/code_field_hint"
+            android:hint="@string/id_field_hint"
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

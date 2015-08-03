@@ -3,26 +3,72 @@
     android:background="#FFFFFF"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/dark_primary_color"
+        android:padding="@dimen/form_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
+        <ImageView
+            android:id="@+id/profile_info_icon"
+            android:background="#FFFFFF"
+            android:layout_width="96dp"
+            android:layout_height="96dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/form_padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/profile_info_name"
+                android:textSize="@dimen/profile_name_text_size"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:text="Profil test"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/profile_info_id"
+                android:textSize="@dimen/profile_id_text_size"
+                android:textColor="#FFFFFF"
+                android:textStyle="italic"
+                android:layout_marginTop="@dimen/form_input_top_margin"
+                android:text="profil_test"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:padding="@dimen/small_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <Button
             android:id="@+id/delete_profile"
+            android:background="@drawable/white_button_bgd"
+            android:textColor="@color/primary_color"
             android:layout_toLeftOf="@+id/select_profile"
-            android:text="Supprimer"
+            android:text="@string/profile_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/select_profile"
+            android:background="@drawable/white_button_bgd"
+            android:layout_marginLeft="@dimen/small_padding"
+            android:textColor="@color/primary_color"
             android:layout_toLeftOf="@+id/see_profile"
-            android:text="Selectionner"
+            android:text="@string/profile_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/see_profile"
+            android:background="@drawable/white_button_bgd"
+            android:layout_marginLeft="@dimen/small_padding"
+            android:textColor="@color/primary_color"
             android:layout_alignParentRight="true"
-            android:text="Voir"
+            android:text="@string/profile_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>

@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
@@ -24,17 +26,17 @@
         </activity>
         <activity
             android:name=".activity.ConnectionActivity"
-            android:label="@string/title_activity_home"
+            android:label="@string/connection_section"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.SpeechActivity"
-            android:label="@string/title_activity_home"
+            android:label="@string/speech_section"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.ProfileActivity"
-            android:label="@string/title_activity_home"
+            android:label="@string/profiles_section"
             android:screenOrientation="portrait">
         </activity>
 

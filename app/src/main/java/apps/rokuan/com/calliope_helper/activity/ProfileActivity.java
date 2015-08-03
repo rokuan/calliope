@@ -55,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void navigateToFragment(int section){
-        Fragment fragment = null;
+        Fragment fragment;
 
         switch(section){
             case PROFILE_INFO_SECTION:

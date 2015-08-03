@@ -1,6 +1,7 @@
 package apps.rokuan.com.calliope_helper.db;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -34,12 +35,21 @@ public class Profile {
         profileName = name;
     }
 
+    public Profile(String code, String name, Bitmap icon){
+        this(code, name);
+        profileIcon = icon;
+    }
+
     public String getName(){
         return profileName;
     }
 
     public String getIdentifier(){
         return profileId;
+    }
+
+    public Bitmap getIcon(){
+        return profileIcon;
     }
 
     @Override
