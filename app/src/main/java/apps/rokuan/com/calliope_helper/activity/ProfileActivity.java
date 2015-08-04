@@ -32,11 +32,6 @@ public class ProfileActivity extends AppCompatActivity {
     public static final int PROFILE_INFO_SECTION = 0;
     public static final int PROFILE_EDIT_SECTION = 1;
 
-    @Bind(R.id.profile_edit_name) protected EditText profileNameView;
-    @Bind(R.id.profile_edit_identifier) protected EditText profileIdentifierView;
-
-    private CalliopeSQLiteOpenHelper db;
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

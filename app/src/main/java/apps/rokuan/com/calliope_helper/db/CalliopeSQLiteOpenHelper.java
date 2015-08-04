@@ -20,6 +20,7 @@ import com.rokuan.calliopecore.parser.SpeechParser;
 import com.rokuan.calliopecore.parser.WordBuffer;
 import com.rokuan.calliopecore.sentence.Action;
 import com.rokuan.calliopecore.sentence.CityInfo;
+import com.rokuan.calliopecore.sentence.ColorInfo;
 import com.rokuan.calliopecore.sentence.CountryInfo;
 import com.rokuan.calliopecore.sentence.CustomMode;
 import com.rokuan.calliopecore.sentence.CustomObject;
@@ -65,6 +66,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     private static final Class<?>[] COMMON_CLASSES = {
             Word.class,
             LanguageInfo.class,
+            ColorInfo.class,
             CityInfo.class,
             CountryInfo.class,
             VerbConjugation.class,
@@ -74,6 +76,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     private static final String[] COMMON_COLUMN_NAMES = {
             Word.WORD_FIELD_NAME,
             LanguageInfo.LANGUAGE_FIELD_NAME,
+            ColorInfo.COLOR_FIELD_NAME,
             CityInfo.CITY_FIELD_NAME,
             CountryInfo.COUNTRY_FIELD_NAME,
             VerbConjugation.VALUE_FIELD_NAME,
@@ -111,6 +114,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             TableUtils.createTable(connectionSource, CityInfo.class);
             TableUtils.createTable(connectionSource, CountryInfo.class);
             TableUtils.createTable(connectionSource, LanguageInfo.class);
+            TableUtils.createTable(connectionSource, ColorInfo.class);
             // TODO: tables des couleurs (et prenoms ?)
             TableUtils.createTable(connectionSource, Verb.class);
             TableUtils.createTable(connectionSource, VerbConjugation.class);
@@ -133,6 +137,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             loadCountries(connectionSource);
             defaultBus.post(new DatabaseEvent("Langues"));
             loadLanguages(connectionSource);
+            defaultBus.post(new DatabaseEvent("Couleurs"));
+            loadColors(connectionSource);
             defaultBus.post(new DatabaseEvent("Verbes"));
             loadVerbs(connectionSource);
             defaultBus.post(new DatabaseEvent("Conjugaisons"));
@@ -232,6 +238,23 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             String[] fields = line.split(DATA_SEPARATOR);
 
             dao.create(new LanguageInfo(fields[0], fields[1]));
+        }
+
+        in.close();
+        sc.close();
+    }
+
+    private void loadColors(ConnectionSource connectionSource) throws IOException, SQLException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("colors.txt");
+        Scanner sc = new Scanner(in);
+        Dao<ColorInfo, String> dao = DaoManager.createDao(connectionSource, ColorInfo.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new ColorInfo(fields[0], fields[1]));
         }
 
         in.close();
@@ -454,7 +477,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public boolean addCustomObject(CustomProfileObject object, String profileId){
         try {
             Dao<CustomProfileObject, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileObject.class);
-            //object.setProfile(getActiveProfile());
             object.setProfile(getProfile(profileId));
             return (dao.create(object) >= 0);
         } catch (SQLException e) {
@@ -466,7 +488,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public boolean addCustomPlace(CustomProfilePlace place, String profileId){
         try {
             Dao<CustomProfilePlace, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePlace.class);
-            //place.setProfile(getActiveProfile());
             place.setProfile(getProfile(profileId));
             return (dao.create(place) >= 0);
         } catch (SQLException e) {
@@ -478,7 +499,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public boolean addCustomPerson(CustomProfilePerson person, String profileId){
         try {
             Dao<CustomProfilePerson, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePerson.class);
-            //person.setProfile(getActiveProfile());
             person.setProfile(getProfile(profileId));
             return (dao.create(person) >= 0);
         } catch (SQLException e) {
@@ -490,7 +510,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public boolean addCustomMode(CustomProfileMode mode, String profileId){
         try {
             Dao<CustomProfileMode, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileMode.class);
-            //mode.setProfile(getActiveProfile());
             mode.setProfile(getProfile(profileId));
             return (dao.create(mode) >= 0);
         } catch (SQLException e) {
@@ -641,6 +660,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         Word result = queryFirst(this, Word.class, Word.WORD_FIELD_NAME, q);
 
         LanguageInfo language = findLanguageInfo(q);
+        ColorInfo color = findColorInfo(q);
         CityInfo city = findCityInfo(q);
         CountryInfo country = findCountryInfo(q);
         CustomObject object = findCustomObject(q);
@@ -663,6 +683,10 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
         if(language != null){
             types.add(Word.WordType.LANGUAGE);
+        }
+
+        if(color != null){
+            types.add(Word.WordType.COLOR);
         }
 
         if(city != null){
@@ -717,6 +741,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
         if(result != null) {
             result.setLanguageInfo(language);
+            result.setColorInfo(color);
             result.setCityInfo(city);
             result.setCountryInfo(country);
             result.setCustomObject(object);
@@ -792,6 +817,10 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
     public LanguageInfo findLanguageInfo(String q){
         return queryFirst(this, LanguageInfo.class, LanguageInfo.LANGUAGE_FIELD_NAME, q);
+    }
+
+    public ColorInfo findColorInfo(String q){
+        return queryFirst(this, ColorInfo.class, ColorInfo.COLOR_FIELD_NAME, q);
     }
 
     public CityInfo findCityInfo(String q){

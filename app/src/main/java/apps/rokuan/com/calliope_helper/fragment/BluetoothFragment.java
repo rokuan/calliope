@@ -137,7 +137,7 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
 
         this.getActivity().registerReceiver(bluetoothState, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
         this.getActivity().registerReceiver(deviceReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-        this.getActivity().registerReceiver(deviceReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+        this.getActivity().registerReceiver(bluetoothAdapterReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
     }
 
     @Override

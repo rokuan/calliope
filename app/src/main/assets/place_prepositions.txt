@@ -35,9 +35,15 @@ chez;AT
 en face de;FRONT
 en face du;FRONT
 en face des;FRONT
+à la gauche de;LEFT
+à la gauche du;LEFT
+à la gauche des;LEFT
 à gauche de;LEFT
 à gauche du;LEFT
 à gauche des;LEFT
+à la droite de;RIGHT
+à la droite du;RIGHT
+à la droite des;RIGHT
 à droite de;RIGHT
 à droite du;RIGHT
 à droite des;RIGHT
@@ -47,4 +53,10 @@ en bas des;DOWN
 en haut de;UP
 en haut du;UP
 en haut des;UP
+au centre de;CENTER
+au centre du;CENTER
+au centre des;CENTER
+au milieu de;CENTER
+au milieu du;CENTER
+au milieu des;CENTER
 parmi;AMONG
