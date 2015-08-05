@@ -65,23 +65,28 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
     private static final Class<?>[] COMMON_CLASSES = {
             Word.class,
+            VerbConjugation.class,
+            PlacePreposition.class,
+            TimePreposition.class,
+            WayPreposition.class,
+            PurposePreposition.class,
             LanguageInfo.class,
             ColorInfo.class,
             CityInfo.class,
-            CountryInfo.class,
-            VerbConjugation.class,
-            PlacePreposition.class,
-            TimePreposition.class
+            CountryInfo.class
     };
     private static final String[] COMMON_COLUMN_NAMES = {
+            // Ordre different pour des raisons de performance
             Word.WORD_FIELD_NAME,
+            VerbConjugation.VALUE_FIELD_NAME,
+            PlacePreposition.VALUE_FIELD_NAME,
+            TimePreposition.VALUE_FIELD_NAME,
+            WayPreposition.VALUE_FIELD_NAME,
+            PurposePreposition.VALUE_FIELD_NAME,
             LanguageInfo.LANGUAGE_FIELD_NAME,
             ColorInfo.COLOR_FIELD_NAME,
             CityInfo.CITY_FIELD_NAME,
-            CountryInfo.COUNTRY_FIELD_NAME,
-            VerbConjugation.VALUE_FIELD_NAME,
-            PlacePreposition.VALUE_FIELD_NAME,
-            TimePreposition.VALUE_FIELD_NAME
+            CountryInfo.COUNTRY_FIELD_NAME
     };
     private static final Class<?>[] PROFILE_CLASSES = {
             CustomProfileObject.class,
@@ -110,24 +115,26 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, Profile.class);
+
+            // TODO: tables des et prenoms ?
             TableUtils.createTable(connectionSource, Word.class);
             TableUtils.createTable(connectionSource, CityInfo.class);
             TableUtils.createTable(connectionSource, CountryInfo.class);
             TableUtils.createTable(connectionSource, LanguageInfo.class);
             TableUtils.createTable(connectionSource, ColorInfo.class);
-            // TODO: tables des couleurs (et prenoms ?)
             TableUtils.createTable(connectionSource, Verb.class);
             TableUtils.createTable(connectionSource, VerbConjugation.class);
             TableUtils.createTable(connectionSource, PlacePreposition.class);
             TableUtils.createTable(connectionSource, TimePreposition.class);
             TableUtils.createTable(connectionSource, WayPreposition.class);
             TableUtils.createTable(connectionSource, PurposePreposition.class);
+
             TableUtils.createTable(connectionSource, CustomProfileObject.class);
             TableUtils.createTable(connectionSource, CustomProfilePlace.class);
             TableUtils.createTable(connectionSource, CustomProfilePerson.class);
             TableUtils.createTable(connectionSource, CustomProfileMode.class);
 
-            defaultBus.post(new DatabaseEvent("Profiles"));
+            defaultBus.post(new DatabaseEvent("Profils"));
             loadProfiles(connectionSource);
             defaultBus.post(new DatabaseEvent("Mots"));
             loadWords(connectionSource);
@@ -157,7 +164,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
-
+        // TODO:
     }
 
     private void loadProfiles(ConnectionSource connectionSource) throws SQLException {
@@ -271,7 +278,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
 
-            dao.create(new Verb(fields[0], Action.VerbAction.valueOf(fields[1]), (Integer.parseInt(fields[3]) == 0)));
+            dao.create(new Verb(fields[0], Action.VerbAction.valueOf(fields[1]), (Integer.parseInt(fields[3]) != 0)));
         }
 
         in.close();
@@ -535,45 +542,24 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         String[] words = s.split(" ");
 
         for(int i=0; i<words.length; i++){
-            Word currentWord = null;
             StringBuilder wordBuilder = new StringBuilder(words[i]);
-            boolean shouldContinue = wordStartsWith(wordBuilder.toString());
+            Word currentWord = findWord(words[i]);
+            boolean shouldContinue = wordStartsWith(words[i]);
 
-            if(!shouldContinue){
-                int charIndex = words[i].indexOf('\'');
+            if(currentWord != null && !shouldContinue){
 
-                if(charIndex != -1) {
-                    String leftPart = words[i].substring(0, charIndex);
-                    String rightPart = words[i].substring(charIndex + 1, words[i].length());
-
-                    Word leftWord = findWord(leftPart);
-
-                    // Mot d'une autre langue
-                    if(leftWord == null){
-                        buffer.add(new Word(words[i], Word.WordType.OTHER));
-                        continue;
-                    } else {
-                        buffer.add(leftWord);
-                        wordBuilder = new StringBuilder(rightPart);
-                        shouldContinue = true;
-                    }
-                }
-
-                String tmpPart = wordBuilder.toString();
-                Word tmpWord = findWord(tmpPart);
-
-                if(tmpWord == null) {
-                    // TODO: faire le split sur le tiret
-                    charIndex = tmpPart.indexOf('-');
+            } else {
+                if (!shouldContinue) {
+                    int charIndex = words[i].indexOf('\'');
 
                     if (charIndex != -1) {
-                        String leftPart = tmpPart.substring(0, charIndex);
-                        String rightPart = tmpPart.substring(charIndex + 1, words[i].length());
+                        String leftPart = words[i].substring(0, charIndex);
+                        String rightPart = words[i].substring(charIndex + 1, words[i].length());
 
                         Word leftWord = findWord(leftPart);
 
                         // Mot d'une autre langue
-                        if(leftWord == null){
+                        if (leftWord == null) {
                             buffer.add(new Word(words[i], Word.WordType.OTHER));
                             continue;
                         } else {
@@ -582,23 +568,55 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                             shouldContinue = true;
                         }
                     }
-                } else {
-                    shouldContinue = true;
+
+                    String tmpPart = wordBuilder.toString();
+                    Word tmpWord = findWord(tmpPart);
+
+                    if (tmpWord == null) {
+                        // TODO: faire le split sur le tiret
+                        charIndex = tmpPart.indexOf('-');
+
+                        if (charIndex != -1) {
+                            String leftPart = tmpPart.substring(0, charIndex);
+                            String rightPart = tmpPart.substring(charIndex + 1, words[i].length());
+
+                            Word leftWord = findWord(leftPart);
+
+                            // Mot d'une autre langue
+                            if (leftWord == null) {
+                                buffer.add(new Word(words[i], Word.WordType.OTHER));
+                                continue;
+                            } else {
+                                buffer.add(leftWord);
+                                wordBuilder = new StringBuilder(rightPart);
+                                shouldContinue = true;
+                            }
+                        }
+                    } else {
+                        shouldContinue = true;
+                    }
                 }
-            }
 
-            while(shouldContinue && i < words.length){
-                currentWord = findWord(wordBuilder.toString());
+                int lastIndex = i;
 
-                i++;
+                while (shouldContinue && lastIndex < words.length) {
+                    Word tmpWord = findWord(wordBuilder.toString());
 
-                if(i < words.length) {
-                    wordBuilder.append(' ');
-                    wordBuilder.append(words[i]);
-                    shouldContinue = wordStartsWith(wordBuilder.toString());
+                    if(tmpWord != null) {
+                        currentWord = tmpWord;
+                        i = lastIndex;
+                    }
 
-                    if(!shouldContinue){
-                        i--;
+                    lastIndex++;
+
+                    if (lastIndex < words.length) {
+                        wordBuilder.append(' ');
+                        wordBuilder.append(words[lastIndex]);
+                        shouldContinue = wordStartsWith(wordBuilder.toString());
+
+                        if (!shouldContinue) {
+                            lastIndex--;
+                        }
                     }
                 }
             }
@@ -776,7 +794,15 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             try {
                 Dao<?, ?> dao = DaoManager.createDao(connectionSource, COMMON_CLASSES[i]);
                 QueryBuilder builder = dao.queryBuilder();
-                long count = builder.where().like(COMMON_COLUMN_NAMES[i], q + "%").countOf();
+
+                /*long count = builder.where()
+                        .ge(COMMON_COLUMN_NAMES[i], q)
+                        .and()
+                        .lt(COMMON_COLUMN_NAMES[i], q + "ý").countOf();*/
+                long count = builder.where()
+                        .eq(COMMON_COLUMN_NAMES[i], q)
+                        .or()
+                        .between(COMMON_COLUMN_NAMES[i], q + " ", q + "ý").countOf();
                 exists = (count > 0);
 
                 if(exists){
@@ -795,13 +821,17 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 try {
                     Dao<?, ?> dao = DaoManager.createDao(connectionSource, PROFILE_CLASSES[i]);
                     QueryBuilder builder = dao.queryBuilder();
-                    Where where = builder.where();
+                    //Where where = builder.where();
 
-                    where.like(PROFILE_RELATED_COLUMN_NAMES[i], q + "%")
+                    /*where.like(PROFILE_RELATED_COLUMN_NAMES[i], q + "%")
                             .and()
-                            .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);
+                            .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);*/
+                    long count = builder.where().like(PROFILE_RELATED_COLUMN_NAMES[i], q + "%")
+                            .and()
+                            .eq(Profile.PROFILE_COLUMN_NAME, currentProfile).countOf();
 
-                    exists = (where.countOf() > 0);
+                    exists = (count > 0);
+                    //exists = (dao.queryForFirst(preparedQuery) != null);
 
                     if(exists){
                         break;

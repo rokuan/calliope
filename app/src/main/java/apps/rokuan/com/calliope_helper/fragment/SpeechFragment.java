@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 
@@ -36,6 +38,9 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
     public static final int SPEECH_FRAME = 0;
     public static final int SOUND_FRAME = 1;
     public static final int PARSE_FRAME = 2;
+    public static final int TEXT_FRAME = 3;
+
+    public static final int INPUT_TYPE_FRAME = SPEECH_FRAME;
 
     private SpeechRecognizer speech;
     private Intent recognizerIntent;
@@ -59,7 +64,8 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
 
     @Bind(R.id.recognized_text) protected TextView resultText;
     @Bind(R.id.object_json) protected TextView jsonText;
-    @Bind({ R.id.speech_frame, R.id.sound_frame, R.id.parse_frame }) protected List<View> frames;
+    @Bind(R.id.input_command) protected EditText commandText;
+    @Bind({ R.id.speech_frame, R.id.sound_frame, R.id.parse_frame, R.id.text_frame }) protected List<View> frames;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -81,7 +87,9 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View mainView = inflater.inflate(R.layout.fragment_speech, parent, false);
         ButterKnife.bind(this, mainView);
-        switchToFrame(SPEECH_FRAME);
+        //switchToFrame(SPEECH_FRAME);
+        //switchToFrame(TEXT_FRAME);
+        switchToFrame(INPUT_TYPE_FRAME);
         return mainView;
     }
 
@@ -112,6 +120,16 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
         if(db != null){
             db.close();
             db = null;
+        }
+    }
+
+    @OnClick(R.id.input_submit)
+    public void submitText(){
+        String command = commandText.getText().toString();
+
+        if(!command.isEmpty()) {
+            startProcess(command);
+            commandText.getText().clear();
         }
     }
 
@@ -165,20 +183,32 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
     public void onResults(Bundle results) {
         ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
+        String result = data.get(0);
+        startProcess(result);
+    }
+
+    private void startProcess(String command){
         try{
-            String result = data.get(0);
-            String rightPart = result.length() > 1 ? result.substring(1) : "";
+            String rightPart = command.length() > 1 ? command.substring(1) : "";
 
             switchToFrame(PARSE_FRAME);
 
-            InterpretationObject object = db.parseText(result);
+            long start = System.currentTimeMillis();
+            InterpretationObject object = db.parseText(command);
+            long end = System.currentTimeMillis();
+            Log.i("ParseTime", (end - start) + "ms");
 
-            switchToFrame(SPEECH_FRAME);
+            //switchToFrame(SPEECH_FRAME);
+            //switchToFrame(TEXT_FRAME);
+            switchToFrame(INPUT_TYPE_FRAME);
 
-            resultText.setText(Character.toUpperCase(result.charAt(0)) + rightPart);
+            resultText.setText(Character.toUpperCase(command.charAt(0)) + rightPart);
 
             if(object != null) {
+                long jsonStart =  System.currentTimeMillis();
                 String json = InterpretationObject.toJSON(object);
+                long jsonEnd = System.currentTimeMillis();
+                Log.i("JsonTime", (jsonEnd - jsonStart) + "ms");
                 jsonText.setText(json);
 
                 Message jsonMessage = Message.obtain(null, ConnectionService.JSON_MESSAGE, json);
@@ -189,7 +219,9 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
         }catch(Exception e){
             e.printStackTrace();
         } finally {
-            switchToFrame(SPEECH_FRAME);
+            //switchToFrame(SPEECH_FRAME);
+            //switchToFrame(TEXT_FRAME);
+            switchToFrame(INPUT_TYPE_FRAME);
         }
     }
 

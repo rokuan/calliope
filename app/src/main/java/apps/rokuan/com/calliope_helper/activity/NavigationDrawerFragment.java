@@ -240,6 +240,11 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
+
+        if(position == 0){
+            mPositionsHistory.clear();
+        }
+
         mPositionsHistory.add(position);
 
         if (mDrawerListView != null) {

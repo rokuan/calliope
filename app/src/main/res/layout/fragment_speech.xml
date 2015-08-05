@@ -58,6 +58,24 @@
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/text_frame"
+            android:orientation="horizontal"
+            android:padding="@dimen/form_padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/input_command"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+            <ImageButton
+                android:id="@+id/input_submit"
+                android:src="@android:drawable/ic_menu_send"
+                android:layout_marginLeft="@dimen/form_padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
             android:id="@+id/speech_frame"
             android:orientation="horizontal"
             android:background="#FFFFFF"
