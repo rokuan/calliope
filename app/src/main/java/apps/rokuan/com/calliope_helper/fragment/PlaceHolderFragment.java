@@ -13,7 +13,7 @@ import apps.rokuan.com.calliope_helper.activity.NavigationDrawerActivity;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends Fragment {
+public abstract class PlaceholderFragment extends CalliopeFragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.

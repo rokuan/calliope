@@ -42,7 +42,7 @@ import butterknife.OnClick;
 /**
  * Created by LEBEAU Christophe on 26/07/15.
  */
-public class BluetoothFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class BluetoothFragment extends CalliopeFragment implements AdapterView.OnItemClickListener {
     @Bind(R.id.bluetooth_disabled_frame) protected View disabledBluetoothFrame;
     @Bind(R.id.bluetooth_devices_list) protected ListView devicesListView;
     @Bind(R.id.bluetooth_scan) protected Button scanButton;
@@ -191,6 +191,11 @@ public class BluetoothFragment extends Fragment implements AdapterView.OnItemCli
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         BluetoothDevice device = deviceAdapter.getItem(position);
         new BluetoothSocketAsyncTask().execute(device, getDeviceUUID());
+    }
+
+    @Override
+    public void refresh() {
+
     }
 
     class BluetoothSocketAsyncTask extends AsyncTask<Object, Void, Boolean> {

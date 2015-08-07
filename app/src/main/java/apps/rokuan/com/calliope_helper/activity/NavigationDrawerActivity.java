@@ -1,6 +1,8 @@
 package apps.rokuan.com.calliope_helper.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import apps.rokuan.com.calliope_helper.R;
+import apps.rokuan.com.calliope_helper.fragment.CalliopeFragment;
+import de.greenrobot.event.util.ErrorDialogManager;
 
 /**
  * Created by LEBEAU Christophe on 24/07/15.

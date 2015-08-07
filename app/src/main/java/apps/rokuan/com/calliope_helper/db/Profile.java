@@ -1,5 +1,6 @@
 package apps.rokuan.com.calliope_helper.db;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -50,6 +51,11 @@ public class Profile {
 
     public Bitmap getIcon(){
         return profileIcon;
+    }
+
+    public static String getCurrentProfileId(Context context){
+        return context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
+                .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
     }
 
     @Override

@@ -38,7 +38,6 @@ public class PeopleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_data_people, parent, false);
-        profileId = this.getArguments().getString(ProfileActivity.EXTRA_PROFILE_KEY);
         ButterKnife.bind(this, v);
         return v;
     }
@@ -69,6 +68,15 @@ public class PeopleFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+
+        Bundle args = this.getArguments();
+
+        if(args.getBoolean(ProfileDataFragment.ARG_USE_ACTIVE_PROFILE)){
+            profileId = Profile.getCurrentProfileId(this.getActivity());
+        } else {
+            profileId = this.getArguments().getString(ProfileActivity.EXTRA_PROFILE_KEY);
+        }
+
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
         adapter = new ProfilePersonAdapter(this.getActivity(), db.queryProfilePeople(profileId, ""));
         peopleList.setAdapter(adapter);

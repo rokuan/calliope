@@ -49,6 +49,7 @@ public class ProfilesFragment extends PlaceholderFragment {
     @Override
     public void onResume(){
         super.onResume();
+
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
         adapter = new ProfileAdapter(this.getActivity(), db.queryProfiles());
         profilesList.setAdapter(adapter);
@@ -77,6 +78,11 @@ public class ProfilesFragment extends PlaceholderFragment {
         super.onPause();
         db.close();
         db = null;
+    }
+
+    @Override
+    public void refresh() {
+
     }
 
     class ProfileAdapter extends ArrayAdapter<Profile> {

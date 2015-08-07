@@ -19,6 +19,7 @@ import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.CustomProfilePlace;
+import apps.rokuan.com.calliope_helper.db.Profile;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,7 +39,6 @@ public class PlacesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_data_places, parent, false);
-        profileId = this.getArguments().getString(ProfileActivity.EXTRA_PROFILE_KEY);
         ButterKnife.bind(this, v);
         return v;
     }
@@ -74,6 +74,15 @@ public class PlacesFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+
+        Bundle args = this.getArguments();
+
+        if(args.getBoolean(ProfileDataFragment.ARG_USE_ACTIVE_PROFILE)){
+            profileId = Profile.getCurrentProfileId(this.getActivity());
+        } else {
+            profileId = this.getArguments().getString(ProfileActivity.EXTRA_PROFILE_KEY);
+        }
+
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
         adapter = new ProfilePlaceAdapter(this.getActivity(), db.queryProfilePlaces(profileId, ""));
         placesList.setAdapter(adapter);

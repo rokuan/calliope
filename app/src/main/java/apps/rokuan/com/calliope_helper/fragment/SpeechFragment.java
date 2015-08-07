@@ -234,4 +234,9 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
     public void onEvent(int eventType, Bundle params) {
 
     }
+
+    @Override
+    public void refresh() {
+
+    }
 }

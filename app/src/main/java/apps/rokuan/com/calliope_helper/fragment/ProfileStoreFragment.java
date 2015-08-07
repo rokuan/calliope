@@ -15,4 +15,9 @@ public class ProfileStoreFragment extends PlaceholderFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_store, parent, false);
     }
+
+    @Override
+    public void refresh() {
+
+    }
 }

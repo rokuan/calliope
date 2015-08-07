@@ -26,6 +26,7 @@ public class ProfileDataFragment extends PlaceholderFragment {
     public static final int MODES_TAB = 3;
 
     public static final String ARG_DATA_INITIAL_TAB = "initial_tab";
+    public static final String ARG_USE_ACTIVE_PROFILE = "use_active_profile";
 
     private ViewPager mViewPager;
     private ProfileDataPagerAdapter pagerAdapter;
@@ -35,25 +36,28 @@ public class ProfileDataFragment extends PlaceholderFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         View mainView = inflater.inflate(R.layout.fragment_profile_data, parent, false);
-
-        pagerAdapter = new ProfileDataPagerAdapter(this.getChildFragmentManager(), this.getActivity());
         mViewPager = (ViewPager) mainView.findViewById(R.id.pager);
-        mViewPager.setAdapter(pagerAdapter);
+        return mainView;
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.refresh();
+    }
+
+    @Override
+    public void refresh() {
         Bundle args = this.getArguments();
 
-        if(args.containsKey(ProfileActivity.EXTRA_PROFILE_KEY)){
-            profileId = args.getString(ProfileActivity.EXTRA_PROFILE_KEY);
+        if(args.getBoolean(ARG_USE_ACTIVE_PROFILE)){
+            profileId = Profile.getCurrentProfileId(this.getActivity());
         } else {
-            profileId = this.getActivity().getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
-                    .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
+            profileId = args.getString(ProfileActivity.EXTRA_PROFILE_KEY);
         }
 
-        /*if(args.containsKey(ARG_DATA_INITIAL_TAB)){
-            mViewPager.setCurrentItem(args.getInt(ARG_DATA_INITIAL_TAB));
-        }*/
-
-        return mainView;
+        pagerAdapter = new ProfileDataPagerAdapter(this.getChildFragmentManager(), this.getActivity());
+        mViewPager.setAdapter(pagerAdapter);
     }
 
     class ProfileDataPagerAdapter extends FragmentPagerAdapter {
@@ -90,6 +94,7 @@ public class ProfileDataFragment extends PlaceholderFragment {
             }
 
             Bundle args = new Bundle();
+            args.putBoolean(ARG_USE_ACTIVE_PROFILE, getArguments().getBoolean(ARG_USE_ACTIVE_PROFILE));
             args.putString(ProfileActivity.EXTRA_PROFILE_KEY, profileId);
             fragment.setArguments(args);
 

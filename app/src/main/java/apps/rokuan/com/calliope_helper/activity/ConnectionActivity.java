@@ -90,6 +90,7 @@ public class ConnectionActivity extends NavigationDrawerActivity implements Frag
                 default:
                     //args.putInt(ProfileDataFragment.ARG_DATA_INITIAL_TAB, sectionNumber - 4);
                     fragment = new ProfileDataFragment();
+                    args.putBoolean(ProfileDataFragment.ARG_USE_ACTIVE_PROFILE, true);
                     break;
             }
 

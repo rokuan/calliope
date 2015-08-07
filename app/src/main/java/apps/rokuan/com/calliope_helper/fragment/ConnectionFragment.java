@@ -76,6 +76,11 @@ public class ConnectionFragment extends PlaceholderFragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.connection_section);
     }
 
+    @Override
+    public void refresh() {
+
+    }
+
     public class ConnectionPagerAdapter extends FragmentPagerAdapter {
         private final int[] tabsIcons = new int[]{ R.drawable.ic_bluetooth_white_36dp, R.drawable.ic_wifi_white_36dp };
 
