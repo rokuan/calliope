@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Calliope - Helper</string>
+    <!-- <string name="app_name">Calliope - Helper</string> -->
 
     <!-- <string name="hello_world">Hello world!</string> -->
     <string name="title_activity_home">HomeActivity</string>
@@ -39,14 +39,18 @@
     <string name="wifi_address_hint">Adresse</string>
     <string name="wifi_port_hint">Port</string>
     <string name="wifi_password_hint">Mot de passe interne</string>
-    <string name="wifi_disabled">Veuillez activer le wi-fi pour continuer</string>
-    <string name="bluetooth_disabled">Veuillez activer le bluetooth pour continuer</string>
+    <string name="connection_type">Choisissez le type de connexion</string>
+    <!-- <string name="wifi_disabled">Veuillez activer le wi-fi pour continuer</string>
+    <string name="bluetooth_disabled">Veuillez activer le bluetooth pour continuer</string> -->
+    <string name="wifi_disabled">Activez le wi-fi pour continuer avec ce mode</string>
+    <string name="bluetooth_disabled">Activez le bluetooth pour continuer avec ce mode</string>
 
     <string name="connection">Connexion</string>
     <string name="save_data">Enregistrer</string>
     <string name="back_message">Appuyez à nouveau pour quitter</string>
     <string name="delete_profile_message">Supprimer ce profil ?</string>
     <string name="scan_devices">Rechercher des périphériques</string>
+    <string name="in_construction">En construction</string>
 
     <string name="connection_section">Connexion</string>
     <string name="speech_section">Calliope</string>

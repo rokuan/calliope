@@ -4,5 +4,15 @@
         android:state_pressed="true" />
     <item android:drawable="@drawable/white_button_pressed"
         android:state_focused="true" />
+    <item android:state_enabled="false">
+        <shape>
+            <padding android:left="@dimen/small_padding"
+                android:top="@dimen/small_padding"
+                android:right="@dimen/small_padding"
+                android:bottom="@dimen/small_padding" />
+            <corners android:radius="5dp" />
+            <solid android:color="#EEEEEE" />
+        </shape>
+    </item>
     <item android:drawable="@drawable/white_button_default" />
 </selector>

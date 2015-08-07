@@ -5,12 +5,15 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <!-- <style name="WhiteButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/white_button_bgd</item>
-        <item name="android:textColor">@color/primary_color</item>
-    </style> -->
-    <!-- <style name="Button.GreenButton" parent="Widget.AppCompat.Button">
+    <style name="CalliopeButton">
+        <item name="android:layout_margin">4dp</item>
+    </style>
+    <style name="CalliopeGreenButton" parent="CalliopeButton">
         <item name="android:background">@drawable/green_button_bgd</item>
         <item name="android:textColor">#FFFFFF</item>
-    </style> -->
+    </style>
+    <style name="CalliopeWhiteButton" parent="CalliopeButton">
+        <item name="android:background">@drawable/white_button_bgd</item>
+        <item name="android:textColor">@color/primary_color</item>
+    </style>
 </resources>

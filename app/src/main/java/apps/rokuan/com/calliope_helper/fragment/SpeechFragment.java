@@ -200,7 +200,7 @@ public class SpeechFragment extends PlaceholderFragment implements RecognitionLi
 
             //switchToFrame(SPEECH_FRAME);
             //switchToFrame(TEXT_FRAME);
-            switchToFrame(INPUT_TYPE_FRAME);
+            //switchToFrame(INPUT_TYPE_FRAME);
 
             resultText.setText(Character.toUpperCase(command.charAt(0)) + rightPart);
 

@@ -47,7 +47,7 @@
         android:layout_height="wrap_content">
         <Button
             android:id="@+id/delete_profile"
-            android:background="@drawable/white_button_bgd"
+            style="@style/CalliopeWhiteButton"
             android:textColor="@color/primary_color"
             android:layout_toLeftOf="@+id/select_profile"
             android:text="@string/profile_delete"
@@ -55,18 +55,14 @@
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/select_profile"
-            android:background="@drawable/white_button_bgd"
-            android:layout_marginLeft="@dimen/small_padding"
-            android:textColor="@color/primary_color"
+            style="@style/CalliopeWhiteButton"
             android:layout_toLeftOf="@+id/see_profile"
             android:text="@string/profile_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/see_profile"
-            android:background="@drawable/white_button_bgd"
-            android:layout_marginLeft="@dimen/small_padding"
-            android:textColor="@color/primary_color"
+            style="@style/CalliopeWhiteButton"
             android:layout_alignParentRight="true"
             android:text="@string/profile_check"
             android:layout_width="wrap_content"

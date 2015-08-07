@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Calliope - Helper</string>
+    <!-- <string name="app_name">Calliope - Helper</string> -->
+    <string name="app_name" translatable="false">Calliope</string>
 
     <!-- <string name="hello_world">Hello world!</string> -->
     <string name="title_activity_home">HomeActivity</string>
@@ -50,14 +51,18 @@
     <string name="wifi_address_hint">Address</string>
     <string name="wifi_port_hint">Port</string>
     <string name="wifi_password_hint">Internal Password</string>
-    <string name="wifi_disabled">Please enable wifi to continue</string>
-    <string name="bluetooth_disabled">Please enable bluetooth to continue</string>
+    <string name="connection_type">Select the type of connection</string>
+    <!-- <string name="wifi_disabled">Please enable wifi to continue</string>
+    <string name="bluetooth_disabled">Please enable bluetooth to continue</string> -->
+    <string name="wifi_disabled">Please enable wifi to continue with this mode</string>
+    <string name="bluetooth_disabled">Please enable bluetooth to continue with this mode</string>
 
     <string name="connection">Connection</string>
     <string name="save_data">Save</string>
     <string name="back_message">Please click again to quit</string>
     <string name="delete_profile_message">Delete this profile ?</string>
     <string name="scan_devices">Scan for devices</string>
+    <string name="in_construction">In construction</string>
 
     <string name="connection_section">Connection</string>
     <string name="speech_section">Calliope</string>

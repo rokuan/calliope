@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
+        android:background="#FFFFFF"
         android:orientation="vertical"
         android:padding="@dimen/form_padding"
         android:layout_width="match_parent"
@@ -16,10 +17,11 @@
             android:id="@+id/bluetooth_scan"
             android:text="@string/scan_devices"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/bluetooth_disabled_frame"
+        android:padding="@dimen/form_padding"
         android:background="#FFFFFF"
         android:gravity="center"
         android:orientation="vertical"
