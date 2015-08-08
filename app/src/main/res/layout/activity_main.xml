@@ -1,17 +1,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:gravity="center" tools:context=".MainActivity">
+    android:gravity="center"
+    tools:context=".MainActivity">
 
-    <android.widget.ProgressBar
+
+
+    <!-- <android.widget.ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        />
+        /> -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <!-- <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_icon"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:src="@drawable/calliope_face"
+            app:border_width="10dp"
+            app:border_color="@color/light_primary_color"/> -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_icon"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:src="@drawable/calliope_face"
+            app:border_width="10dp"
+            app:border_color="@android:color/transparent"/>
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:id="@+id/progress_wheel"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            wheel:matProg_barWidth="10dp"
+            wheel:matProg_barColor="@color/dark_primary_color"
+            wheel:matProg_progressIndeterminate="true"
+            wheel:matProg_fillRadius="true" />
+    </FrameLayout>
 
     <TextView
         android:textSize="30sp"

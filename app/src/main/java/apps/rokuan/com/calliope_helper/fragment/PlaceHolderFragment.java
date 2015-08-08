@@ -6,7 +6,6 @@ package apps.rokuan.com.calliope_helper.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import apps.rokuan.com.calliope_helper.activity.NavigationDrawerActivity;
 

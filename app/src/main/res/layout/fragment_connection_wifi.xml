@@ -58,16 +58,18 @@
             android:id="@+id/wifi_connect"
             style="@style/CalliopeGreenButton"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/form_input_top_margin"
             android:text="@string/connection"
             android:textAllCaps="true"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/wifi_disabled_frame"
         android:padding="@dimen/form_padding"
         android:background="#FFFFFF"
+        android:visibility="invisible"
         android:gravity="center"
         android:orientation="vertical"
         android:layout_width="match_parent"

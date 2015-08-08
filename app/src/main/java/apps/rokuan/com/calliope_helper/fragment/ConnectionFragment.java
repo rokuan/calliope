@@ -1,20 +1,12 @@
 package apps.rokuan.com.calliope_helper.fragment;
 
-import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,10 +54,6 @@ public class ConnectionFragment extends PlaceholderFragment {
         viewPager.setAdapter(new ConnectionPagerAdapter(this.getChildFragmentManager()));
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        //tabLayout.setupWithViewPager(viewPager);
-        /*viewPager.setAdapter(new ConnectionPagerAdapter(this.getChildFragmentManager()));
-        tabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
-        tabLayout.setViewPager(mViewPager);*/
 
         return v;
     }
@@ -82,7 +70,7 @@ public class ConnectionFragment extends PlaceholderFragment {
     }
 
     public class ConnectionPagerAdapter extends FragmentPagerAdapter {
-        private final int[] tabsIcons = new int[]{ R.drawable.ic_bluetooth_white_36dp, R.drawable.ic_wifi_white_36dp };
+        //private final int[] tabsIcons = new int[]{ R.drawable.ic_bluetooth_white_36dp, R.drawable.ic_wifi_white_36dp };
 
         public ConnectionPagerAdapter(FragmentManager fm) {
             super(fm);
