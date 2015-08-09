@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Calliope-Helper.iml" filepath="$PROJECT_DIR$/Calliope-Helper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/calliope-helper.iml" filepath="$PROJECT_DIR$/calliope-helper.iml" />
     </modules>
   </component>
 </project>

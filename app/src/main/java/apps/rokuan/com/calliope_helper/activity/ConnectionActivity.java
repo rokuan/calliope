@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.fragment.ConnectionFragment;
-import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
+import apps.rokuan.com.calliope_helper.fragment.PlaceHolderFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileDataFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileStoreFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfilesFragment;
@@ -15,7 +15,8 @@ import apps.rokuan.com.calliope_helper.fragment.ProfilesFragment;
 /**
  * Created by LEBEAU Christophe on 24/07/15.
  */
-public class ConnectionActivity extends NavigationDrawerActivity implements FragmentManager.OnBackStackChangedListener {
+//public class ConnectionActivity extends NavigationDrawerActivity implements FragmentManager.OnBackStackChangedListener {
+public class ConnectionActivity extends ToolbarDrawerActivity implements FragmentManager.OnBackStackChangedListener {
     @Override
     protected void onResume(){
         super.onResume();
@@ -69,8 +70,8 @@ public class ConnectionActivity extends NavigationDrawerActivity implements Frag
     }
 
     public static class PlaceholderConnectionFragment {
-        public static PlaceholderFragment newInstance(int sectionNumber){
-            PlaceholderFragment fragment;
+        public static PlaceHolderFragment newInstance(int sectionNumber){
+            PlaceHolderFragment fragment;
             Bundle args = new Bundle();
 
             switch(sectionNumber){
@@ -95,7 +96,7 @@ public class ConnectionActivity extends NavigationDrawerActivity implements Frag
             }
 
             //Bundle args = new Bundle();
-            args.putInt(PlaceholderFragment.ARG_SECTION_NUMBER, sectionNumber);
+            args.putInt(PlaceHolderFragment.ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
 
             return fragment;

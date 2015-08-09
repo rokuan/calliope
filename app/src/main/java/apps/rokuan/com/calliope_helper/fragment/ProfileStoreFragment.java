@@ -10,7 +10,7 @@ import apps.rokuan.com.calliope_helper.R;
 /**
  * Created by LEBEAU Christophe on 18/07/15.
  */
-public class ProfileStoreFragment extends PlaceholderFragment {
+public class ProfileStoreFragment extends PlaceHolderFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_store, parent, false);

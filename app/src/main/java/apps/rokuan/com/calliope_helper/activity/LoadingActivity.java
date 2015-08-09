@@ -51,8 +51,6 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
-
         ButterKnife.bind(this);
     }
 
@@ -82,13 +80,6 @@ public class LoadingActivity extends AppCompatActivity {
                 messageView.setText(message + "...");
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     @Override

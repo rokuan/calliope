@@ -25,7 +25,7 @@ import butterknife.OnClick;
 /**
  * Created by LEBEAU Christophe on 17/07/15.
  */
-public class ProfilesFragment extends PlaceholderFragment {
+public class ProfilesFragment extends PlaceHolderFragment {
     @Bind(R.id.fragment_profiles_list) protected ListView profilesList;
 
     private CalliopeSQLiteOpenHelper db;

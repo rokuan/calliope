@@ -33,7 +33,7 @@ import butterknife.OnClick;
 /**
  * Created by LEBEAU Christophe on 17/07/15.
  */
-public class SpeechFragment extends PlaceholderFragment implements RecognitionListener {
+public class SpeechFragment extends PlaceHolderFragment implements RecognitionListener {
     public static final int SPEECH_FRAME = 0;
     public static final int SOUND_FRAME = 1;
     public static final int PARSE_FRAME = 2;

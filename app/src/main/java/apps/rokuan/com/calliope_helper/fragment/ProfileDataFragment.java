@@ -17,7 +17,7 @@ import apps.rokuan.com.calliope_helper.db.Profile;
 /**
  * Created by LEBEAU Christophe on 19/07/15.
  */
-public class ProfileDataFragment extends PlaceholderFragment {
+public class ProfileDataFragment extends PlaceHolderFragment {
     public static final int OBJECTS_TAB = 0;
     public static final int PLACES_TAB = 1;
     public static final int PEOPLE_TAB = 2;

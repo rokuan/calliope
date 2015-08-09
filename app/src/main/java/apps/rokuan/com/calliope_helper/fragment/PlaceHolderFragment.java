@@ -7,12 +7,12 @@ package apps.rokuan.com.calliope_helper.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 
-import apps.rokuan.com.calliope_helper.activity.NavigationDrawerActivity;
+import apps.rokuan.com.calliope_helper.activity.ToolbarDrawerActivity;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public abstract class PlaceholderFragment extends CalliopeFragment {
+public abstract class PlaceHolderFragment extends CalliopeFragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -23,8 +23,8 @@ public abstract class PlaceholderFragment extends CalliopeFragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static PlaceholderFragment newInstance(int sectionNumber) {
-        PlaceholderFragment fragment;
+    public static PlaceHolderFragment newInstance(int sectionNumber) {
+        PlaceHolderFragment fragment;
 
         switch(sectionNumber){
             case 0:
@@ -40,7 +40,7 @@ public abstract class PlaceholderFragment extends CalliopeFragment {
         return fragment;
     }
 
-    public PlaceholderFragment() {
+    public PlaceHolderFragment() {
 
     }
 
@@ -49,7 +49,9 @@ public abstract class PlaceholderFragment extends CalliopeFragment {
         super.onAttach(activity);
 
         try {
-            ((NavigationDrawerActivity) activity).onSectionAttached(
+            /*((NavigationDrawerActivity) activity).onSectionAttached(
+                    getArguments().getInt(ARG_SECTION_NUMBER));*/
+            ((ToolbarDrawerActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }catch(Exception e){
 

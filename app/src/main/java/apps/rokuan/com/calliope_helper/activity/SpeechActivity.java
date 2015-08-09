@@ -9,7 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import apps.rokuan.com.calliope_helper.R;
-import apps.rokuan.com.calliope_helper.fragment.PlaceholderFragment;
+import apps.rokuan.com.calliope_helper.fragment.PlaceHolderFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileDataFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfileStoreFragment;
 import apps.rokuan.com.calliope_helper.fragment.ProfilesFragment;
@@ -17,7 +17,7 @@ import apps.rokuan.com.calliope_helper.fragment.SpeechFragment;
 import apps.rokuan.com.calliope_helper.service.ConnectionService;
 
 
-public class SpeechActivity extends NavigationDrawerActivity {
+public class SpeechActivity extends ToolbarDrawerActivity {
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -78,8 +78,8 @@ public class SpeechActivity extends NavigationDrawerActivity {
     }
 
     public static class PlaceholderSpeechFragment {
-        public static PlaceholderFragment newInstance(int sectionNumber){
-            PlaceholderFragment fragment;
+        public static PlaceHolderFragment newInstance(int sectionNumber){
+            PlaceHolderFragment fragment;
             Bundle args = new Bundle();
 
             switch(sectionNumber){
@@ -104,7 +104,7 @@ public class SpeechActivity extends NavigationDrawerActivity {
             }
 
             //Bundle args = new Bundle();
-            args.putInt(PlaceholderFragment.ARG_SECTION_NUMBER, sectionNumber);
+            args.putInt(PlaceHolderFragment.ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
 
             return fragment;

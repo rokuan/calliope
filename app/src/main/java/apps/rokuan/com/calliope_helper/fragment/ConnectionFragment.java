@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 /**
  * Created by LEBEAU Christophe on 24/07/15.
  */
-public class ConnectionFragment extends PlaceholderFragment {
+public class ConnectionFragment extends PlaceHolderFragment {
     @Bind(R.id.tab_layout) protected TabLayout tabLayout;
     @Bind(R.id.pager) protected ViewPager viewPager;
 
