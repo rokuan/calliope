@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -42,6 +45,9 @@ import butterknife.OnClick;
  * Created by LEBEAU Christophe on 26/07/15.
  */
 public class BluetoothFragment extends CalliopeFragment implements AdapterView.OnItemClickListener {
+    private static final UUID MY_UUID_INSECURE =
+            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+
     @Bind(R.id.bluetooth_disabled_frame) protected View disabledBluetoothFrame;
     @Bind(R.id.bluetooth_devices_list) protected ListView devicesListView;
     @Bind(R.id.bluetooth_scan) protected Button scanButton;
@@ -142,6 +148,7 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
     @Override
     public void onPause(){
         super.onPause();
+        bluetoothAdapter.cancelDiscovery();
         this.getActivity().unregisterReceiver(bluetoothState);
         this.getActivity().unregisterReceiver(deviceReceiver);
         this.getActivity().unregisterReceiver(bluetoothAdapterReceiver);
@@ -178,8 +185,11 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
     }
 
     private UUID getDeviceUUID(){
-        String deviceUuid = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-        return UUID.fromString(deviceUuid);
+        /*String deviceUuid = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+        System.out.println("Device UUID=" + deviceUuid);
+        return UUID.fromString(deviceUuid);*/
+        //ParcelUuid uuids = bluetoothAdapter.
+        return MY_UUID_INSECURE;
     }
 
     private boolean isBluetoothEnabled() {
@@ -188,8 +198,16 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        bluetoothAdapter.cancelDiscovery();
+
         BluetoothDevice device = deviceAdapter.getItem(position);
-        new BluetoothSocketAsyncTask().execute(device, getDeviceUUID());
+
+        try {
+            new BluetoothSocketAsyncTask().execute(device, getDeviceUUID());
+            //new BluetoothSocketAsyncTask().execute(device, UUID.randomUUID());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -204,13 +222,40 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
         protected Boolean doInBackground(Object... params) {
             BluetoothDevice device = (BluetoothDevice)params[0];
             // TODO: trouver le bon UUID
-            UUID uuid = (UUID)params[1];
+            //UUID uuid = (UUID)params[1];
+            UUID uuid = device.getUuids()[0].getUuid();
+
+            try{
+s = device.createRfcommSocketToServiceRecord(uuid);
+            }catch(Exception e2) {
+                try {
+
+                    s = device.createInsecureRfcommSocketToServiceRecord(uuid);
+                } catch (IOException e) {
+                    //e.printStackTrace();
+
+                    try {
+                        Method m = device.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                        s = (BluetoothSocket) m.invoke(device, 1);
+
+
+                    } catch (NoSuchMethodException e1) {
+                        e1.printStackTrace();
+                        return false;
+                    } catch (InvocationTargetException e1) {
+                        e1.printStackTrace();
+                        return false;
+                    } catch (IllegalAccessException e1) {
+                        e1.printStackTrace();
+                        return false;
+                    }
+                }
+            }
 
             try {
-                s = device.createRfcommSocketToServiceRecord(uuid);
+                s.connect();
             } catch (IOException e) {
                 e.printStackTrace();
-                return false;
             }
 
             return true;
