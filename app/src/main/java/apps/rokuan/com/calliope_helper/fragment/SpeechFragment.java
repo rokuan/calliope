@@ -26,6 +26,7 @@ import java.util.List;
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.service.ConnectionService;
+import apps.rokuan.com.calliope_helper.view.SoundLevelView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -64,6 +65,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
     @Bind(R.id.recognized_text) protected TextView resultText;
     @Bind(R.id.object_json) protected TextView jsonText;
     @Bind(R.id.input_command) protected EditText commandText;
+    @Bind(R.id.sound_view) protected SoundLevelView soundView;
     @Bind({ R.id.speech_frame, R.id.sound_frame, R.id.parse_frame, R.id.text_frame }) protected List<View> frames;
 
     @Override
@@ -160,7 +162,8 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
 
     @Override
     public void onRmsChanged(float rmsdB) {
-
+        Log.i("SpeechFragment", "Speech rms: " + rmsdB + "db");
+        soundView.setLevel((int)rmsdB);
     }
 
     @Override

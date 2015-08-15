@@ -17,6 +17,7 @@
             >
             <EditText
                 android:id="@+id/wifi_address"
+                android:singleLine="true"
                 android:hint="@string/wifi_address_hint"
                 android:layout_marginTop="@dimen/form_padding"
                 android:layout_width="match_parent"
@@ -32,6 +33,7 @@
             >
             <EditText
                 android:id="@+id/wifi_port"
+                android:singleLine="true"
                 android:hint="@string/wifi_port_hint"
                 android:inputType="number"
                 android:layout_marginTop="@dimen/form_padding"

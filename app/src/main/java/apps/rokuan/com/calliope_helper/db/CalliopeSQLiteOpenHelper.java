@@ -40,7 +40,7 @@ import com.rokuan.calliopecore.sentence.structure.data.DateConverter;
 import com.rokuan.calliopecore.sentence.structure.data.place.PlaceAdverbial;
 import com.rokuan.calliopecore.sentence.structure.data.purpose.PurposeAdverbial;
 import com.rokuan.calliopecore.sentence.structure.data.time.TimeAdverbial;
-import com.rokuan.calliopecore.sentence.structure.way.WayAdverbial;
+import com.rokuan.calliopecore.sentence.structure.data.way.WayAdverbial;
 
 import java.io.IOException;
 import java.io.InputStream;

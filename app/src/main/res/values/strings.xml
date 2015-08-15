@@ -56,6 +56,7 @@
     <string name="bluetooth_disabled">Please enable bluetooth to continue</string> -->
     <string name="wifi_disabled">Please enable wifi to continue with this mode</string>
     <string name="bluetooth_disabled">Please enable bluetooth to continue with this mode</string>
+    <string name="bonded_bluetooth_device">Bonded</string>
 
     <string name="connection">Connection</string>
     <string name="save_data">Save</string>

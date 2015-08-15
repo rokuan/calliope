@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -52,10 +53,16 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/sound_frame"
+            android:layout_gravity="bottom"
+            android:padding="@dimen/form_padding"
+            android:gravity="center"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+            <apps.rokuan.com.calliope_helper.view.SoundLevelView
+                android:id="@+id/sound_view"
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/text_frame"

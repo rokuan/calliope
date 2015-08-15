@@ -1,5 +1,6 @@
 package apps.rokuan.com.calliope_helper.fragment;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -53,6 +55,7 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
     @Bind(R.id.bluetooth_scan) protected Button scanButton;
 
     private BluetoothDeviceAdapter deviceAdapter;
+    private ProgressDialog bluetoothConnectionDialog;
 
     private boolean bound = false;
     private Messenger serviceMessenger;
@@ -124,6 +127,17 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
         }
     };
 
+    /*private final BroadcastReceiver deviceConnectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if(action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)){
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            }
+        }
+    };*/
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_connection_bluetooth, container, false);
@@ -163,6 +177,8 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
     }
 
     private void onTryConnect(boolean success, BluetoothSocket s){
+        closeProgressDialog();
+
         if(success) {
             socket = s;
             startAndBindService();
@@ -203,7 +219,7 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
         BluetoothDevice device = deviceAdapter.getItem(position);
 
         try {
-            new BluetoothSocketAsyncTask().execute(device, getDeviceUUID());
+            new BluetoothSocketAsyncTask(device).execute(getDeviceUUID());
             //new BluetoothSocketAsyncTask().execute(device, UUID.randomUUID());
         }catch(Exception e){
             e.printStackTrace();
@@ -215,30 +231,51 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
 
     }
 
+    private void openProgressDialog(BluetoothDevice device){
+        bluetoothConnectionDialog = ProgressDialog.show(this.getActivity(), device.getName(), this.getActivity().getString(R.string.connection), true);
+    }
+
+    private void closeProgressDialog(){
+        if(bluetoothConnectionDialog != null){
+            bluetoothConnectionDialog.dismiss();
+            bluetoothConnectionDialog = null;
+        }
+    }
+
     class BluetoothSocketAsyncTask extends AsyncTask<Object, Void, Boolean> {
         private BluetoothSocket s = null;
+        private BluetoothDevice device;
+
+        public BluetoothSocketAsyncTask(BluetoothDevice d){
+            device = d;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            openProgressDialog(device);
+        }
 
         @Override
         protected Boolean doInBackground(Object... params) {
-            BluetoothDevice device = (BluetoothDevice)params[0];
+            //BluetoothDevice device = (BluetoothDevice)params[0];
             // TODO: trouver le bon UUID
             //UUID uuid = (UUID)params[1];
-            UUID uuid = device.getUuids()[0].getUuid();
+            //UUID uuid = device.getUuids()[0].getUuid();
+            /*UUID uuid = MY_UUID_INSECURE;
 
             try{
-s = device.createRfcommSocketToServiceRecord(uuid);
+                s = device.createRfcommSocketToServiceRecord(uuid);
             }catch(Exception e2) {
                 try {
 
                     s = device.createInsecureRfcommSocketToServiceRecord(uuid);
                 } catch (IOException e) {
                     //e.printStackTrace();
-
+*/
                     try {
                         Method m = device.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
                         s = (BluetoothSocket) m.invoke(device, 1);
-
-
                     } catch (NoSuchMethodException e1) {
                         e1.printStackTrace();
                         return false;
@@ -249,13 +286,14 @@ s = device.createRfcommSocketToServiceRecord(uuid);
                         e1.printStackTrace();
                         return false;
                     }
-                }
-            }
+                /*}
+            }*/
 
             try {
                 s.connect();
             } catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
 
             return true;
@@ -263,6 +301,7 @@ s = device.createRfcommSocketToServiceRecord(uuid);
 
         @Override
         protected void onPostExecute(Boolean result){
+            super.onPostExecute(result);
             onTryConnect(result, s);
         }
     }
@@ -289,7 +328,14 @@ s = device.createRfcommSocketToServiceRecord(uuid);
             TextView deviceAddress = (TextView)v.findViewById(R.id.bluetooth_device_address);
 
             deviceName.setText(item.getName());
-            deviceAddress.setText(item.getAddress());
+
+            if(item.getBondState() == BluetoothDevice.BOND_BONDED){
+                deviceAddress.setTextColor(Color.GREEN);
+                deviceAddress.setText(this.getContext().getString(R.string.bonded_bluetooth_device));
+            } else {
+                deviceAddress.setTextColor(Color.GRAY);
+                deviceAddress.setText(item.getAddress());
+            }
 
             return v;
         }

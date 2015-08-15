@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,10 +33,15 @@ public class ProfileActivity extends AppCompatActivity {
     public static final int PROFILE_INFO_SECTION = 0;
     public static final int PROFILE_EDIT_SECTION = 1;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        toolbar = (Toolbar)this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
 
         this.getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override

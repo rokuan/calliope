@@ -44,6 +44,7 @@
     <string name="bluetooth_disabled">Veuillez activer le bluetooth pour continuer</string> -->
     <string name="wifi_disabled">Activez le wi-fi pour continuer avec ce mode</string>
     <string name="bluetooth_disabled">Activez le bluetooth pour continuer avec ce mode</string>
+    <string name="bonded_bluetooth_device">Appairé</string>
 
     <string name="connection">Connexion</string>
     <string name="save_data">Enregistrer</string>
