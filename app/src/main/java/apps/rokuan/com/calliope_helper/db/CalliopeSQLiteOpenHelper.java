@@ -9,15 +9,13 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
-import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.rokuan.calliopecore.parser.Parser;
 import com.rokuan.calliopecore.parser.SpeechParser;
-import com.rokuan.calliopecore.parser.WordBuffer;
+import com.rokuan.calliopecore.parser.WordDatabase;
 import com.rokuan.calliopecore.sentence.Action;
 import com.rokuan.calliopecore.sentence.CityInfo;
 import com.rokuan.calliopecore.sentence.ColorInfo;
@@ -59,7 +57,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by LEBEAU Christophe on 18/07/15.
  */
-public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements SpeechParser {
+public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements WordDatabase {
     public static final String DATA_SEPARATOR = ";";
     public static final String SPECIAL_ENCODING = "ISO-8859-1";
 
@@ -105,10 +103,12 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     private static final int DB_VERSION = 1;
     private Context context;
     private EventBus defaultBus = EventBus.getDefault();
+    private SpeechParser parser;
 
     public CalliopeSQLiteOpenHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
+        parser = new SpeechParser(this);
     }
 
     @Override
@@ -536,257 +536,12 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }*/
 
-    @Override
-    public WordBuffer lexSpeech(String s) {
-        WordBuffer buffer = new WordBuffer();
-        String[] words = s.split(" ");
-
-        for(int i=0; i<words.length; i++){
-            StringBuilder wordBuilder = new StringBuilder(words[i]);
-            Word currentWord = findWord(words[i]);
-            boolean shouldContinue = wordStartsWith(words[i]);
-
-            if(currentWord != null && !shouldContinue){
-
-            } else {
-                if (!shouldContinue) {
-                    int charIndex = words[i].indexOf('\'');
-
-                    if (charIndex != -1) {
-                        String leftPart = words[i].substring(0, charIndex);
-                        String rightPart = words[i].substring(charIndex + 1, words[i].length());
-
-                        Word leftWord = findWord(leftPart);
-
-                        // Mot d'une autre langue
-                        if (leftWord == null) {
-                            buffer.add(new Word(words[i], Word.WordType.OTHER));
-                            continue;
-                        } else {
-                            buffer.add(leftWord);
-                            wordBuilder = new StringBuilder(rightPart);
-                            shouldContinue = true;
-                        }
-                    }
-
-                    String tmpPart = wordBuilder.toString();
-                    Word tmpWord = findWord(tmpPart);
-
-                    if (tmpWord == null) {
-                        // TODO: faire le split sur le tiret
-                        charIndex = tmpPart.indexOf('-');
-
-                        if (charIndex != -1) {
-                            String leftPart = tmpPart.substring(0, charIndex);
-                            String rightPart = tmpPart.substring(charIndex + 1, words[i].length());
-
-                            Word leftWord = findWord(leftPart);
-
-                            // Mot d'une autre langue
-                            if (leftWord == null) {
-                                buffer.add(new Word(words[i], Word.WordType.OTHER));
-                                continue;
-                            } else {
-                                buffer.add(leftWord);
-                                wordBuilder = new StringBuilder(rightPart);
-                                shouldContinue = true;
-                            }
-                        }
-                    } else {
-                        shouldContinue = true;
-                    }
-                }
-
-                int lastIndex = i;
-
-                while (shouldContinue && lastIndex < words.length) {
-                    Word tmpWord = findWord(wordBuilder.toString());
-
-                    if(tmpWord != null) {
-                        currentWord = tmpWord;
-                        i = lastIndex;
-                    }
-
-                    lastIndex++;
-
-                    if (lastIndex < words.length) {
-                        wordBuilder.append(' ');
-                        wordBuilder.append(words[lastIndex]);
-                        shouldContinue = wordStartsWith(wordBuilder.toString());
-
-                        if (!shouldContinue) {
-                            lastIndex--;
-                        }
-                    }
-                }
-            }
-
-            buffer.add(currentWord);
-        }
-
-        Log.i("CalliopeSQL", "wordBuffer=" + buffer);
-
-        return buffer;
-    }
-
-    @Override
-    public InterpretationObject parseSpeech(WordBuffer words) {
-        return new Parser().parseInterpretationObject(words);
-    }
-
     public InterpretationObject parseText(String text){
-        return this.parseSpeech(this.lexSpeech(text));
+        return parser.parseText(text);
     }
 
-    public Word findWord(String q){
-        // TODO: PROPER_NAME, NUMBER
-        if(q.matches(DateConverter.FULL_TIME_REGEX) || q.matches(DateConverter.HOUR_ONLY_REGEX)){
-            return new Word(q, Word.WordType.TIME);
-        }
-
-        /*if(Character.isDigit(w.charAt(0))){
-            return new Word(Word.WordType.NUMBER, w);
-        }*/
-        /*if(Character.isDigit(q.charAt(0))) {
-            try {
-                return new Word(q, Word.WordType.NUMBER);
-            } catch (Exception e) {
-                Matcher matcher = Pattern.compile("[0-9]+e").matcher(w);
-
-                if (matcher.find()) {
-                    String matchingValue = matcher.group(0);
-                    long longValue = Long.parseLong(matchingValue.substring(0, matchingValue.length() - 1));
-                    return new Word(String.valueOf(longValue), Word.WordType.NUMERICAL_POSITION);
-                }
-            }
-        }*/
-        try{
-            Integer.parseInt(q);
-            return new Word(q, Word.WordType.NUMBER);
-        }catch(Exception e){
-            // TODO: les positions de la forme [0-9]eme
-            Matcher matcher = Pattern.compile("[0-9]+e").matcher(q);
-
-            if (matcher.find()) {
-                String matchingValue = matcher.group(0);
-                long longValue = Long.parseLong(matchingValue.substring(0, matchingValue.length() - 1));
-                return new Word(String.valueOf(longValue), Word.WordType.NUMERICAL_POSITION);
-            }
-        }
-
-        Set<Word.WordType> types = new HashSet<>();
-        Word result = queryFirst(this, Word.class, Word.WORD_FIELD_NAME, q);
-
-        LanguageInfo language = findLanguageInfo(q);
-        ColorInfo color = findColorInfo(q);
-        CityInfo city = findCityInfo(q);
-        CountryInfo country = findCountryInfo(q);
-        CustomObject object = findCustomObject(q);
-        CustomPlace place = findCustomPlace(q);
-        PlacePreposition placePreposition = findPlacePreposition(q);
-        TimePreposition timePreposition = findTimePreposition(q);
-        WayPreposition wayPreposition = findWayPreposition(q);
-        PurposePreposition purposePreposition = findPurposePreposition(q);
-        VerbConjugation conjugation = findConjugation(q);
-
-        if(Character.isUpperCase(q.charAt(0))){
-            if(city == null && country == null) {
-                types.add(Word.WordType.PROPER_NAME);
-            }
-        } else {
-            if(CountConverter.isAPosition(q)){
-                types.add(Word.WordType.NUMERICAL_POSITION);
-            }
-        }
-
-        if(language != null){
-            types.add(Word.WordType.LANGUAGE);
-        }
-
-        if(color != null){
-            types.add(Word.WordType.COLOR);
-        }
-
-        if(city != null){
-            types.add(Word.WordType.CITY);
-        }
-
-        if(country != null){
-            types.add(Word.WordType.COUNTRY);
-        }
-
-        if(object != null){
-            types.add(Word.WordType.OBJECT);
-        }
-
-        if(place != null){
-            types.add(Word.WordType.ADDITIONAL_PLACE);
-        }
-
-        if(placePreposition != null){
-            types.add(Word.WordType.PLACE_PREPOSITION);
-        }
-
-        if(timePreposition != null){
-            types.add(Word.WordType.TIME_PREPOSITION);
-        }
-
-        if(wayPreposition != null){
-            types.add(Word.WordType.WAY_PREPOSITION);
-        }
-
-        if(purposePreposition != null){
-            types.add(Word.WordType.PURPOSE_PREPOSITION);
-        }
-
-        if(conjugation != null){
-            types.add(Word.WordType.VERB);
-
-            if(conjugation.getVerb().isAuxiliary()){
-                types.add(Word.WordType.AUXILIARY);
-            }
-        }
-
-        if (result == null){
-            if(!types.isEmpty()) {
-                result = new Word(q, types);
-            }
-        } else {
-            for(Word.WordType t: types) {
-                result.addType(t);
-            }
-        }
-
-        if(result != null) {
-            result.setLanguageInfo(language);
-            result.setColorInfo(color);
-            result.setCityInfo(city);
-            result.setCountryInfo(country);
-            result.setCustomObject(object);
-            result.setCustomPlace(place);
-            result.setVerbInfo(conjugation);
-
-            if(placePreposition != null){
-                result.setPlacePreposition(placePreposition.getPlacePreposition());
-            }
-
-            if(timePreposition != null){
-                result.setDatePreposition(timePreposition.getTimePreposition());
-            }
-
-            if(wayPreposition != null){
-                result.setWayPreposition(wayPreposition.getWayPreposition());
-            }
-
-            if(purposePreposition != null){
-                result.setPurposePreposition(purposePreposition.getPurposePreposition());
-            }
-        }
-
-        return result;
-    }
-
-    private boolean wordStartsWith(String q){
+    @Override
+    public boolean wordStartsWith(String q){
         ConnectionSource connectionSource = this.getConnectionSource();
         boolean exists = false;
 
@@ -845,14 +600,22 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return exists;
     }
 
+    @Override
+    public Word findWord(String q) {
+        return queryFirst(this, Word.class, Word.WORD_FIELD_NAME, q);
+    }
+
+    @Override
     public LanguageInfo findLanguageInfo(String q){
         return queryFirst(this, LanguageInfo.class, LanguageInfo.LANGUAGE_FIELD_NAME, q);
     }
 
+    @Override
     public ColorInfo findColorInfo(String q){
         return queryFirst(this, ColorInfo.class, ColorInfo.COLOR_FIELD_NAME, q);
     }
 
+    @Override
     public CityInfo findCityInfo(String q){
         return queryFirst(this, CityInfo.class, CityInfo.CITY_FIELD_NAME, q);
     }
@@ -861,30 +624,37 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return queryFirst(this, CountryInfo.class, CountryInfo.COUNTRY_FIELD_NAME, q);
     }
 
+    @Override
     public CustomObject findCustomObject(String q){
         return queryFirst(this, CustomProfileObject.class, CustomObject.OBJECT_FIELD_NAME, q);
     }
 
+    @Override
     public CustomPlace findCustomPlace(String q){
         return queryFirst(this, CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, q);
     }
 
+    @Override
     public PlacePreposition findPlacePreposition(String q) {
         return queryFirst(this, PlacePreposition.class, PlacePreposition.VALUE_FIELD_NAME, q);
     }
 
+    @Override
     public TimePreposition findTimePreposition(String q) {
         return queryFirst(this, TimePreposition.class, TimePreposition.VALUE_FIELD_NAME, q);
     }
 
+    @Override
     public WayPreposition findWayPreposition(String q) {
         return queryFirst(this, WayPreposition.class, WayPreposition.VALUE_FIELD_NAME, q);
     }
 
+    @Override
     public PurposePreposition findPurposePreposition(String q) {
         return queryFirst(this, PurposePreposition.class, PurposePreposition.VALUE_FIELD_NAME, q);
     }
 
+    @Override
     public VerbConjugation findConjugation(String q){
         return queryFirst(this, VerbConjugation.class, VerbConjugation.VALUE_FIELD_NAME, q);
     }
