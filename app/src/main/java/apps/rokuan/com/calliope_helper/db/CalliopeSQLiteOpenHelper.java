@@ -324,8 +324,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[2].split(",");
+            Set<PlaceAdverbial.PlaceType> prepTypes = new HashSet<>();
 
-            dao.create(new PlacePreposition(fields[0], PlaceAdverbial.PlaceContext.valueOf(fields[1])));
+            for(String ty: types){
+                prepTypes.add(PlaceAdverbial.PlaceType.valueOf(ty));
+            }
+
+            dao.create(new PlacePreposition(fields[0], PlaceAdverbial.PlaceContext.valueOf(fields[1]), prepTypes));
         }
 
         in.close();
@@ -341,8 +347,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[2].split(",");
+            Set<TimeAdverbial.TimeType> prepTypes = new HashSet<>();
 
-            dao.create(new TimePreposition(fields[0], TimeAdverbial.DateContext.valueOf(fields[1])));
+            for(String ty: types){
+                prepTypes.add(TimeAdverbial.TimeType.valueOf(ty));
+            }
+
+            dao.create(new TimePreposition(fields[0], TimeAdverbial.DateContext.valueOf(fields[1]), prepTypes));
         }
 
         in.close();
@@ -358,8 +370,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[2].split(",");
+            Set<WayAdverbial.WayType> prepTypes = new HashSet<>();
 
-            dao.create(new WayPreposition(fields[0], WayAdverbial.WayContext.valueOf(fields[1])));
+            for(String ty: types){
+                prepTypes.add(WayAdverbial.WayType.valueOf(ty));
+            }
+
+            dao.create(new WayPreposition(fields[0], WayAdverbial.WayContext.valueOf(fields[1]), prepTypes));
         }
 
         in.close();
@@ -375,8 +393,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[2].split(",");
+            Set<PurposeAdverbial.PurposeType> prepTypes = new HashSet<>();
 
-            dao.create(new PurposePreposition(fields[0], PurposeAdverbial.PurposeContext.valueOf(fields[1])));
+            for(String ty: types){
+                prepTypes.add(PurposeAdverbial.PurposeType.valueOf(ty));
+            }
+
+            dao.create(new PurposePreposition(fields[0], PurposeAdverbial.PurposeContext.valueOf(fields[1]), prepTypes));
         }
 
         in.close();

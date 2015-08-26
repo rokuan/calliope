@@ -1,9 +1,15 @@
-avant;BEFORE
-après;AFTER
-pendant;DURING
-jusqu'à;UNTIL
-jusqu'au;UNTIL
-depuis;SINCE
-losque;WHEN
-lorsqu;WHEN
-quand;WHEN
+avant;BEFORE;SINGLE
+après;AFTER;SINGLE
+pendant;DURING;SINGLE
+jusqu'à;UNTIL;SINGLE
+jusqu'au;UNTIL;SINGLE
+depuis;SINCE;SINGLE
+lorsqu;WHEN;VERBAL
+lorsque;WHEN;VERBAL
+quand;WHEN;VERBAL
+avant d;BEFORE;VERBAL
+avant de;BEFORE;VERBAL
+au début de;BEFORE;DAY_PART
+au début du;BEFORE;DAY_PART
+à la fin de;AFTER;DAY_PART
+à la fin du;AFTER;DAY_PART

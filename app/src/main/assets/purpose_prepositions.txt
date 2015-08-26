@@ -1,6 +1,6 @@
-pour;TO
-afin de;TO
-afin d;TO
-afin que;TO
-afin qu;TO
-de manière à;TO
+pour;TO;VERBAL
+afin de;TO;VERBAL
+afin d;TO;VERBAL
+afin que;TO;VERBAL
+afin qu;TO;VERBAL
+de manière à;TO;VERBAL
