@@ -35,6 +35,7 @@
                 android:id="@+id/wifi_port"
                 android:singleLine="true"
                 android:hint="@string/wifi_port_hint"
+                android:text="@string/wifi_default_port"
                 android:inputType="number"
                 android:layout_marginTop="@dimen/form_padding"
                 android:layout_width="match_parent"

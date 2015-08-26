@@ -51,6 +51,7 @@
     <string name="wifi_address_hint">Address</string>
     <string name="wifi_port_hint">Port</string>
     <string name="wifi_password_hint">Internal Password</string>
+    <string name="wifi_default_port" translatable="false">7980</string>
     <string name="connection_type">Select the type of connection</string>
     <!-- <string name="wifi_disabled">Please enable wifi to continue</string>
     <string name="bluetooth_disabled">Please enable bluetooth to continue</string> -->
