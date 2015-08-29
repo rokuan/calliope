@@ -1,0 +1,8 @@
+pied;WALK
+voiture;CAR
+avion;PLANE
+bus;BUS
+bateau;BOAT
+train;TRAIN
+vélo;BIKE
+bicyclette;BIKE

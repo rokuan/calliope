@@ -1,2 +1,3 @@
-en;BY
-par;BY
+à;BY;TRANSPORT
+en;BY;TRANSPORT
+par;BY;TRANSPORT

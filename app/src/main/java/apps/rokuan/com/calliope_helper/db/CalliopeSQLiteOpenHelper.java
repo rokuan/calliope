@@ -28,6 +28,8 @@ import com.rokuan.calliopecore.sentence.LanguageInfo;
 import com.rokuan.calliopecore.sentence.PlacePreposition;
 import com.rokuan.calliopecore.sentence.PurposePreposition;
 import com.rokuan.calliopecore.sentence.TimePreposition;
+import com.rokuan.calliopecore.sentence.TransportInfo;
+import com.rokuan.calliopecore.sentence.UnitInfo;
 import com.rokuan.calliopecore.sentence.Verb;
 import com.rokuan.calliopecore.sentence.VerbConjugation;
 import com.rokuan.calliopecore.sentence.WayPreposition;
@@ -35,9 +37,11 @@ import com.rokuan.calliopecore.sentence.Word;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 import com.rokuan.calliopecore.sentence.structure.data.CountConverter;
 import com.rokuan.calliopecore.sentence.structure.data.DateConverter;
+import com.rokuan.calliopecore.sentence.structure.data.nominal.UnitObject;
 import com.rokuan.calliopecore.sentence.structure.data.place.PlaceAdverbial;
 import com.rokuan.calliopecore.sentence.structure.data.purpose.PurposeAdverbial;
 import com.rokuan.calliopecore.sentence.structure.data.time.TimeAdverbial;
+import com.rokuan.calliopecore.sentence.structure.data.way.TransportObject;
 import com.rokuan.calliopecore.sentence.structure.data.way.WayAdverbial;
 
 import java.io.IOException;
@@ -71,7 +75,9 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             LanguageInfo.class,
             ColorInfo.class,
             CityInfo.class,
-            CountryInfo.class
+            CountryInfo.class,
+            TransportInfo.class,
+            UnitInfo.class
     };
     private static final String[] COMMON_COLUMN_NAMES = {
             // Ordre different pour des raisons de performance
@@ -84,7 +90,9 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             LanguageInfo.LANGUAGE_FIELD_NAME,
             ColorInfo.COLOR_FIELD_NAME,
             CityInfo.CITY_FIELD_NAME,
-            CountryInfo.COUNTRY_FIELD_NAME
+            CountryInfo.COUNTRY_FIELD_NAME,
+            TransportInfo.VALUE_FIELD_NAME,
+            UnitInfo.UNIT_FIELD_NAME
     };
     private static final Class<?>[] PROFILE_CLASSES = {
             CustomProfileObject.class,
@@ -118,12 +126,17 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
             // TODO: tables des et prenoms ?
             TableUtils.createTable(connectionSource, Word.class);
+
             TableUtils.createTable(connectionSource, CityInfo.class);
             TableUtils.createTable(connectionSource, CountryInfo.class);
             TableUtils.createTable(connectionSource, LanguageInfo.class);
             TableUtils.createTable(connectionSource, ColorInfo.class);
+            TableUtils.createTable(connectionSource, TransportInfo.class);
+            TableUtils.createTable(connectionSource, UnitInfo.class);
+
             TableUtils.createTable(connectionSource, Verb.class);
             TableUtils.createTable(connectionSource, VerbConjugation.class);
+
             TableUtils.createTable(connectionSource, PlacePreposition.class);
             TableUtils.createTable(connectionSource, TimePreposition.class);
             TableUtils.createTable(connectionSource, WayPreposition.class);
@@ -146,6 +159,10 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             loadLanguages(connectionSource);
             defaultBus.post(new DatabaseEvent("Couleurs"));
             loadColors(connectionSource);
+            defaultBus.post(new DatabaseEvent("Moyens de locomotion"));
+            loadTransports(connectionSource);
+            defaultBus.post(new DatabaseEvent("Unités"));
+            loadUnits(connectionSource);
             defaultBus.post(new DatabaseEvent("Verbes"));
             loadVerbs(connectionSource);
             defaultBus.post(new DatabaseEvent("Conjugaisons"));
@@ -262,6 +279,40 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             String[] fields = line.split(DATA_SEPARATOR);
 
             dao.create(new ColorInfo(fields[0], fields[1]));
+        }
+
+        in.close();
+        sc.close();
+    }
+
+    private void loadTransports(ConnectionSource connectionSource) throws SQLException, IOException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("transports.txt");
+        Scanner sc = new Scanner(in);
+        Dao<TransportInfo, String> dao = DaoManager.createDao(connectionSource, TransportInfo.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new TransportInfo(fields[0], TransportObject.TransportType.valueOf(fields[1])));
+        }
+
+        in.close();
+        sc.close();
+    }
+
+    private void loadUnits(ConnectionSource connectionSource) throws SQLException, IOException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("units.txt");
+        Scanner sc = new Scanner(in);
+        Dao<UnitInfo, String> dao = DaoManager.createDao(connectionSource, UnitInfo.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new UnitInfo(fields[0], UnitObject.UnitType.valueOf(fields[1])));
         }
 
         in.close();
@@ -550,10 +601,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 Dao<?, ?> dao = DaoManager.createDao(connectionSource, COMMON_CLASSES[i]);
                 QueryBuilder builder = dao.queryBuilder();
 
-                /*long count = builder.where()
-                        .ge(COMMON_COLUMN_NAMES[i], q)
-                        .and()
-                        .lt(COMMON_COLUMN_NAMES[i], q + "ý").countOf();*/
                 long count = builder.where()
                         .eq(COMMON_COLUMN_NAMES[i], q)
                         .or()
@@ -576,17 +623,11 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 try {
                     Dao<?, ?> dao = DaoManager.createDao(connectionSource, PROFILE_CLASSES[i]);
                     QueryBuilder builder = dao.queryBuilder();
-                    //Where where = builder.where();
-
-                    /*where.like(PROFILE_RELATED_COLUMN_NAMES[i], q + "%")
-                            .and()
-                            .eq(Profile.PROFILE_COLUMN_NAME, currentProfile);*/
                     long count = builder.where().like(PROFILE_RELATED_COLUMN_NAMES[i], q + "%")
                             .and()
                             .eq(Profile.PROFILE_COLUMN_NAME, currentProfile).countOf();
 
                     exists = (count > 0);
-                    //exists = (dao.queryForFirst(preparedQuery) != null);
 
                     if(exists){
                         break;
@@ -620,8 +661,19 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return queryFirst(this, CityInfo.class, CityInfo.CITY_FIELD_NAME, q);
     }
 
+    @Override
     public CountryInfo findCountryInfo(String q){
         return queryFirst(this, CountryInfo.class, CountryInfo.COUNTRY_FIELD_NAME, q);
+    }
+
+    @Override
+    public TransportInfo findTransportInfo(String q) {
+        return queryFirst(this, TransportInfo.class, TransportInfo.VALUE_FIELD_NAME, q);
+    }
+
+    @Override
+    public UnitInfo findUnitInfo(String q) {
+        return queryFirst(this, UnitInfo.class, UnitInfo.UNIT_FIELD_NAME, q);
     }
 
     @Override
@@ -632,6 +684,16 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     @Override
     public CustomPlace findCustomPlace(String q){
         return queryFirst(this, CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, q);
+    }
+
+    @Override
+    public CustomMode findCustomMode(String q) {
+        return queryFirst(this, CustomProfileMode.class, CustomMode.MODE_FIELD_NAME, q);
+    }
+
+    @Override
+    public CustomPerson findCustomPerson(String q) {
+        return queryFirst(this, CustomProfilePerson.class, CustomPerson.PERSON_FIELD_NAME, q);
     }
 
     @Override

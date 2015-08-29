@@ -1,0 +1,10 @@
+mètre;METER
+mètres;METERS
+watt;WATT
+watts;WATT
+heure;HOUR
+heures;HOUR
+minute;MINUTE
+minutes;MINUTE
+seconde;SECOND
+secondes;SECOND
