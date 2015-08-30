@@ -1,4 +1,4 @@
-avant;BEFORE;
+avant;BEFORE;SINGLE
 avant d;BEFORE;VERBAL
 avant de;BEFORE;VERBAL
 avant qu';BEFORE;VERBAL
@@ -6,14 +6,18 @@ avant que;BEFORE;VERBAL
 après;AFTER;SINGLE
 après qu;AFTER;VERBAL
 après que;AFTER;VERBAL
-pendant;DURING;DAY_PART
+pendant;DURING;DAY_PART,SINGLE
 jusqu'à;UNTIL;VERBAL
 jusqu'au;UNTIL;SINGLE
 jusqu'à ce qu;UNTIL;VERBAL
 jusqu'à ce que;UNTIL;VERBAL
-depuis;SINCE
+depuis;SINCE;SINGLE
 depuis qu;SINCE;VERBAL
 depuis que;SINCE;VERBAL
 lorsqu;WHEN;VERBAL
 lorsque;WHEN;VERBAL
 quand;WHEN;VERBAL
+au début de;START;DAY_PART
+au début du;START;DAY_PART
+à la fin de;END;DAY_PART
+à la fin du;END;DAY_PART

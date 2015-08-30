@@ -1,62 +1,110 @@
-jusqu'à;TO
-jusqu'au;TO
-jusqu'aux;TO
-à côté de;NEAR
-à côté du;NEAR
-à côté des;NEAR
-à proximité de;NEAR
-à proximité du;NEAR
-à proximité des;NEAR
-à;AT
-au;AT
-aux;AT
-dans;IN
-en;IN
-sur;ON
-sous;UNDER
-au dessus de;ABOVE
-au dessus du;ABOVE
-au dessus des;ABOVE
-en dessous de;UNDER
-en dessous du;UNDER
-en dessous des;UNDER
-devant;BEFORE
-derrière;AFTER
-entre;BETWEEN
-vers;TO
-autour de;AROUND
-autour du;AROUND
-autour des;AROUND
-contre;AGAINST
-le long de;ALONG
-le long du;ALONG
-le long des;ALONG
-chez;AT
-en face de;FRONT
-en face du;FRONT
-en face des;FRONT
-à la gauche de;LEFT
-à la gauche du;LEFT
-à la gauche des;LEFT
-à gauche de;LEFT
-à gauche du;LEFT
-à gauche des;LEFT
-à la droite de;RIGHT
-à la droite du;RIGHT
-à la droite des;RIGHT
-à droite de;RIGHT
-à droite du;RIGHT
-à droite des;RIGHT
-en bas de;DOWN
-en bas du;DOWN
-en bas des;DOWN
-en haut de;UP
-en haut du;UP
-en haut des;UP
-au centre de;CENTER
-au centre du;CENTER
-au centre des;CENTER
-au milieu de;CENTER
-au milieu du;CENTER
-au milieu des;CENTER
-parmi;AMONG
+jusqu'Ã ;TO;CITY
+jusqu'au;TO;NAMED_PLACE
+jusqu'aux;TO;NOMINAL
+jusqu'en;TO;COUNTRY
+Ã  cÃ´tÃ© de;NEAR;CITY
+Ã  cÃ´tÃ© du;NEAR;COUNTRY
+Ã  cÃ´tÃ© des;NEAR;COUNTRY
+Ã  proximitÃ© de;NEAR;CITY
+Ã  proximitÃ© du;NEAR;COUNTRY
+Ã  proximitÃ© des;NEAR;COUNTRY
+Ã ;AT;CITY
+au;AT;COUNTRY
+aux;AT;COUNTRY
+dans;IN;CITY
+en;IN;COUNTRY
+sur;ON;CITY
+sous;UNDER;NOMINAL
+au dessus de;ABOVE;CITY,COUNTRY
+au dessus du;ABOVE;COUNTRY
+au dessus des;ABOVE;COUNTRY
+en dessous de;UNDER;NOMINAL
+en dessous du;UNDER;NOMINAL
+en dessous des;UNDER;NOMINAL
+devant;BEFORE;CITY,COUNTRY
+derriÃ¨re;AFTER;CITY,COUNTRY
+entre;BETWEEN;CITY,COUNTRY
+vers;TO;CITY,COUNTRY
+autour d;AROUND;CITY
+autour de;AROUND;CITY,COUNTRY
+autour du;AROUND;COUNTRY
+autour des;AROUND;COUNTRY
+contre;AGAINST;NOMINAL
+le long d;ALONG;CITY
+le long de;ALONG;CITY
+le long du;ALONG;NOMINAL
+le long des;ALONG;NOMINAL
+chez;AT;NOMINAL
+en face d;FRONT;NOMINAL
+en face de;FRONT;NOMINAL
+en face du;FRONT;NOMINAL
+en face des;FRONT;NOMINAL
+Ã  la gauche d;LEFT;NOMINAL
+Ã  la gauche de;LEFT;NOMINAL
+Ã  la gauche du;LEFT;NOMINAL
+Ã  la gauche des;LEFT;NOMINAL
+Ã  gauche d;LEFT;NOMINAL
+Ã  gauche de;LEFT;NOMINAL
+Ã  gauche du;LEFT;NOMINAL
+Ã  gauche des;LEFT;NOMINAL
+Ã  la droite d;RIGHT;NOMINAL
+Ã  la droite de;RIGHT;NOMINAL
+Ã  la droite du;RIGHT;NOMINAL
+Ã  la droite des;RIGHT;NOMINAL
+Ã  droite d;RIGHT;NOMINAL
+Ã  droite de;RIGHT;NOMINAL
+Ã  droite du;RIGHT;NOMINAL
+Ã  droite des;RIGHT;NOMINAL
+au nord d;NORTH;CITY
+au nord de;NORTH;CITY,COUNTRY
+au nord du;NORTH;COUNTRY
+au nord des;NORTH;COUNTRY
+au sud d;SOUTH;CITY
+au sud de;SOUTH;CITY
+au sud du;SOUTH;COUNTRY
+au sud des;SOUTH;COUNTRY
+Ã  l'ouest d;WEST;CITY
+Ã  l'ouest de;WEST;CITY,COUNTRY
+Ã  l'ouest du;WEST;COUNTRY
+Ã  l'ouest des;WEST;COUNTRY
+Ã  l'est d;EAST;CITY
+Ã  l'est de;EAST;CITY,COUNTRY
+Ã  l'est du;EAST;COUNTRY
+Ã  l'est des;EAST;COUNTRY
+au nord-ouest d;NORTH_WEST;CITY
+au nord-ouest de;NORTH_WEST;CITY,COUNTRY
+au nord-ouest du;NORTH_WEST;COUNTRY
+au nord-ouest des;NORTH_WEST;COUNTRY
+au nord-est d;NORTH_EAST;CITY
+au nord-est de;NORTH_EAST;CITY,COUNTRY
+au nord-est du;NORTH_EAST;COUNTRY
+au nord-est des;NORTH_EAST;COUNTRY
+au sud-ouest d;SOUTH_WEST;CITY
+au sud-ouest de;SOUTH_WEST;CITY,COUNTRY
+au sud-ouest du;SOUTH_WEST;COUNTRY
+au sud-ouest des;SOUTH_WEST;COUNTRY
+au sud-est d;SOUTH_EAST;CITY
+au sud-est de;SOUTH_EAST;CITY,COUNTRY
+au sud-est du;SOUTH_EAST;COUNTRY
+au sud-est des;SOUTH_EAST;COUNTRY
+en bas d;DOWN;NOMINAL
+en bas de;DOWN;NOMINAL
+en bas du;DOWN;NOMINAL
+en bas des;DOWN;NOMINAL
+en haut d;UP;NOMINAL
+en haut de;UP;NOMINAL
+en haut du;UP;NOMINAL
+en haut des;UP;NOMINAL
+au centre d;CENTER;NOMINAL
+au centre de;CENTER;NOMINAL
+au centre du;CENTER;NOMINAL
+au centre des;CENTER;NOMINAL
+au milieu d;CENTER;NOMINAL
+au milieu de;CENTER;NOMINAL
+au milieu du;CENTER;NOMINAL
+au milieu des;CENTER;NOMINAL
+au pied d;BOTTOM;NOMINAL
+au pied de;BOTTOM;NOMINAL
+au pied du;BOTTOM;NOMINAL
+au pied des;BOTTOM;NOMINAL
+parmi;AMONG;NOMINAL

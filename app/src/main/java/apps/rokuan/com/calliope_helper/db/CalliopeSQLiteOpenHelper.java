@@ -91,7 +91,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             ColorInfo.COLOR_FIELD_NAME,
             CityInfo.CITY_FIELD_NAME,
             CountryInfo.COUNTRY_FIELD_NAME,
-            TransportInfo.VALUE_FIELD_NAME,
+            TransportInfo.TRANSPORT_FIELD_NAME,
             UnitInfo.UNIT_FIELD_NAME
     };
     private static final Class<?>[] PROFILE_CLASSES = {
@@ -375,8 +375,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[2].split(",");
+            Set<PlaceAdverbial.PlaceType> prepTypes = new HashSet<>();
 
-            dao.create(new PlacePreposition(fields[0], PlaceAdverbial.PlaceContext.valueOf(fields[1])));
+            for(String ty: types){
+                prepTypes.add(PlaceAdverbial.PlaceType.valueOf(ty));
+            }
+
+            dao.create(new PlacePreposition(fields[0], PlaceAdverbial.PlaceContext.valueOf(fields[1]), prepTypes));
         }
 
         in.close();
@@ -392,8 +398,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[2].split(",");
+            Set<TimeAdverbial.TimeType> prepTypes = new HashSet<>();
 
-            dao.create(new TimePreposition(fields[0], TimeAdverbial.DateContext.valueOf(fields[1])));
+            for(String ty: types){
+                prepTypes.add(TimeAdverbial.TimeType.valueOf(ty));
+            }
+
+            dao.create(new TimePreposition(fields[0], TimeAdverbial.TimeContext.valueOf(fields[1]), prepTypes));
         }
 
         in.close();
@@ -409,8 +421,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[2].split(",");
+            Set<WayAdverbial.WayType> prepTypes = new HashSet<>();
 
-            dao.create(new WayPreposition(fields[0], WayAdverbial.WayContext.valueOf(fields[1])));
+            for(String ty: types){
+                prepTypes.add(WayAdverbial.WayType.valueOf(ty));
+            }
+
+            dao.create(new WayPreposition(fields[0], WayAdverbial.WayContext.valueOf(fields[1]), prepTypes));
         }
 
         in.close();
@@ -426,8 +444,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         while(sc.hasNextLine()){
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
+            String[] types = fields[2].split(",");
+            Set<PurposeAdverbial.PurposeType> prepTypes = new HashSet<>();
 
-            dao.create(new PurposePreposition(fields[0], PurposeAdverbial.PurposeContext.valueOf(fields[1])));
+            for(String ty: types){
+                prepTypes.add(PurposeAdverbial.PurposeType.valueOf(ty));
+            }
+
+            dao.create(new PurposePreposition(fields[0], PurposeAdverbial.PurposeContext.valueOf(fields[1]), prepTypes));
         }
 
         in.close();
@@ -668,7 +692,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
     @Override
     public TransportInfo findTransportInfo(String q) {
-        return queryFirst(this, TransportInfo.class, TransportInfo.VALUE_FIELD_NAME, q);
+        return queryFirst(this, TransportInfo.class, TransportInfo.TRANSPORT_FIELD_NAME, q);
     }
 
     @Override
@@ -727,7 +751,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         try {
             Dao<T, String> dao = DaoManager.createDao(connectionSource, objectClass);
             QueryBuilder builder = dao.queryBuilder();
-            PreparedQuery<T> preparedQuery = builder.where().eq(columnName, queryString).prepare();
+            PreparedQuery<T> preparedQuery = builder.where().eq(columnName, queryString.replaceAll("'", "\\'")).prepare();
             T result = dao.queryForFirst(preparedQuery);
             return result;
         } catch (SQLException e) {
