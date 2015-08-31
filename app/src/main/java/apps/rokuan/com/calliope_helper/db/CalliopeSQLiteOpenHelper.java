@@ -17,6 +17,7 @@ import com.j256.ormlite.table.TableUtils;
 import com.rokuan.calliopecore.parser.SpeechParser;
 import com.rokuan.calliopecore.parser.WordDatabase;
 import com.rokuan.calliopecore.sentence.Action;
+import com.rokuan.calliopecore.sentence.CharacterInfo;
 import com.rokuan.calliopecore.sentence.CityInfo;
 import com.rokuan.calliopecore.sentence.ColorInfo;
 import com.rokuan.calliopecore.sentence.CountryInfo;
@@ -25,6 +26,7 @@ import com.rokuan.calliopecore.sentence.CustomObject;
 import com.rokuan.calliopecore.sentence.CustomPerson;
 import com.rokuan.calliopecore.sentence.CustomPlace;
 import com.rokuan.calliopecore.sentence.LanguageInfo;
+import com.rokuan.calliopecore.sentence.PlaceInfo;
 import com.rokuan.calliopecore.sentence.PlacePreposition;
 import com.rokuan.calliopecore.sentence.PurposePreposition;
 import com.rokuan.calliopecore.sentence.TimePreposition;
@@ -37,8 +39,10 @@ import com.rokuan.calliopecore.sentence.Word;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 import com.rokuan.calliopecore.sentence.structure.data.CountConverter;
 import com.rokuan.calliopecore.sentence.structure.data.DateConverter;
+import com.rokuan.calliopecore.sentence.structure.data.nominal.CharacterObject;
 import com.rokuan.calliopecore.sentence.structure.data.nominal.UnitObject;
 import com.rokuan.calliopecore.sentence.structure.data.place.PlaceAdverbial;
+import com.rokuan.calliopecore.sentence.structure.data.place.PlaceObject;
 import com.rokuan.calliopecore.sentence.structure.data.purpose.PurposeAdverbial;
 import com.rokuan.calliopecore.sentence.structure.data.time.TimeAdverbial;
 import com.rokuan.calliopecore.sentence.structure.data.way.TransportObject;
@@ -77,7 +81,9 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             CityInfo.class,
             CountryInfo.class,
             TransportInfo.class,
-            UnitInfo.class
+            UnitInfo.class,
+            CharacterInfo.class,
+            PlaceInfo.class
     };
     private static final String[] COMMON_COLUMN_NAMES = {
             // Ordre different pour des raisons de performance
@@ -92,7 +98,9 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             CityInfo.CITY_FIELD_NAME,
             CountryInfo.COUNTRY_FIELD_NAME,
             TransportInfo.TRANSPORT_FIELD_NAME,
-            UnitInfo.UNIT_FIELD_NAME
+            UnitInfo.UNIT_FIELD_NAME,
+            CharacterInfo.CHARACTER_FIELD_NAME,
+            PlaceInfo.PLACE_FIELD_NAME
     };
     private static final Class<?>[] PROFILE_CLASSES = {
             CustomProfileObject.class,
@@ -133,6 +141,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             TableUtils.createTable(connectionSource, ColorInfo.class);
             TableUtils.createTable(connectionSource, TransportInfo.class);
             TableUtils.createTable(connectionSource, UnitInfo.class);
+            TableUtils.createTable(connectionSource, CharacterInfo.class);
+            TableUtils.createTable(connectionSource, PlaceInfo.class);
 
             TableUtils.createTable(connectionSource, Verb.class);
             TableUtils.createTable(connectionSource, VerbConjugation.class);
@@ -163,6 +173,10 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             loadTransports(connectionSource);
             defaultBus.post(new DatabaseEvent("Unités"));
             loadUnits(connectionSource);
+            defaultBus.post(new DatabaseEvent("Types de lieux"));
+            loadPlaces(connectionSource);
+            defaultBus.post(new DatabaseEvent("Types de personnes"));
+            loadCharacters(connectionSource);
             defaultBus.post(new DatabaseEvent("Verbes"));
             loadVerbs(connectionSource);
             defaultBus.post(new DatabaseEvent("Conjugaisons"));
@@ -313,6 +327,40 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             String[] fields = line.split(DATA_SEPARATOR);
 
             dao.create(new UnitInfo(fields[0], UnitObject.UnitType.valueOf(fields[1])));
+        }
+
+        in.close();
+        sc.close();
+    }
+
+    private void loadCharacters(ConnectionSource connectionSource) throws SQLException, IOException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("characters.txt");
+        Scanner sc = new Scanner(in);
+        Dao<CharacterInfo, String> dao = DaoManager.createDao(connectionSource, CharacterInfo.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new CharacterInfo(fields[0], CharacterObject.CharacterType.valueOf(fields[1])));
+        }
+
+        in.close();
+        sc.close();
+    }
+
+    private void loadPlaces(ConnectionSource connectionSource) throws SQLException, IOException {
+        AssetManager assets = context.getAssets();
+        InputStream in = assets.open("places.txt");
+        Scanner sc = new Scanner(in);
+        Dao<PlaceInfo, String> dao = DaoManager.createDao(connectionSource, PlaceInfo.class);
+
+        while(sc.hasNextLine()){
+            String line = sc.nextLine();
+            String[] fields = line.split(DATA_SEPARATOR);
+
+            dao.create(new PlaceInfo(fields[0], PlaceObject.PlaceCategory.valueOf(fields[1])));
         }
 
         in.close();
@@ -698,6 +746,16 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     @Override
     public UnitInfo findUnitInfo(String q) {
         return queryFirst(this, UnitInfo.class, UnitInfo.UNIT_FIELD_NAME, q);
+    }
+
+    @Override
+    public CharacterInfo findCharacterInfo(String q) {
+        return queryFirst(this, CharacterInfo.class, CharacterInfo.CHARACTER_FIELD_NAME, q);
+    }
+
+    @Override
+    public PlaceInfo findPlaceInfo(String q) {
+        return queryFirst(this, PlaceInfo.class, PlaceInfo.PLACE_FIELD_NAME, q);
     }
 
     @Override

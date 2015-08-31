@@ -1,0 +1,5 @@
+restaurant;RESTAURANT
+cinéma;MOVIE_THEATER
+supermarché;GROCERY_OR_SUPERMARKET
+banque;BANK
+zoo;ZOO
