@@ -53,6 +53,8 @@
     <string name="scan_devices">Rechercher des périphériques</string>
     <string name="in_construction">En construction</string>
 
+    <string name="how_to_talk">Appuyez puis parlez</string>
+
     <string name="connection_section">Connexion</string>
     <string name="speech_section">Calliope</string>
     <string name="store_section">Store</string>

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
@@ -7,79 +7,39 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     tools:context="apps.rokuan.com.calliope_helper.activity.SpeechActivity$PlaceholderFragment">
-
     <LinearLayout
+        android:id="@+id/result_frame"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_margin="20dp"
         android:padding="5dp">
-        <TextView
-            android:id="@+id/object_json"
-            android:background="@color/primary_color"
-            android:padding="5dp"
-            android:textColor="#FFFFFF"
-            android:ellipsize="end"
-            android:gravity="center"
+        <LinearLayout
+            android:id="@+id/result_frame_content"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
-        <TextView
-            android:id="@+id/recognized_text"
-            android:textColor="#FFFFFF"
-            android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:lines="2"
-            android:background="@color/text_color"
-            android:padding="5dp"
-            android:ellipsize="end"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/parse_frame"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ProgressBar
-                android:indeterminate="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/sound_frame"
-            android:layout_gravity="bottom"
-            android:padding="@dimen/form_padding"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <apps.rokuan.com.calliope_helper.view.SoundLevelView
-                android:id="@+id/sound_view"
-                android:layout_width="48dp"
-                android:layout_height="48dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/text_frame"
-            android:orientation="horizontal"
-            android:padding="@dimen/form_padding"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/input_command"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/object_json"
+                android:background="@color/primary_color"
+                android:padding="5dp"
+                android:textColor="#FFFFFF"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1" />
-            <ImageButton
-                android:id="@+id/input_submit"
-                android:src="@android:drawable/ic_menu_send"
-                android:layout_marginLeft="@dimen/form_padding"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/recognized_text"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:lines="2"
+                android:background="@color/text_color"
+                android:padding="5dp"
+                android:ellipsize="end"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
@@ -91,11 +51,80 @@
             android:layout_height="wrap_content">
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/speech_button"
+                android:src="@drawable/ic_mic_white_48dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_mic_white_48dp"
-                app:backgroundTint="@color/primary_color"
+                app:backgroundTint="@color/darker_primary_color"
                 app:fabSize="normal" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/parse_frame"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:indeterminate="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <FrameLayout android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/sound_frame"
+            android:visibility="invisible"
+            android:layout_gravity="bottom"
+            android:padding="@dimen/form_padding"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <apps.rokuan.com.calliope_helper.view.SoundLevelView
+                android:id="@+id/sound_view"
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/first_frame"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/first_frame_image"
+                android:src="@drawable/ic_mic_white_48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </ImageView>
+            <TextView
+                android:id="@+id/first_frame_text"
+                android:text="@string/how_to_talk"
+                android:layout_margin="@dimen/form_padding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </FrameLayout>
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/text_frame"
+        android:visibility="invisible"
+        android:orientation="horizontal"
+        android:padding="@dimen/form_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/input_command"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <ImageButton
+            android:id="@+id/input_submit"
+            android:src="@android:drawable/ic_menu_send"
+            android:layout_marginLeft="@dimen/form_padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</FrameLayout>

@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -11,6 +12,7 @@ import android.os.Messenger;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 
 import java.util.ArrayList;
@@ -39,6 +44,8 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
     public static final int SOUND_FRAME = 1;
     public static final int PARSE_FRAME = 2;
     public static final int TEXT_FRAME = 3;
+    public static final int RESULT_FRAME = 4;
+    public static final int FIRST_FRAME = 5;
 
     public static final int INPUT_TYPE_FRAME = SPEECH_FRAME;
 
@@ -62,11 +69,14 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
         }
     };
 
+    @Bind(R.id.speech_button) protected FloatingActionButton speechButton;
+    @Bind(R.id.first_frame) protected View firstFrame;
+    @Bind(R.id.result_frame_content) protected View resultContent;
     @Bind(R.id.recognized_text) protected TextView resultText;
     @Bind(R.id.object_json) protected TextView jsonText;
     @Bind(R.id.input_command) protected EditText commandText;
     @Bind(R.id.sound_view) protected SoundLevelView soundView;
-    @Bind({ R.id.speech_frame, R.id.sound_frame, R.id.parse_frame, R.id.text_frame }) protected List<View> frames;
+    @Bind({ R.id.speech_frame, R.id.sound_frame, R.id.parse_frame, R.id.text_frame, R.id.result_frame, R.id.first_frame }) protected List<View> frames;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -90,7 +100,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
         ButterKnife.bind(this, mainView);
         //switchToFrame(SPEECH_FRAME);
         //switchToFrame(TEXT_FRAME);
-        switchToFrame(INPUT_TYPE_FRAME);
+        //switchToFrame(INPUT_TYPE_FRAME);
         return mainView;
     }
 
@@ -134,10 +144,160 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
         }
     }
 
+    @OnClick(R.id.first_frame)
+    public void closeFirstFrame(){
+        YoYo.with(Techniques.SlideOutDown).duration(300)
+                .withListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        firstFrame.findViewById(R.id.first_frame_text).setVisibility(View.GONE);
+
+                        YoYo.with(Techniques.FadeIn).duration(500)
+                                .withListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        firstFrame.setVisibility(View.INVISIBLE);
+                                        switchToFrame(SOUND_FRAME);
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                }).playOn(firstFrame.findViewById(R.id.first_frame_image));
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                }).playOn(firstFrame.findViewById(R.id.first_frame_text));
+    }
+
     @OnClick(R.id.speech_button)
     public void startSpeechRecognition(){
-        switchToFrame(SOUND_FRAME);
+        //switchToFrame(SOUND_FRAME);
+        resultContent.setVisibility(View.INVISIBLE);
+
+        YoYo.with(Techniques.FadeInDown).duration(500)
+                .withListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                switchToFrame(SOUND_FRAME);
+                startListening();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).playOn(speechButton);
+
+        startListening();
+    }
+
+    private void startListening(){
+        soundView.resetLevel();
         speech.startListening(recognizerIntent);
+    }
+
+    private void switchBetweenFrames(int fromFrame, int toFrame){
+        if(fromFrame == toFrame){
+            return;
+        }
+
+        switch(fromFrame){
+            case SPEECH_FRAME:
+                switch(toFrame){
+                    case SOUND_FRAME:
+                        break;
+                    case PARSE_FRAME:
+                        break;
+                    case TEXT_FRAME:
+                        break;
+                    case RESULT_FRAME:
+                        break;
+                }
+                break;
+            case SOUND_FRAME:
+                switch(toFrame){
+                    case SPEECH_FRAME:
+                        break;
+                    case PARSE_FRAME:
+                        break;
+                    case TEXT_FRAME:
+                        break;
+                    case RESULT_FRAME:
+                        break;
+                }
+                break;
+            case PARSE_FRAME:
+                switch(toFrame){
+                    case SPEECH_FRAME:
+                        break;
+                    case SOUND_FRAME:
+                        break;
+                    case TEXT_FRAME:
+                        break;
+                    case RESULT_FRAME:
+                        break;
+                }
+                break;
+            case TEXT_FRAME:
+                switch(toFrame){
+                    case SPEECH_FRAME:
+                        break;
+                    case SOUND_FRAME:
+                        break;
+                    case PARSE_FRAME:
+                        break;
+                    case RESULT_FRAME:
+                        break;
+                }
+                break;
+            case RESULT_FRAME:
+                switch(toFrame){
+                    case SPEECH_FRAME:
+                        break;
+                    case SOUND_FRAME:
+                        break;
+                    case PARSE_FRAME:
+                        break;
+                    case TEXT_FRAME:
+                        break;
+                }
+                break;
+        }
     }
 
     private void switchToFrame(int frameIndex){

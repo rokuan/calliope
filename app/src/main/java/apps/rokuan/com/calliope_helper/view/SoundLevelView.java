@@ -44,6 +44,10 @@ public class SoundLevelView extends View {
 
     }*/
 
+    public void resetLevel(){
+        setLevel(MIN_VALUE);
+    }
+
     public void setLevel(int l){
         value = l;
         this.postInvalidate();

@@ -66,6 +66,8 @@
     <string name="scan_devices">Scan for devices</string>
     <string name="in_construction">In construction</string>
 
+    <string name="how_to_talk">Press then talk</string>
+
     <string name="connection_section">Connection</string>
     <string name="speech_section">Calliope</string>
     <string name="store_section">Store</string>
