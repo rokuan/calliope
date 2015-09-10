@@ -3,7 +3,6 @@ package apps.rokuan.com.calliope_helper.db;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -14,7 +13,9 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.rokuan.calliopecore.parser.SpeechParser;
+import com.rokuan.calliopecore.fr.parser.SpeechParser;
+import com.rokuan.calliopecore.fr.sentence.Verb;
+import com.rokuan.calliopecore.fr.sentence.VerbConjugation;
 import com.rokuan.calliopecore.parser.WordDatabase;
 import com.rokuan.calliopecore.sentence.Action;
 import com.rokuan.calliopecore.sentence.CharacterInfo;
@@ -25,6 +26,7 @@ import com.rokuan.calliopecore.sentence.CustomMode;
 import com.rokuan.calliopecore.sentence.CustomObject;
 import com.rokuan.calliopecore.sentence.CustomPerson;
 import com.rokuan.calliopecore.sentence.CustomPlace;
+import com.rokuan.calliopecore.sentence.IVerbConjugation;
 import com.rokuan.calliopecore.sentence.LanguageInfo;
 import com.rokuan.calliopecore.sentence.PlaceInfo;
 import com.rokuan.calliopecore.sentence.PlacePreposition;
@@ -32,13 +34,9 @@ import com.rokuan.calliopecore.sentence.PurposePreposition;
 import com.rokuan.calliopecore.sentence.TimePreposition;
 import com.rokuan.calliopecore.sentence.TransportInfo;
 import com.rokuan.calliopecore.sentence.UnitInfo;
-import com.rokuan.calliopecore.sentence.Verb;
-import com.rokuan.calliopecore.sentence.VerbConjugation;
 import com.rokuan.calliopecore.sentence.WayPreposition;
 import com.rokuan.calliopecore.sentence.Word;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
-import com.rokuan.calliopecore.sentence.structure.data.CountConverter;
-import com.rokuan.calliopecore.sentence.structure.data.DateConverter;
 import com.rokuan.calliopecore.sentence.structure.data.nominal.CharacterObject;
 import com.rokuan.calliopecore.sentence.structure.data.nominal.UnitObject;
 import com.rokuan.calliopecore.sentence.structure.data.place.PlaceAdverbial;
@@ -56,8 +54,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import apps.rokuan.com.calliope_helper.event.ProfileEvent;
 import de.greenrobot.event.EventBus;
@@ -377,7 +373,14 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             String line = sc.nextLine();
             String[] fields = line.split(DATA_SEPARATOR);
 
-            dao.create(new Verb(fields[0], Action.VerbAction.valueOf(fields[1]), (Integer.parseInt(fields[3]) != 0)));
+            Set<Action.ActionType> actions = new HashSet<>();
+            String[] actionNames = fields[1].split(",");
+
+            for(String act: actionNames){
+                actions.add(Action.ActionType.valueOf(act));
+            }
+
+            dao.create(new Verb(fields[0], actions, (Integer.parseInt(fields[3]) != 0)));
         }
 
         in.close();
@@ -387,6 +390,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     private void loadConjugations(ConnectionSource connectionSource) throws IOException, SQLException {
         AssetManager assets = context.getAssets();
         InputStream in = assets.open("conjugations.txt");
+        //Scanner sc = new Scanner(in, SPECIAL_ENCODING);
         Scanner sc = new Scanner(in, SPECIAL_ENCODING);
         Dao<VerbConjugation, String> dao = DaoManager.createDao(connectionSource, VerbConjugation.class);
         Dao<Verb, String> verbDao = DaoManager.createDao(connectionSource, Verb.class);
@@ -403,7 +407,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             }
 
             dao.create(new VerbConjugation(Verb.ConjugationTense.valueOf(fields[3]),
-                    Verb.Form.valueOf(fields[2]),
+                    IVerbConjugation.Form.valueOf(fields[2]),
                     pronoun,
                     fields[1],
                     verbDao.queryForId(fields[0])

@@ -168,6 +168,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                                     public void onAnimationEnd(Animator animation) {
                                         firstFrame.setVisibility(View.INVISIBLE);
                                         switchToFrame(SOUND_FRAME);
+                                        startListening();
                                     }
 
                                     @Override
@@ -197,36 +198,11 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
     @OnClick(R.id.speech_button)
     public void startSpeechRecognition(){
         //switchToFrame(SOUND_FRAME);
-        resultContent.setVisibility(View.INVISIBLE);
-
-        YoYo.with(Techniques.FadeInDown).duration(500)
-                .withListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                switchToFrame(SOUND_FRAME);
-                startListening();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        }).playOn(speechButton);
-
-        startListening();
+        switchBetweenFrames(RESULT_FRAME, SOUND_FRAME);
     }
 
     private void startListening(){
+        System.out.println("Speech start");
         soundView.resetLevel();
         speech.startListening(recognizerIntent);
     }
@@ -290,10 +266,42 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                     case SPEECH_FRAME:
                         break;
                     case SOUND_FRAME:
+
                         break;
                     case PARSE_FRAME:
                         break;
                     case TEXT_FRAME:
+                        break;
+                }
+                break;
+            case FIRST_FRAME:
+                switch(toFrame){
+                    case SOUND_FRAME:
+                        resultContent.setVisibility(View.INVISIBLE);
+
+                        YoYo.with(Techniques.FadeInDown).duration(500)
+                                .withListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        switchToFrame(SOUND_FRAME);
+                                        startListening();
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                }).playOn(speechButton);
                         break;
                 }
                 break;
@@ -347,6 +355,8 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
 
         String result = data.get(0);
         startProcess(result);
+
+        System.out.println("Speech end");
     }
 
     private void startProcess(String command){
@@ -383,7 +393,11 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
         } finally {
             //switchToFrame(SPEECH_FRAME);
             //switchToFrame(TEXT_FRAME);
-            switchToFrame(INPUT_TYPE_FRAME);
+            //switchToFrame(INPUT_TYPE_FRAME);
+            //switchBetweenFrames(PARSE_FRAME, RESULT_FRAME);
+            switchToFrame(RESULT_FRAME);
+            frames.get(SPEECH_FRAME).setVisibility(View.VISIBLE);
+            YoYo.with(Techniques.SlideInUp).playOn(resultContent);
         }
     }
 

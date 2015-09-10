@@ -88,6 +88,7 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/first_frame"
+            android:orientation="vertical"
             android:background="#FFFFFF"
             android:gravity="center"
             android:layout_width="match_parent"
@@ -103,6 +104,7 @@
             <TextView
                 android:id="@+id/first_frame_text"
                 android:text="@string/how_to_talk"
+                android:gravity="center_horizontal"
                 android:layout_margin="@dimen/form_padding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
