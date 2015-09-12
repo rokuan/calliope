@@ -225,6 +225,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                         break;
                 }
                 break;
+
             case SOUND_FRAME:
                 switch(toFrame){
                     case SPEECH_FRAME:
@@ -237,6 +238,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                         break;
                 }
                 break;
+
             case PARSE_FRAME:
                 switch(toFrame){
                     case SPEECH_FRAME:
@@ -249,6 +251,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                         break;
                 }
                 break;
+
             case TEXT_FRAME:
                 switch(toFrame){
                     case SPEECH_FRAME:
@@ -261,12 +264,34 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                         break;
                 }
                 break;
+
             case RESULT_FRAME:
                 switch(toFrame){
                     case SPEECH_FRAME:
                         break;
                     case SOUND_FRAME:
+                        YoYo.with(Techniques.SlideOutDown).duration(500).withListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
 
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                switchToFrame(SOUND_FRAME);
+                                startListening();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        }).playOn(speechButton);
                         break;
                     case PARSE_FRAME:
                         break;
@@ -274,6 +299,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                         break;
                 }
                 break;
+
             case FIRST_FRAME:
                 switch(toFrame){
                     case SOUND_FRAME:
@@ -301,7 +327,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                                     public void onAnimationRepeat(Animator animation) {
 
                                     }
-                                }).playOn(speechButton);
+                                }).playOn(frames.get(SPEECH_FRAME));
                         break;
                 }
                 break;
@@ -330,7 +356,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        Log.i("SpeechFragment", "Speech rms: " + rmsdB + "db");
+        //Log.i("SpeechFragment", "Speech rms: " + rmsdB + "db");
         soundView.setLevel((int)rmsdB);
     }
 
@@ -355,8 +381,6 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
 
         String result = data.get(0);
         startProcess(result);
-
-        System.out.println("Speech end");
     }
 
     private void startProcess(String command){
@@ -395,6 +419,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
             //switchToFrame(TEXT_FRAME);
             //switchToFrame(INPUT_TYPE_FRAME);
             //switchBetweenFrames(PARSE_FRAME, RESULT_FRAME);
+            //speechButton.clearAnimation();
             switchToFrame(RESULT_FRAME);
             frames.get(SPEECH_FRAME).setVisibility(View.VISIBLE);
             YoYo.with(Techniques.SlideInUp).playOn(resultContent);
