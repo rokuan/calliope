@@ -40,14 +40,19 @@ import butterknife.OnClick;
  * Created by LEBEAU Christophe on 17/07/15.
  */
 public class SpeechFragment extends PlaceHolderFragment implements RecognitionListener {
-    public static final int SPEECH_FRAME = 0;
+    /*public static final int SPEECH_FRAME = 0;
     public static final int SOUND_FRAME = 1;
     public static final int PARSE_FRAME = 2;
     public static final int TEXT_FRAME = 3;
     public static final int RESULT_FRAME = 4;
-    public static final int FIRST_FRAME = 5;
+    public static final int FIRST_FRAME = 5;*/
+    public static final int FIRST_FRAME = 0;
+    public static final int SOUND_FRAME = 1;
+    public static final int PARSE_FRAME = 2;
+    public static final int TEXT_FRAME = 3;
+    public static final int RESULT_FRAME = 4;
 
-    public static final int INPUT_TYPE_FRAME = SPEECH_FRAME;
+    //public static final int INPUT_TYPE_FRAME = SPEECH_FRAME;
 
     private SpeechRecognizer speech;
     private Intent recognizerIntent;
@@ -76,7 +81,8 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
     @Bind(R.id.object_json) protected TextView jsonText;
     @Bind(R.id.input_command) protected EditText commandText;
     @Bind(R.id.sound_view) protected SoundLevelView soundView;
-    @Bind({ R.id.speech_frame, R.id.sound_frame, R.id.parse_frame, R.id.text_frame, R.id.result_frame, R.id.first_frame }) protected List<View> frames;
+    //@Bind({ R.id.speech_frame, R.id.sound_frame, R.id.parse_frame, R.id.text_frame, R.id.result_frame, R.id.first_frame }) protected List<View> frames;
+    @Bind({ R.id.first_frame, R.id.sound_frame, R.id.parse_frame, R.id.text_frame, R.id.result_frame }) protected List<View> frames;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -213,7 +219,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
         }
 
         switch(fromFrame){
-            case SPEECH_FRAME:
+            /*case SPEECH_FRAME:
                 switch(toFrame){
                     case SOUND_FRAME:
                         break;
@@ -224,12 +230,12 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                     case RESULT_FRAME:
                         break;
                 }
-                break;
+                break;*/
 
             case SOUND_FRAME:
                 switch(toFrame){
-                    case SPEECH_FRAME:
-                        break;
+                    /*case SPEECH_FRAME:
+                        break;*/
                     case PARSE_FRAME:
                         break;
                     case TEXT_FRAME:
@@ -241,21 +247,65 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
 
             case PARSE_FRAME:
                 switch(toFrame){
-                    case SPEECH_FRAME:
-                        break;
-                    case SOUND_FRAME:
-                        break;
                     case TEXT_FRAME:
                         break;
                     case RESULT_FRAME:
+                        switchToFrame(RESULT_FRAME);
+                        resultContent.setVisibility(View.INVISIBLE);
+
+                        YoYo.with(Techniques.SlideInUp).duration(500)
+                                .withListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        resultContent.setVisibility(View.VISIBLE);
+
+                                        YoYo.with(Techniques.FadeIn).duration(300).withListener(new Animator.AnimatorListener() {
+                                            @Override
+                                            public void onAnimationStart(Animator animation) {
+
+                                            }
+
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+
+                                            }
+
+                                            @Override
+                                            public void onAnimationCancel(Animator animation) {
+
+                                            }
+
+                                            @Override
+                                            public void onAnimationRepeat(Animator animation) {
+
+                                            }
+                                        }).playOn(resultContent);
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                }).playOn(speechButton);
+
                         break;
                 }
                 break;
 
             case TEXT_FRAME:
                 switch(toFrame){
-                    case SPEECH_FRAME:
-                        break;
+                    /*case SPEECH_FRAME:
+                        break;*/
                     case SOUND_FRAME:
                         break;
                     case PARSE_FRAME:
@@ -267,10 +317,60 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
 
             case RESULT_FRAME:
                 switch(toFrame){
-                    case SPEECH_FRAME:
-                        break;
                     case SOUND_FRAME:
-                        YoYo.with(Techniques.SlideOutDown).duration(500).withListener(new Animator.AnimatorListener() {
+                        YoYo.with(Techniques.FadeOut).duration(300).withListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                YoYo.with(Techniques.SlideOutDown).duration(500)
+                                        .withListener(new Animator.AnimatorListener() {
+                                            @Override
+                                            public void onAnimationStart(Animator animation) {
+
+                                            }
+
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                switchToFrame(SOUND_FRAME);
+                                                startListening();
+                                            }
+
+                                            @Override
+                                            public void onAnimationCancel(Animator animation) {
+
+                                            }
+
+                                            @Override
+                                            public void onAnimationRepeat(Animator animation) {
+
+                                            }
+                                        }).playOn(speechButton);
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        }).playOn(resultContent);
+                        break;
+                    case TEXT_FRAME:
+                        break;
+                }
+                break;
+
+            case FIRST_FRAME:
+                switch(toFrame){
+                    case SOUND_FRAME:
+                        YoYo.with(Techniques.FadeOut).duration(500).withListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
 
@@ -291,43 +391,7 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
                             public void onAnimationRepeat(Animator animation) {
 
                             }
-                        }).playOn(speechButton);
-                        break;
-                    case PARSE_FRAME:
-                        break;
-                    case TEXT_FRAME:
-                        break;
-                }
-                break;
-
-            case FIRST_FRAME:
-                switch(toFrame){
-                    case SOUND_FRAME:
-                        resultContent.setVisibility(View.INVISIBLE);
-
-                        YoYo.with(Techniques.FadeInDown).duration(500)
-                                .withListener(new Animator.AnimatorListener() {
-                                    @Override
-                                    public void onAnimationStart(Animator animation) {
-
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        switchToFrame(SOUND_FRAME);
-                                        startListening();
-                                    }
-
-                                    @Override
-                                    public void onAnimationCancel(Animator animation) {
-
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animator animation) {
-
-                                    }
-                                }).playOn(frames.get(SPEECH_FRAME));
+                        }).playOn(frames.get(FIRST_FRAME));
                         break;
                 }
                 break;
@@ -384,46 +448,52 @@ public class SpeechFragment extends PlaceHolderFragment implements RecognitionLi
     }
 
     private void startProcess(String command){
-        try{
-            String rightPart = command.length() > 1 ? command.substring(1) : "";
+        InterpretationObject object = null;
+        String rightPart = command.length() > 1 ? command.substring(1) : "";
 
-            switchToFrame(PARSE_FRAME);
+        switchToFrame(PARSE_FRAME);
 
+        try {
             long start = System.currentTimeMillis();
-            InterpretationObject object = db.parseText(command);
+            object = db.parseText(command);
             long end = System.currentTimeMillis();
             Log.i("ParseTime", (end - start) + "ms");
+        }catch(Exception e) {
 
-            //switchToFrame(SPEECH_FRAME);
-            //switchToFrame(TEXT_FRAME);
-            //switchToFrame(INPUT_TYPE_FRAME);
+        }
 
-            resultText.setText(Character.toUpperCase(command.charAt(0)) + rightPart);
+        //switchToFrame(SPEECH_FRAME);
+        //switchToFrame(TEXT_FRAME);
+        //switchToFrame(INPUT_TYPE_FRAME);
 
-            if(object != null) {
-                long jsonStart =  System.currentTimeMillis();
-                String json = InterpretationObject.toJSON(object);
-                long jsonEnd = System.currentTimeMillis();
-                Log.i("JsonTime", (jsonEnd - jsonStart) + "ms");
-                jsonText.setText(json);
+        resultText.setText(Character.toUpperCase(command.charAt(0)) + rightPart);
 
+        if(object != null) {
+            long jsonStart =  System.currentTimeMillis();
+            String json = InterpretationObject.toJSON(object);
+            long jsonEnd = System.currentTimeMillis();
+            Log.i("JsonTime", (jsonEnd - jsonStart) + "ms");
+            jsonText.setText(json);
+
+            try {
                 Message jsonMessage = Message.obtain(null, ConnectionService.JSON_MESSAGE, json);
                 serviceMessenger.send(jsonMessage);
-            } else {
-                jsonText.setText("ERROR");
+            }catch(Exception e) {
+
             }
-        }catch(Exception e){
-            e.printStackTrace();
-        } finally {
-            //switchToFrame(SPEECH_FRAME);
-            //switchToFrame(TEXT_FRAME);
-            //switchToFrame(INPUT_TYPE_FRAME);
-            //switchBetweenFrames(PARSE_FRAME, RESULT_FRAME);
-            //speechButton.clearAnimation();
-            switchToFrame(RESULT_FRAME);
-            frames.get(SPEECH_FRAME).setVisibility(View.VISIBLE);
-            YoYo.with(Techniques.SlideInUp).playOn(resultContent);
+        } else {
+            jsonText.setText("ERROR");
         }
+
+        //switchToFrame(SPEECH_FRAME);
+        //switchToFrame(TEXT_FRAME);
+        //switchToFrame(INPUT_TYPE_FRAME);
+        //switchBetweenFrames(PARSE_FRAME, RESULT_FRAME);
+        //speechButton.clearAnimation();
+        switchBetweenFrames(PARSE_FRAME, RESULT_FRAME);
+        /*switchToFrame(RESULT_FRAME);
+        frames.get(SPEECH_FRAME).setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.SlideInUp).playOn(resultContent);*/
     }
 
     @Override
