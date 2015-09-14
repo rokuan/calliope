@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.nhaarman.listviewanimations.util.Insertable;
 
 import java.util.List;
 
@@ -26,14 +27,14 @@ import butterknife.OnClick;
 /**
  * Created by LEBEAU Christophe on 17/07/15.
  */
-public class ObjectsFragment extends Fragment {
+public class ObjectsFragment extends CustomDataFragment {
     private CalliopeSQLiteOpenHelper db;
     private ProfileObjectAdapter adapter;
     private String profileId;
 
     @Bind(R.id.object_form_text) protected EditText objectValueView;
     @Bind(R.id.object_form_code) protected EditText objectCodeView;
-    @Bind(R.id.fragment_data_objects_list) protected ListView objectsList;
+    //@Bind(R.id.fragment_data_objects_list) protected ListView objectsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
@@ -63,8 +64,9 @@ public class ObjectsFragment extends Fragment {
             // TODO: afficher un message de reussite
             objectValueView.getText().clear();
             objectCodeView.getText().clear();
-            adapter.add(object);
-            adapter.notifyDataSetChanged();
+            //adapter.add(0, object);
+            this.getDataListView().insert(0, object);
+            //adapter.notifyDataSetChanged();
         } else {
             // TODO; afficher un message d'erreur
         }
@@ -84,7 +86,8 @@ public class ObjectsFragment extends Fragment {
 
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
         adapter = new ProfileObjectAdapter(this.getActivity(), db.queryProfileObjects(profileId, ""));
-        objectsList.setAdapter(adapter);
+        adapter.setNotifyOnChange(true);
+        this.setDataAdapter(adapter);
     }
 
     @Override
@@ -94,7 +97,7 @@ public class ObjectsFragment extends Fragment {
         db = null;
     }
 
-    class ProfileObjectAdapter extends ArrayAdapter<CustomProfileObject> {
+    class ProfileObjectAdapter extends ArrayAdapter<CustomProfileObject> implements Insertable<CustomProfileObject> {
         private LayoutInflater inflater;
 
         public ProfileObjectAdapter(Context context, List<CustomProfileObject> objects) {
@@ -118,6 +121,11 @@ public class ObjectsFragment extends Fragment {
             objectCode.setText(object.getCode());
 
             return v;
+        }
+
+        @Override
+        public void add(int i, CustomProfileObject object) {
+            this.insert(object, 0);
         }
     }
 }

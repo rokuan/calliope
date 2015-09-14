@@ -74,11 +74,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    <ListView
+    <!-- <ListView
         android:id="@+id/fragment_data_objects_list"
         android:background="#FFFFFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ListView>
+    </ListView> -->
+    <include layout="@layout/data_list"></include>
 </LinearLayout>
