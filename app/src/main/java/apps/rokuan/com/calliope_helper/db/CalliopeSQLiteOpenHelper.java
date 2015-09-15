@@ -22,6 +22,7 @@ import com.rokuan.calliopecore.sentence.CharacterInfo;
 import com.rokuan.calliopecore.sentence.CityInfo;
 import com.rokuan.calliopecore.sentence.ColorInfo;
 import com.rokuan.calliopecore.sentence.CountryInfo;
+import com.rokuan.calliopecore.sentence.CustomData;
 import com.rokuan.calliopecore.sentence.CustomMode;
 import com.rokuan.calliopecore.sentence.CustomObject;
 import com.rokuan.calliopecore.sentence.CustomPerson;
@@ -103,12 +104,6 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             CustomProfilePlace.class,
             CustomProfilePerson.class,
             CustomProfileMode.class
-    };
-    private static final String[] PROFILE_RELATED_COLUMN_NAMES = {
-            CustomObject.OBJECT_FIELD_NAME,
-            CustomPlace.PLACE_FIELD_NAME,
-            CustomPerson.PERSON_FIELD_NAME,
-            CustomMode.MODE_FIELD_NAME
     };
 
     private static final String DB_NAME = "calliope_helper";
@@ -510,21 +505,21 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         sc.close();
     }
 
-    public List<CustomProfileObject> queryProfileObjects(String profileId, String queryString){
-        return (List<CustomProfileObject>)queryProfileData(CustomProfileObject.class, CustomObject.OBJECT_FIELD_NAME, queryString, profileId);
+    /*public List<CustomProfileObject> queryProfileObjects(String profileId, String queryString){
+        return queryProfileData(this, CustomProfileObject.class, queryString, profileId);
     }
 
     public List<CustomProfilePlace> queryProfilePlaces(String profileId, String queryString){
-        return (List<CustomProfilePlace>)queryProfileData(CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, queryString, profileId);
+        return queryProfileData(this, CustomProfilePlace.class, queryString, profileId);
     }
 
     public List<CustomProfilePerson> queryProfilePeople(String profileId, String queryString){
-        return (List<CustomProfilePerson>)queryProfileData(CustomProfilePerson.class, CustomPerson.PERSON_FIELD_NAME, queryString, profileId);
+        return queryProfileData(this, CustomProfilePerson.class, queryString, profileId);
     }
 
     public List<CustomProfileMode> queryProfileModes(String profileId, String queryString){
-        return (List<CustomProfileMode>)queryProfileData(CustomProfileMode.class, CustomMode.MODE_FIELD_NAME, queryString, profileId);
-    }
+        return queryProfileData(this, CustomProfileMode.class, queryString, profileId);
+    }*/
 
     public List<Profile> queryProfiles(){
         try {
@@ -536,13 +531,17 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    private List<?> queryProfileData(Class<?> daoClass, String queryField, String queryValue, String profileName){
+    private static <T extends CustomData> T findCustomData(OrmLiteSqliteOpenHelper helper, Class<T> dataClass, String queryString){
+        return queryFirst(helper, dataClass, CustomData.DATA_FIELD_NAME, queryString);
+    }
+
+    public static <T extends CustomData> List<T> queryProfileData(OrmLiteSqliteOpenHelper helper, Class<T> daoClass, String profileName, String queryValue ){
         try {
-            Dao<?, ?> dataDao = DaoManager.createDao(this.getConnectionSource(), daoClass);
+            Dao<?, ?> dataDao = DaoManager.createDao(helper.getConnectionSource(), daoClass);
             QueryBuilder builder = dataDao.queryBuilder();
             Where where = builder.where();
 
-            where.like(queryField, "%" + queryValue + "%")
+            where.like(CustomData.DATA_FIELD_NAME, "%" + queryValue + "%")
                     .and()
                     .eq(Profile.PROFILE_COLUMN_NAME, profileName);
             return dataDao.query(where.prepare());
@@ -608,60 +607,32 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    public boolean addCustomObject(CustomProfileObject object, String profileId){
+    public static <T extends CustomData & ProfileRelated> boolean addCustomData(CalliopeSQLiteOpenHelper db, Class<T> profileClass, T profileObject, String profileId){
         try {
-            Dao<CustomProfileObject, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileObject.class);
-            object.setProfile(getProfile(profileId));
-            return (dao.create(object) >= 0);
+            Dao<T, String> dao = DaoManager.createDao(db.getConnectionSource(), profileClass);
+            profileObject.setProfile(db.getProfile(profileId));
+            return (dao.create(profileObject) >= 0);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean addCustomObject(CustomProfileObject object, String profileId){
+        return addCustomData(this, CustomProfileObject.class, object, profileId);
     }
 
     public boolean addCustomPlace(CustomProfilePlace place, String profileId){
-        try {
-            Dao<CustomProfilePlace, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePlace.class);
-            place.setProfile(getProfile(profileId));
-            return (dao.create(place) >= 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return addCustomData(this, CustomProfilePlace.class, place, profileId);
     }
 
     public boolean addCustomPerson(CustomProfilePerson person, String profileId){
-        try {
-            Dao<CustomProfilePerson, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfilePerson.class);
-            person.setProfile(getProfile(profileId));
-            return (dao.create(person) >= 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return addCustomData(this, CustomProfilePerson.class, person, profileId);
     }
 
     public boolean addCustomMode(CustomProfileMode mode, String profileId){
-        try {
-            Dao<CustomProfileMode, String> dao = DaoManager.createDao(this.getConnectionSource(), CustomProfileMode.class);
-            mode.setProfile(getProfile(profileId));
-            return (dao.create(mode) >= 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return addCustomData(this, CustomProfileMode.class, mode, profileId);
     }
-
-    /*private boolean addCustomData(Class<? extends ProfileRelated> dataClass, ProfileRelated profileData) {
-        try {
-            Dao<? extends ProfileRelated, ?> dao = DaoManager.createDao(this.getConnectionSource(), dataClass);
-            profileData.setProfile(getActiveProfile());
-            return (dao.create(profileData) >= 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }*/
 
     public InterpretationObject parseText(String text){
         return parser.parseText(text);
@@ -699,7 +670,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 try {
                     Dao<?, ?> dao = DaoManager.createDao(connectionSource, PROFILE_CLASSES[i]);
                     QueryBuilder builder = dao.queryBuilder();
-                    long count = builder.where().like(PROFILE_RELATED_COLUMN_NAMES[i], q + "%")
+                    long count = builder.where().like(CustomData.DATA_FIELD_NAME, q + "%")
                             .and()
                             .eq(Profile.PROFILE_COLUMN_NAME, currentProfile).countOf();
 
@@ -764,22 +735,22 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
     @Override
     public CustomObject findCustomObject(String q){
-        return queryFirst(this, CustomProfileObject.class, CustomObject.OBJECT_FIELD_NAME, q);
+        return findCustomData(this, CustomProfileObject.class, q);
     }
 
     @Override
     public CustomPlace findCustomPlace(String q){
-        return queryFirst(this, CustomProfilePlace.class, CustomPlace.PLACE_FIELD_NAME, q);
+        return findCustomData(this, CustomProfilePlace.class, q);
     }
 
     @Override
     public CustomMode findCustomMode(String q) {
-        return queryFirst(this, CustomProfileMode.class, CustomMode.MODE_FIELD_NAME, q);
+        return findCustomData(this, CustomProfileMode.class, q);
     }
 
     @Override
     public CustomPerson findCustomPerson(String q) {
-        return queryFirst(this, CustomProfilePerson.class, CustomPerson.PERSON_FIELD_NAME, q);
+        return findCustomData(this, CustomProfilePerson.class, q);
     }
 
     @Override

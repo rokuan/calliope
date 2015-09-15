@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
+                android:id="@+id/data_icon"
                 android:src="@drawable/ic_settings_applications_black_48dp"
                 android:layout_marginRight="@dimen/small_padding"
                 android:layout_width="wrap_content"
@@ -25,14 +26,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
-                    android:id="@+id/mode_form_text"
-                    android:hint="@string/text_field_hint"
+                    android:id="@+id/data_form_name"
+                    android:hint="@string/name_field_hint"
                     android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
                 <EditText
-                    android:id="@+id/mode_form_code"
-                    android:layout_below="@+id/mode_form_text"
+                    android:id="@+id/data_form_code"
+                    android:layout_below="@+id/data_form_name"
                     android:hint="@string/code_field_hint"
                     android:singleLine="true"
                     android:layout_width="match_parent"
@@ -41,7 +42,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/mode_form_save"
+            android:id="@+id/data_form_save"
             style="@style/CalliopeGreenButton"
             android:textAllCaps="true"
             android:text="@string/save_data"
@@ -49,11 +50,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    <ListView
-        android:id="@+id/fragment_data_modes_list"
+    <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_data_list"
         android:background="#FFFFFF"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </ListView>
+        android:layout_height="match_parent" />
 </LinearLayout>

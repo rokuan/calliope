@@ -274,7 +274,7 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
                     //e.printStackTrace();
 */
                     try {
-                        Method m = device.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                        Method m = device.getClass().getMethod("createRfcommSocket", int.class);
                         s = (BluetoothSocket) m.invoke(device, 1);
                     } catch (NoSuchMethodException e1) {
                         e1.printStackTrace();

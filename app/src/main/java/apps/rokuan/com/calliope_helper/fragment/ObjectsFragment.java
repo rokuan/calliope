@@ -19,6 +19,7 @@ import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.CustomProfileObject;
+import apps.rokuan.com.calliope_helper.db.CustomProfilePlace;
 import apps.rokuan.com.calliope_helper.db.Profile;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,105 +28,8 @@ import butterknife.OnClick;
 /**
  * Created by LEBEAU Christophe on 17/07/15.
  */
-public class ObjectsFragment extends CustomDataFragment {
-    private CalliopeSQLiteOpenHelper db;
-    private ProfileObjectAdapter adapter;
-    private String profileId;
-
-    @Bind(R.id.object_form_text) protected EditText objectValueView;
-    @Bind(R.id.object_form_code) protected EditText objectCodeView;
-    //@Bind(R.id.fragment_data_objects_list) protected ListView objectsList;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState){
-        View v = inflater.inflate(R.layout.fragment_data_objects, parent, false);
-        ButterKnife.bind(this, v);
-        return v;
-    }
-
-    @OnClick(R.id.object_form_save)
-    public void saveObject(){
-        String objectValue = objectValueView.getText().toString();
-        String objectCode = objectCodeView.getText().toString();
-
-        if(objectValue.isEmpty()){
-            Toast.makeText(this.getActivity(), "Champ VALEUR obligatoire", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(objectCode.isEmpty()){
-            Toast.makeText(this.getActivity(), "Champ CODE obligatoire", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        CustomProfileObject object = new CustomProfileObject(objectValue, objectCode);
-
-        if(db.addCustomObject(object, profileId)){
-            // TODO: afficher un message de reussite
-            objectValueView.getText().clear();
-            objectCodeView.getText().clear();
-            //adapter.add(0, object);
-            this.getDataListView().insert(0, object);
-            //adapter.notifyDataSetChanged();
-        } else {
-            // TODO; afficher un message d'erreur
-        }
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-
-        Bundle args = this.getArguments();
-
-        if(args.getBoolean(ProfileDataFragment.ARG_USE_ACTIVE_PROFILE)){
-            profileId = Profile.getCurrentProfileId(this.getActivity());
-        } else {
-            profileId = this.getArguments().getString(ProfileActivity.EXTRA_PROFILE_KEY);
-        }
-
-        db = new CalliopeSQLiteOpenHelper(this.getActivity());
-        adapter = new ProfileObjectAdapter(this.getActivity(), db.queryProfileObjects(profileId, ""));
-        adapter.setNotifyOnChange(true);
-        this.setDataAdapter(adapter);
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        db.close();
-        db = null;
-    }
-
-    class ProfileObjectAdapter extends ArrayAdapter<CustomProfileObject> implements Insertable<CustomProfileObject> {
-        private LayoutInflater inflater;
-
-        public ProfileObjectAdapter(Context context, List<CustomProfileObject> objects) {
-            super(context, R.layout.profile_object_item, objects);
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            CustomProfileObject object = this.getItem(position);
-
-            if(v == null){
-                v = inflater.inflate(R.layout.profile_object_item, parent, false);
-            }
-
-            TextView objectValue = (TextView)v.findViewById(R.id.profile_object_item_value);
-            TextView objectCode = (TextView)v.findViewById(R.id.profile_object_item_code);
-
-            objectValue.setText(object.getContent());
-            objectCode.setText(object.getCode());
-
-            return v;
-        }
-
-        @Override
-        public void add(int i, CustomProfileObject object) {
-            this.insert(object, 0);
-        }
+public class ObjectsFragment extends CustomDataFragment<CustomProfileObject> {
+    public ObjectsFragment(){
+        super(CustomProfileObject.class, R.drawable.ic_memory_black_48dp);
     }
 }
