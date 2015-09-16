@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <View
+                android:background="@color/dark_primary_color"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <View
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/store_profile_icon"
+                android:layout_gravity="center_vertical"
+                android:background="#007FFF"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/store_profile_name"
+                    android:gravity="bottom"
+                    android:text="Calliope Voice Pack"
+                    android:textSize="20sp"
+                    android:textColor="#FFFFFF"
+                    android:padding="8dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp" />
+                <TextView
+                    android:id="@+id/store_profile_id"
+                    android:text="calli_v_pack1"
+                    android:textColor="#7F7F7F"
+                    android:padding="8dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+    <TextView
+        android:id="@+id/store_profile_description"
+        android:padding="16dp"
+        android:text="Calliope Voice Pack v1.0 est un jeu de données nécessaires au bon fonctionnement de la librairie"
+        android:textColor="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!-- <LinearLayout
+        android:padding="16dp"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:layout_margin="16dp"
+            android:background="#FF0000"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+        <View
+            android:layout_margin="16dp"
+            android:background="#00FF00"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+        <View
+            android:layout_margin="16dp"
+            android:background="#0000FF"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+        <View
+            android:layout_margin="16dp"
+            android:background="#FFFF00"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+        <View
+            android:layout_margin="16dp"
+            android:background="#FF00FF"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+        <View
+            android:layout_margin="16dp"
+            android:background="#00FFFF"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+    </LinearLayout> -->
+    <GridView
+        android:id="@+id/store_profile_versions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="4"
+        android:verticalSpacing="16dp"
+        android:horizontalSpacing="16dp">
+
+    </GridView>
+</LinearLayout>
