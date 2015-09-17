@@ -1,17 +1,23 @@
 package apps.rokuan.com.calliope_helper.fragment.store;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.api.LanguageVersion;
 import apps.rokuan.com.calliope_helper.api.Profile;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
+import apps.rokuan.com.calliope_helper.view.ProfileVersionView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -47,9 +53,7 @@ public class StoreProfileFragment extends Fragment {
         profileDescrView.setText(profile.getDescription());
 
         if(profile.getVersions() != null){
-            for(LanguageVersion lang: profile.getVersions()){
-                // TODO: creer la vue correspondante et verifier si la version est installee
-            }
+            profileVersionsGrid.setAdapter(new ProfileVersionAdapter(this.getActivity(), profile.getVersions()));
         }
     }
 
@@ -60,6 +64,28 @@ public class StoreProfileFragment extends Fragment {
         if(db != null) {
             db.close();
             db = null;
+        }
+    }
+
+    class ProfileVersionAdapter extends ArrayAdapter<LanguageVersion> {
+        private List<ProfileVersionView> views = new ArrayList<>();
+
+        public ProfileVersionAdapter(Context context, List<LanguageVersion> objects) {
+            super(context, R.layout.view_profile_version, objects);
+
+            for(LanguageVersion version: objects){
+                views.add(new ProfileVersionView(context, profile, version));
+            }
+        }
+
+        @Override
+        public int getCount(){
+            return views.size();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            return views.get(position);
         }
     }
 }

@@ -65,6 +65,7 @@
     <string name="delete_profile_message">Delete this profile ?</string>
     <string name="scan_devices">Scan for devices</string>
     <string name="in_construction">In construction</string>
+    <string name="confirm_download">Download ?</string>
 
     <string name="how_to_talk">Press then talk</string>
 

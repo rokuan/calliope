@@ -5,4 +5,8 @@ package apps.rokuan.com.calliope_helper.api;
  */
 public class LanguageVersion {
     private String countryCode;
+
+    public String getCountryCode(){
+        return countryCode;
+    }
 }

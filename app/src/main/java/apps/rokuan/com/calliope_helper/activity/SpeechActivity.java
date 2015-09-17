@@ -57,7 +57,7 @@ public class SpeechActivity extends ToolbarDrawerActivity {
             closeDrawer();
         } else if(getSupportFragmentManager().getBackStackEntryCount() == 1) {
             new AlertDialog.Builder(this)
-                    .setMessage(this.getString(R.string.exit_activity))
+                    .setMessage(R.string.exit_activity)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
