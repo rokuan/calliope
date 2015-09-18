@@ -11,4 +11,16 @@ public class User {
     private String userName;
     private Bitmap userImage;
     private List<Profile> userProfiles;
+
+    public String getName(){
+        return userName;
+    }
+
+    public Bitmap getLogo(){
+        return userImage;
+    }
+
+    public List<Profile> getProfiles(){
+        return userProfiles;
+    }
 }
