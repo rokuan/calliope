@@ -35,6 +35,10 @@
     <string name="code_field_hint">Code</string>
     <string name="name_field_hint">Nom</string>
     <string name="id_field_hint">ID</string>
+    <string name="login_field_hint">Identifiant</string>
+    <string name="email_field_hint">E-mail</string>
+    <string name="password_field_hint">Mot de passe</string>
+    <string name="password_confirm_field_hint">Confirmer mot de passe</string>
 
     <string name="wifi_address_hint">Adresse</string>
     <string name="wifi_port_hint">Port</string>
@@ -47,6 +51,7 @@
     <string name="bonded_bluetooth_device">Appairé</string>
 
     <string name="connection">Connexion</string>
+    <string name="signup">S'enregistrer</string>
     <string name="save_data">Enregistrer</string>
     <string name="back_message">Appuyez à nouveau pour quitter</string>
     <string name="delete_profile_message">Supprimer ce profil ?</string>

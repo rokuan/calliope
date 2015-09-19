@@ -43,8 +43,6 @@ public class StoreAccountFragment extends Fragment {
     public void onResume(){
         super.onResume();
 
-        db = new CalliopeSQLiteOpenHelper(this.getActivity());
-
         // TODO: recuperer le compte depuis l'API
 
         accountNameView.setText(user.getName());
@@ -52,16 +50,6 @@ public class StoreAccountFragment extends Fragment {
 
         if(user.getProfiles() != null){
             accountProfilesGrid.setAdapter(new ProfileAdapter(this.getActivity(), user.getProfiles()));
-        }
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-
-        if(db != null) {
-            db.close();
-            db = null;
         }
     }
 
