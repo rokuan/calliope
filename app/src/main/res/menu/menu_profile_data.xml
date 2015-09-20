@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_language_select"
+        android:title="@string/action_select_language"
+        app:showAsAction="ifRoom"
+        android:actionLayout="@layout/language_spinner"  />
+    <item android:id="@+id/action_language_new"
+        android:title="@string/action_new_language"
+        app:showAsAction="always" />
+</menu>

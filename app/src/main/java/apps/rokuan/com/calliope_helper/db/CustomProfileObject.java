@@ -8,9 +8,9 @@ import com.rokuan.calliopecore.sentence.CustomObject;
  * Created by LEBEAU Christophe on 21/07/15.
  */
 @DatabaseTable(tableName = "custom_objects")
-public class CustomProfileObject extends CustomObject implements ProfileRelated {
-    @DatabaseField(columnName = Profile.PROFILE_COLUMN_NAME, foreign = true, index = true)
-    private Profile profile;
+public class CustomProfileObject extends CustomObject implements ProfileVersionRelated {
+    @DatabaseField(columnName = ProfileVersion.VERSION_COLUMN_NAME, foreign = true, index = true)
+    private ProfileVersion profileVersion;
 
     public CustomProfileObject(){
 
@@ -21,7 +21,7 @@ public class CustomProfileObject extends CustomObject implements ProfileRelated 
     }
 
     @Override
-    public void setProfile(Profile p){
-        profile = p;
+    public void setProfileVersion(ProfileVersion pv){
+        profileVersion = pv;
     }
 }

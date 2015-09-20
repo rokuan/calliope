@@ -8,6 +8,8 @@
     <string name="action_settings">Paramètres</string>
     <string name="action_save">Enregistrer</string>
     <string name="action_cancel">Annuler</string>
+    <string name="action_select_language">Choix de la langue</string>
+    <string name="action_new_language">Ajouter une langue</string>
 
     <!-- <string name="title_section1">Accueil</string>
     <string name="title_section2">Profile Store</string>
@@ -51,7 +53,7 @@
     <string name="bonded_bluetooth_device">Appairé</string>
 
     <string name="connection">Connexion</string>
-    <string name="signup">S'enregistrer</string>
+    <string name="signup">S\'enregistrer</string>
     <string name="save_data">Enregistrer</string>
     <string name="back_message">Appuyez à nouveau pour quitter</string>
     <string name="delete_profile_message">Supprimer ce profil ?</string>

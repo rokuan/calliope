@@ -5,22 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import apps.rokuan.com.calliope_helper.R;
-import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
-import apps.rokuan.com.calliope_helper.db.Profile;
-import apps.rokuan.com.calliope_helper.fragment.ProfileEditFragment;
-import apps.rokuan.com.calliope_helper.fragment.ProfileInfoFragment;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import apps.rokuan.com.calliope_helper.fragment.profile.ProfileEditFragment;
+import apps.rokuan.com.calliope_helper.fragment.profile.ProfileInfoFragment;
 
 /**
  * Created by LEBEAU Christophe on 29/07/15.
@@ -29,6 +17,7 @@ public class ProfileActivity extends AppCompatActivity {
     public static final String EXTRA_PROFILE_BUNDLE_KEY = "profile_activity_bundle";
     public static final String EXTRA_SECTION_KEY = "profile_activity_section";
     public static final String EXTRA_PROFILE_KEY = "profile_to_display";
+    public static final String EXTRA_PROFILE_VERSION_KEY = "profile_version_to_display";
 
     public static final int PROFILE_INFO_SECTION = 0;
     public static final int PROFILE_EDIT_SECTION = 1;

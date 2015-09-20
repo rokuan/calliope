@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +27,7 @@ import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.CustomProfilePlace;
 import apps.rokuan.com.calliope_helper.db.Profile;
-import apps.rokuan.com.calliope_helper.db.ProfileRelated;
+import apps.rokuan.com.calliope_helper.db.ProfileVersionRelated;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,10 +35,10 @@ import butterknife.OnClick;
 /**
  * Created by LEBEAU Christophe on 14/09/2015.
  */
-public abstract class CustomDataFragment<T extends CustomData & ProfileRelated> extends Fragment {
+public abstract class CustomDataFragment<T extends CustomData & ProfileVersionRelated> extends Fragment {
     private CalliopeSQLiteOpenHelper db;
     private CustomDataAdapter<T> adapter;
-    private String profileId;
+    private int profileVersionId;
     private Class<T> dataClass;
     private int dataDrawableId = R.drawable.ic_memory_black_48dp;
 
@@ -65,16 +64,10 @@ public abstract class CustomDataFragment<T extends CustomData & ProfileRelated> 
     public void onResume(){
         super.onResume();
 
-        Bundle args = this.getArguments();
-
-        if(args.getBoolean(ProfileDataFragment.ARG_USE_ACTIVE_PROFILE)){
-            profileId = Profile.getCurrentProfileId(this.getActivity());
-        } else {
-            profileId = this.getArguments().getString(ProfileActivity.EXTRA_PROFILE_KEY);
-        }
+        profileVersionId = this.getArguments().getInt(ProfileActivity.EXTRA_PROFILE_VERSION_KEY);
 
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
-        adapter = new CustomDataAdapter<T>(this.getActivity(), CalliopeSQLiteOpenHelper.queryProfileData(db, dataClass, profileId, ""));
+        adapter = new CustomDataAdapter<>(this.getActivity(), CalliopeSQLiteOpenHelper.queryProfileData(db, dataClass, profileVersionId, ""));
         this.setDataAdapter(adapter);
     }
 
@@ -104,12 +97,11 @@ public abstract class CustomDataFragment<T extends CustomData & ProfileRelated> 
             Constructor<T> ctor = dataClass.getConstructor(String.class, String.class);
             T data = ctor.newInstance(dataName, dataCode);
 
-            if(CalliopeSQLiteOpenHelper.addCustomData(db, dataClass, data, profileId)){
+            if(CalliopeSQLiteOpenHelper.addCustomData(db, dataClass, data, profileVersionId)){
                 // TODO: afficher un message de reussite
                 dataNameView.getText().clear();
                 dataCodeView.getText().clear();
                 dataListView.insert(0, data);
-                //adapter.notifyDataSetChanged();
             } else {
                 // TODO; afficher un message d'erreur
             }

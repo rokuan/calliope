@@ -122,8 +122,9 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource, Profile.class);
+            TableUtils.createTable(connectionSource, ProfileVersion.class);
 
-            // TODO: tables des et prenoms ?
+            // TODO: table des prenoms ?
             TableUtils.createTable(connectionSource, Word.class);
 
             TableUtils.createTable(connectionSource, CityInfo.class);
@@ -194,6 +195,13 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         Dao<Profile, String> profileDao = DaoManager.createDao(connectionSource, Profile.class);
 
         profileDao.create(defaultProfile);
+
+        ProfileVersion defaultVersion = new ProfileVersion("uni");
+        Dao<ProfileVersion, Integer> profileVersionDao = DaoManager.createDao(connectionSource, ProfileVersion.class);
+
+        defaultVersion.setProfile(this.getProfile(Profile.DEFAULT_PROFILE_CODE));
+        profileVersionDao.create(defaultVersion);
+
         context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0).edit()
                 .putString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE)
                 .apply();
@@ -535,7 +543,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return queryFirst(helper, dataClass, CustomData.DATA_FIELD_NAME, queryString);
     }
 
-    public static <T extends CustomData> List<T> queryProfileData(OrmLiteSqliteOpenHelper helper, Class<T> daoClass, String profileName, String queryValue ){
+    public static <T extends CustomData> List<T> queryProfileData(OrmLiteSqliteOpenHelper helper, Class<T> daoClass, int profileVersionId, String queryValue ){
         try {
             Dao<?, ?> dataDao = DaoManager.createDao(helper.getConnectionSource(), daoClass);
             QueryBuilder builder = dataDao.queryBuilder();
@@ -543,7 +551,7 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
             where.like(CustomData.DATA_FIELD_NAME, "%" + queryValue + "%")
                     .and()
-                    .eq(Profile.PROFILE_COLUMN_NAME, profileName);
+                    .eq(ProfileVersion.VERSION_COLUMN_NAME, profileVersionId);
             return dataDao.query(where.prepare());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -571,6 +579,26 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     public Profile getProfile(String profileId) throws SQLException {
         Dao<Profile, String> dao = DaoManager.createDao(this.getConnectionSource(), Profile.class);
         return dao.queryForId(profileId);
+    }
+
+    public ProfileVersion getProfileVersion(int profileId) throws SQLException {
+        Dao<ProfileVersion, Integer> dao = DaoManager.createDao(this.getConnectionSource(), ProfileVersion.class);
+        return dao.queryForId(profileId);
+    }
+
+    public List<ProfileVersion> getAvailableProfileVersions(String profileId){
+        try {
+            Dao<ProfileVersion, Integer> profileVersionDao = DaoManager.createDao(this.getConnectionSource(), ProfileVersion.class);
+            QueryBuilder builder = profileVersionDao.queryBuilder();
+            Where where = builder.where();
+
+            where.eq(Profile.PROFILE_COLUMN_NAME, profileId);
+
+            return profileVersionDao.query(where.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public boolean deleteProfile(String profileId){
@@ -607,10 +635,10 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    public static <T extends CustomData & ProfileRelated> boolean addCustomData(CalliopeSQLiteOpenHelper db, Class<T> profileClass, T profileObject, String profileId){
+    public static <T extends CustomData & ProfileVersionRelated> boolean addCustomData(CalliopeSQLiteOpenHelper db, Class<T> profileClass, T profileObject, int profileVersionId){
         try {
             Dao<T, String> dao = DaoManager.createDao(db.getConnectionSource(), profileClass);
-            profileObject.setProfile(db.getProfile(profileId));
+            profileObject.setProfileVersion(db.getProfileVersion(profileVersionId));
             return (dao.create(profileObject) >= 0);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -618,21 +646,21 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    public boolean addCustomObject(CustomProfileObject object, String profileId){
-        return addCustomData(this, CustomProfileObject.class, object, profileId);
+    /*public boolean addCustomObject(CustomProfileObject object, int profileVersionId){
+        return addCustomData(this, CustomProfileObject.class, object, profileVersionId);
     }
 
-    public boolean addCustomPlace(CustomProfilePlace place, String profileId){
-        return addCustomData(this, CustomProfilePlace.class, place, profileId);
+    public boolean addCustomPlace(CustomProfilePlace place, int profileVersionId){
+        return addCustomData(this, CustomProfilePlace.class, place, profileVersionId);
     }
 
-    public boolean addCustomPerson(CustomProfilePerson person, String profileId){
-        return addCustomData(this, CustomProfilePerson.class, person, profileId);
+    public boolean addCustomPerson(CustomProfilePerson person, int profileVersionId){
+        return addCustomData(this, CustomProfilePerson.class, person, profileVersionId);
     }
 
-    public boolean addCustomMode(CustomProfileMode mode, String profileId){
-        return addCustomData(this, CustomProfileMode.class, mode, profileId);
-    }
+    public boolean addCustomMode(CustomProfileMode mode, int profileVersionId){
+        return addCustomData(this, CustomProfileMode.class, mode, profileVersionId);
+    }*/
 
     public InterpretationObject parseText(String text){
         return parser.parseText(text);

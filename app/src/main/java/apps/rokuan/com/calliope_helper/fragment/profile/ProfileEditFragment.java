@@ -1,4 +1,4 @@
-package apps.rokuan.com.calliope_helper.fragment;
+package apps.rokuan.com.calliope_helper.fragment.profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

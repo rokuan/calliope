@@ -8,9 +8,9 @@ import com.rokuan.calliopecore.sentence.CustomPerson;
  * Created by LEBEAU Christophe on 29/07/15.
  */
 @DatabaseTable(tableName = "custom_people")
-public class CustomProfilePerson extends CustomPerson implements ProfileRelated {
-    @DatabaseField(columnName = Profile.PROFILE_COLUMN_NAME, foreign = true, index = true)
-    private Profile profile;
+public class CustomProfilePerson extends CustomPerson implements ProfileVersionRelated {
+    @DatabaseField(columnName = ProfileVersion.VERSION_COLUMN_NAME, foreign = true, index = true)
+    private ProfileVersion profileVersion;
 
     public CustomProfilePerson(){
 
@@ -21,7 +21,7 @@ public class CustomProfilePerson extends CustomPerson implements ProfileRelated 
     }
 
     @Override
-    public void setProfile(Profile p) {
-        profile = p;
+    public void setProfileVersion(ProfileVersion pv) {
+        profileVersion = pv;
     }
 }

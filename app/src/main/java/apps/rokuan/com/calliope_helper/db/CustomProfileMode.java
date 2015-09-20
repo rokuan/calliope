@@ -8,9 +8,9 @@ import com.rokuan.calliopecore.sentence.CustomMode;
  * Created by LEBEAU Christophe on 29/07/15.
  */
 @DatabaseTable(tableName = "custom_modes")
-public class CustomProfileMode extends CustomMode implements ProfileRelated {
-    @DatabaseField(columnName = Profile.PROFILE_COLUMN_NAME, foreign = true, index = true)
-    private Profile profile;
+public class CustomProfileMode extends CustomMode implements ProfileVersionRelated {
+    @DatabaseField(columnName = ProfileVersion.VERSION_COLUMN_NAME, foreign = true, index = true)
+    private ProfileVersion profileVersion;
 
     public CustomProfileMode(){
 
@@ -21,7 +21,7 @@ public class CustomProfileMode extends CustomMode implements ProfileRelated {
     }
 
     @Override
-    public void setProfile(Profile p) {
-        profile = p;
+    public void setProfileVersion(ProfileVersion pv) {
+        profileVersion = pv;
     }
 }

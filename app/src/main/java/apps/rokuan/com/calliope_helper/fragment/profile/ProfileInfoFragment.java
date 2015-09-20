@@ -1,4 +1,4 @@
-package apps.rokuan.com.calliope_helper.fragment;
+package apps.rokuan.com.calliope_helper.fragment.profile;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.db.Profile;
 import apps.rokuan.com.calliope_helper.event.ProfileEvent;
+import apps.rokuan.com.calliope_helper.fragment.ProfileDataFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
