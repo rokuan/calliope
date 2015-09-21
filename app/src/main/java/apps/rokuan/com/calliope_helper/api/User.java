@@ -8,19 +8,26 @@ import java.util.List;
  * Created by LEBEAU Christophe on 14/09/2015.
  */
 public class User {
-    private String userName;
-    private Bitmap userImage;
-    private List<Profile> userProfiles;
+    private String name;
+    private String email;
+    private String login;
+    private String password;
+    private Bitmap avatar;
+    private List<Profile> profiles;
+
+    public User(String userName, String userEmail, String userLogin, String userPassword){
+
+    }
 
     public String getName(){
-        return userName;
+        return name;
     }
 
     public Bitmap getLogo(){
-        return userImage;
+        return avatar;
     }
 
     public List<Profile> getProfiles(){
-        return userProfiles;
+        return profiles;
     }
 }
