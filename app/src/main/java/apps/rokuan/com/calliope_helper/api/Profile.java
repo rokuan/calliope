@@ -12,7 +12,7 @@ public class Profile {
     private String profileId;
     private Bitmap profileIcon;
     private String profileDescription;
-    private List<LanguageVersion> versions;
+    private List<ProfileVersion> versions;
 
     public String getName() {
         return profileName;
@@ -30,7 +30,7 @@ public class Profile {
         return profileIcon;
     }
 
-    public List<LanguageVersion> getVersions() {
+    public List<ProfileVersion> getVersions() {
         return versions;
     }
 }

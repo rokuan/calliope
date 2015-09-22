@@ -98,7 +98,6 @@ public abstract class CustomDataFragment<T extends CustomData & ProfileVersionRe
             T data = ctor.newInstance(dataName, dataCode);
 
             if(CalliopeSQLiteOpenHelper.addCustomData(db, dataClass, data, profileVersionId)){
-                // TODO: afficher un message de reussite
                 dataNameView.getText().clear();
                 dataCodeView.getText().clear();
                 dataListView.insert(0, data);

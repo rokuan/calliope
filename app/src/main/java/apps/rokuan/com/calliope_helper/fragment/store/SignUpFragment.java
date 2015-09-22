@@ -8,9 +8,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import apps.rokuan.com.calliope_helper.R;
+import apps.rokuan.com.calliope_helper.api.CalliopeStoreAPI;
+import apps.rokuan.com.calliope_helper.api.OperationResult;
+import apps.rokuan.com.calliope_helper.api.User;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.Response;
 
 /**
  * Created by LEBEAU Christophe on 19/09/2015.
@@ -63,6 +68,18 @@ public class SignUpFragment extends Fragment {
             return;
         }
 
-        // TODO: appeler l'API avec les attributs du compte
+        User user = new User(name, email, login, password);
+
+        CalliopeStoreAPI.getInstance().getService().createAccount(user).enqueue(new Callback<OperationResult>() {
+            @Override
+            public void onResponse(Response<OperationResult> response) {
+                // TODO: savoir si le compte a ete cree
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 }

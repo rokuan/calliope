@@ -59,76 +59,9 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
         }
 
-        /*this.getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, fragment)
-                .addToBackStack(null)
-                .commit();*/
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
                 .addToBackStack(null)
                 .commit();
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_profile_edit, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case R.id.action_profile_save:
-                saveProfile();
-                return true;
-
-            case R.id.action_profile_cancel:
-                this.finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        db = new CalliopeSQLiteOpenHelper(this);
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        db.close();
-        db = null;
-    }
-
-    private void saveProfile(){
-        String profileName = profileNameView.getText().toString();
-        String profileId = profileIdentifierView.getText().toString();
-
-        if(profileName.isEmpty()){
-            Toast.makeText(this, "Veuillez specifier un NOM", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(profileId.isEmpty()){
-            Toast.makeText(this, "Veuillez specifier un IDENTIFIANT", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(!profileId.matches("\\w+")){
-            Toast.makeText(this, "L'IDENTIFIANT ne peut pas contenir de caracteres speciaux ou de ponctuation", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Profile profile = new Profile(profileId, profileName);
-
-        if(db.addProfile(profile)){
-            this.finish();
-        } else {
-            // TODO: afficher un message d'erreur
-        }
-    }*/
 }

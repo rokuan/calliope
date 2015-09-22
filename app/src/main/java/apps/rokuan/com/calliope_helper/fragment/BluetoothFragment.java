@@ -183,7 +183,6 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
             socket = s;
             startAndBindService();
         } else {
-            // TODO: afficher l'erreur a l'ecran
             Toast.makeText(this.getActivity(), "Une erreur est survenue", Toast.LENGTH_SHORT).show();
         }
     }
@@ -258,21 +257,6 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
 
         @Override
         protected Boolean doInBackground(Object... params) {
-            //BluetoothDevice device = (BluetoothDevice)params[0];
-            // TODO: trouver le bon UUID
-            //UUID uuid = (UUID)params[1];
-            //UUID uuid = device.getUuids()[0].getUuid();
-            /*UUID uuid = MY_UUID_INSECURE;
-
-            try{
-                s = device.createRfcommSocketToServiceRecord(uuid);
-            }catch(Exception e2) {
-                try {
-
-                    s = device.createInsecureRfcommSocketToServiceRecord(uuid);
-                } catch (IOException e) {
-                    //e.printStackTrace();
-*/
                     try {
                         Method m = device.getClass().getMethod("createRfcommSocket", int.class);
                         s = (BluetoothSocket) m.invoke(device, 1);
@@ -286,8 +270,6 @@ public class BluetoothFragment extends CalliopeFragment implements AdapterView.O
                         e1.printStackTrace();
                         return false;
                     }
-                /*}
-            }*/
 
             try {
                 s.connect();

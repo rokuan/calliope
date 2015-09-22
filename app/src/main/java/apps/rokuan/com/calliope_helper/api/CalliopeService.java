@@ -50,10 +50,11 @@ public interface CalliopeService {
     Call<OperationResult> deleteProfile(@Path("id") String id);
 
     @GET("/profile/")
-    List<Profile> queryProfiles(@Query("q") String profileNameQuery);
+    Call<List<Profile>> queryProfiles(@Query("q") String profileNameQuery);
 
     // Profile versions
 
+    // TODO: faire en sorte que la valeur de retour soit un fichier
     @GET("/profile-version/{id}")
     Call<ProfileVersion> downloadProfileVersion(@Path("id") String profileVersionId);
 

@@ -10,23 +10,24 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import apps.rokuan.com.calliope_helper.R;
-import apps.rokuan.com.calliope_helper.api.LanguageVersion;
+import apps.rokuan.com.calliope_helper.api.CalliopeStoreAPI;
+import apps.rokuan.com.calliope_helper.api.ProfileVersion;
 import apps.rokuan.com.calliope_helper.api.Profile;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.Response;
 
 /**
  * Created by LEBEAU Christophe on 17/09/2015.
  */
 public class ProfileVersionView extends LinearLayout implements View.OnClickListener {
-    private LanguageVersion version;
-    private Profile profile;
+    private ProfileVersion version;
 
     @Bind(R.id.view_profile_version_flag) protected ImageView flagView;
 
-    public ProfileVersionView(Context context, Profile source, LanguageVersion lang) {
+    public ProfileVersionView(Context context, ProfileVersion lang) {
         super(context);
-        profile = source;
         version = lang;
 
         initProfileVersionView();
@@ -66,8 +67,16 @@ public class ProfileVersionView extends LinearLayout implements View.OnClickList
     }
 
     private void downloadVersion(){
-        // TODO: acceder a l'API pour telecharger la version (en utilisant une AsyncTask)
-        // api.downloadVersion(profile.getId(), languageVersion.getCountryCode().toLowerCase()):
-        Toast.makeText(this.getContext(), version.getCountryCode() + "...", Toast.LENGTH_SHORT).show();
+        CalliopeStoreAPI.getInstance().getService().downloadProfileVersion(version.getId()).enqueue(new Callback<apps.rokuan.com.calliope_helper.db.ProfileVersion>() {
+            @Override
+            public void onResponse(Response<apps.rokuan.com.calliope_helper.db.ProfileVersion> response) {
+                Toast.makeText(ProfileVersionView.this.getContext(), version.getCountryCode() + "...", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 }

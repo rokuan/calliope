@@ -150,7 +150,6 @@ public class WifiFragment extends Fragment {
             socket = s;
             startAndBindService();
         } else {
-            // TODO: afficher l'erreur a l'ecran
             Toast.makeText(this.getActivity(), "Une erreur est survenue", Toast.LENGTH_SHORT).show();
         }
     }

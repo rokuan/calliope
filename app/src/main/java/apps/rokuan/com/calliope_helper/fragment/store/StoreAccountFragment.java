@@ -14,18 +14,24 @@ import android.widget.TextView;
 import java.util.List;
 
 import apps.rokuan.com.calliope_helper.R;
+import apps.rokuan.com.calliope_helper.api.CalliopeStoreAPI;
 import apps.rokuan.com.calliope_helper.api.Profile;
 import apps.rokuan.com.calliope_helper.api.User;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.view.LozengeImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.Response;
 
 /**
  * Created by LEBEAU Christophe on 18/09/2015.
  */
 public class StoreAccountFragment extends Fragment {
+    public static final String ARG_USER_ID = "arg_store_user_id";
+
     private CalliopeSQLiteOpenHelper db;
+    private String userId;
     private User user;
 
     @Bind(R.id.store_account_name) protected TextView accountNameView;
@@ -43,8 +49,23 @@ public class StoreAccountFragment extends Fragment {
     public void onResume(){
         super.onResume();
 
-        // TODO: recuperer le compte depuis l'API
+        userId = this.getArguments().getString(ARG_USER_ID);
 
+        CalliopeStoreAPI.getInstance().getService().getUser(userId).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response) {
+                // TODO: verifier le type de la reponse
+                renderUser(response.body());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                // TODO:
+            }
+        });
+    }
+
+    private void renderUser(User user){
         accountNameView.setText(user.getName());
         accountLogoView.setImageBitmap(user.getLogo());
 

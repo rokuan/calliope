@@ -61,7 +61,7 @@ public class ProfileInfoFragment extends Fragment {
                 .putString(Profile.ACTIVE_PROFILE_KEY, profileId)
                 .apply();
         selectButton.setEnabled(false);
-        // TODO: notifier du changement de profil
+
         EventBus.getDefault().post(new ProfileEvent(profile));
     }
 
@@ -99,7 +99,9 @@ public class ProfileInfoFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
+
         try {
             profile = db.getProfile(profileId);
 

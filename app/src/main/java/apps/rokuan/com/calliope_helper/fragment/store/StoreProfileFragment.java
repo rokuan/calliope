@@ -14,18 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import apps.rokuan.com.calliope_helper.R;
-import apps.rokuan.com.calliope_helper.api.LanguageVersion;
+import apps.rokuan.com.calliope_helper.api.CalliopeStoreAPI;
+import apps.rokuan.com.calliope_helper.api.ProfileVersion;
 import apps.rokuan.com.calliope_helper.api.Profile;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
 import apps.rokuan.com.calliope_helper.view.ProfileVersionView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.Response;
 
 /**
  * Created by LEBEAU Christophe on 16/09/2015.
  */
 public class StoreProfileFragment extends Fragment {
+    public static final String ARG_PROFILE_ID = "arg_store_profile_id";
+
     private CalliopeSQLiteOpenHelper db;
+    private String profileId;
     private Profile profile;
 
     @Bind(R.id.store_profile_name) protected TextView profileNameView;
@@ -46,15 +52,19 @@ public class StoreProfileFragment extends Fragment {
 
         db = new CalliopeSQLiteOpenHelper(this.getActivity());
 
-        // TODO: recuperer le profil a l'aide de l'API
+        profileId = this.getArguments().getString(ARG_PROFILE_ID);
 
-        profileNameView.setText(profile.getName());
-        profileIdView.setText(profile.getId());
-        profileDescrView.setText(profile.getDescription());
+        CalliopeStoreAPI.getInstance().getService().getProfile(profileId).enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Response<Profile> response) {
+                renderProfile(response.body());
+            }
 
-        if(profile.getVersions() != null){
-            profileVersionsGrid.setAdapter(new ProfileVersionAdapter(this.getActivity(), profile.getVersions()));
-        }
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -67,14 +77,24 @@ public class StoreProfileFragment extends Fragment {
         }
     }
 
-    class ProfileVersionAdapter extends ArrayAdapter<LanguageVersion> {
+    private void renderProfile(Profile profile){
+        profileNameView.setText(profile.getName());
+        profileIdView.setText(profile.getId());
+        profileDescrView.setText(profile.getDescription());
+
+        if(profile.getVersions() != null){
+            profileVersionsGrid.setAdapter(new ProfileVersionAdapter(this.getActivity(), profile.getVersions()));
+        }
+    }
+
+    class ProfileVersionAdapter extends ArrayAdapter<ProfileVersion> {
         private List<ProfileVersionView> views = new ArrayList<>();
 
-        public ProfileVersionAdapter(Context context, List<LanguageVersion> objects) {
+        public ProfileVersionAdapter(Context context, List<ProfileVersion> objects) {
             super(context, R.layout.view_profile_version, objects);
 
-            for(LanguageVersion version: objects){
-                views.add(new ProfileVersionView(context, profile, version));
+            for(ProfileVersion version: objects){
+                views.add(new ProfileVersionView(context, version));
             }
         }
 
