@@ -10,6 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "profile_versions")
 public class ProfileVersion {
     public static final String VERSION_COLUMN_NAME = "version_id";
+    public static final String UNIVERSAL_LANGUAGE_CODE = "uni";
 
     public static final String ID_FIELD_NAME = "version_id";
     public static final String LANGUAGE_FIELD_NAME = "language_code";
@@ -27,6 +28,10 @@ public class ProfileVersion {
 
     public ProfileVersion(String languageCode){
         language = languageCode;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public String getLanguage(){

@@ -53,6 +53,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -539,8 +540,37 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         }
     }
 
-    private static <T extends CustomData> T findCustomData(OrmLiteSqliteOpenHelper helper, Class<T> dataClass, String queryString){
-        return queryFirst(helper, dataClass, CustomData.DATA_FIELD_NAME, queryString);
+    private static <T extends CustomData> T findCustomData(CalliopeSQLiteOpenHelper helper, Class<T> dataClass, String queryString){
+        try {
+            String profileId = helper.getActiveProfile().getIdentifier();
+            ProfileVersion version = helper.findVersion(profileId, "fr");
+
+            if(version == null){
+                helper.findVersion(profileId, ProfileVersion.UNIVERSAL_LANGUAGE_CODE);
+            }
+
+            if(version != null) {
+                String versionId = String.valueOf(version.getId());
+
+                try {
+                    Dao<T, String> dao = DaoManager.createDao(helper.getConnectionSource(), dataClass);
+                    QueryBuilder builder = dao.queryBuilder();
+                    PreparedQuery<T> preparedQuery = builder.where()
+                            .eq(CustomData.DATA_FIELD_NAME, queryString)
+                            .and()
+                            .eq(ProfileVersion.VERSION_COLUMN_NAME, versionId).prepare();
+                    return dao.queryForFirst(preparedQuery);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
     }
 
     public static <T extends CustomData> List<T> queryProfileData(OrmLiteSqliteOpenHelper helper, Class<T> daoClass, int profileVersionId, String queryValue ){
@@ -692,28 +722,56 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
 
         if(!exists){
             String currentProfile = context.getSharedPreferences(Profile.PROFILE_PREF_KEY, 0)
-                    .getString(Profile.ACTIVE_PROFILE_KEY, "default");
+                    .getString(Profile.ACTIVE_PROFILE_KEY, Profile.DEFAULT_PROFILE_CODE);
 
-            for(int i=0; i<PROFILE_CLASSES.length; i++){
-                try {
-                    Dao<?, ?> dao = DaoManager.createDao(connectionSource, PROFILE_CLASSES[i]);
-                    QueryBuilder builder = dao.queryBuilder();
-                    long count = builder.where().like(CustomData.DATA_FIELD_NAME, q + "%")
-                            .and()
-                            .eq(Profile.PROFILE_COLUMN_NAME, currentProfile).countOf();
+            // TODO: utiliser la langue du Locale.getDefault() ?
+            ProfileVersion version = findVersion(currentProfile, "fr");
 
-                    exists = (count > 0);
+            if(version == null){
+                version = findVersion(currentProfile, ProfileVersion.UNIVERSAL_LANGUAGE_CODE);
+            }
 
-                    if(exists){
-                        break;
+            if(version != null) {
+                String versionId = String.valueOf(version.getId());
+
+                for (int i = 0; i < PROFILE_CLASSES.length; i++) {
+                    try {
+                        Dao<?, ?> dao = DaoManager.createDao(connectionSource, PROFILE_CLASSES[i]);
+                        QueryBuilder builder = dao.queryBuilder();
+                        long count = builder.where().like(CustomData.DATA_FIELD_NAME, q + "%")
+                                .and()
+                                .eq(ProfileVersion.VERSION_COLUMN_NAME, versionId).countOf();
+
+                        exists = (count > 0);
+
+                        if (exists) {
+                            break;
+                        }
+                    } catch (SQLException e) {
+
                     }
-                } catch (SQLException e) {
-
                 }
             }
         }
 
         return exists;
+    }
+
+    private ProfileVersion findVersion(String profileId, String language){
+        try {
+            Dao<ProfileVersion, Integer> dao = DaoManager.createDao(this.getConnectionSource(), ProfileVersion.class);
+            QueryBuilder builder = dao.queryBuilder();
+            PreparedQuery<ProfileVersion> preparedQuery = builder.where()
+                    .eq(ProfileVersion.LANGUAGE_FIELD_NAME, language)
+                    .and()
+                    .eq(Profile.PROFILE_COLUMN_NAME, profileId)
+                    .prepare();
+            ProfileVersion result = dao.queryForFirst(preparedQuery);
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
