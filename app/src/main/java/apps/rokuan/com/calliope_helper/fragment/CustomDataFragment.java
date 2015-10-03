@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.nhaarman.listviewanimations.appearance.simple.SwingLeftInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.nhaarman.listviewanimations.util.Insertable;
-import com.rokuan.calliopecore.sentence.CustomData;
+import com.rokuan.calliopecore.fr.sentence.CustomData;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -25,8 +25,6 @@ import java.util.List;
 import apps.rokuan.com.calliope_helper.R;
 import apps.rokuan.com.calliope_helper.activity.ProfileActivity;
 import apps.rokuan.com.calliope_helper.db.CalliopeSQLiteOpenHelper;
-import apps.rokuan.com.calliope_helper.db.CustomProfilePlace;
-import apps.rokuan.com.calliope_helper.db.Profile;
 import apps.rokuan.com.calliope_helper.db.ProfileVersionRelated;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -145,7 +143,7 @@ public abstract class CustomDataFragment<T extends CustomData & ProfileVersionRe
             TextView objectValue = (TextView)v.findViewById(R.id.profile_data_item_name);
             TextView objectCode = (TextView)v.findViewById(R.id.profile_data_item_code);
 
-            objectValue.setText(object.getName());
+            objectValue.setText(object.getValue());
             objectCode.setText(object.getCode());
 
             return v;

@@ -2,7 +2,7 @@ package apps.rokuan.com.calliope_helper.db;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import com.rokuan.calliopecore.sentence.CustomMode;
+import com.rokuan.calliopecore.fr.sentence.CustomMode;
 
 /**
  * Created by LEBEAU Christophe on 29/07/15.

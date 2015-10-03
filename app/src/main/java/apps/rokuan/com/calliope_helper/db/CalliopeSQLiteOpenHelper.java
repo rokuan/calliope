@@ -14,29 +14,32 @@ import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.rokuan.calliopecore.fr.parser.SpeechParser;
+import com.rokuan.calliopecore.fr.parser.WordDatabase;
+import com.rokuan.calliopecore.fr.sentence.AdjectiveInfo;
+import com.rokuan.calliopecore.fr.sentence.CharacterInfo;
+import com.rokuan.calliopecore.fr.sentence.CityInfo;
+import com.rokuan.calliopecore.fr.sentence.ColorInfo;
+import com.rokuan.calliopecore.fr.sentence.CountryInfo;
+import com.rokuan.calliopecore.fr.sentence.CustomData;
+import com.rokuan.calliopecore.fr.sentence.CustomMode;
+import com.rokuan.calliopecore.fr.sentence.CustomObject;
+import com.rokuan.calliopecore.fr.sentence.CustomPerson;
+import com.rokuan.calliopecore.fr.sentence.CustomPlace;
+import com.rokuan.calliopecore.fr.sentence.LanguageInfo;
+import com.rokuan.calliopecore.fr.sentence.NameInfo;
+import com.rokuan.calliopecore.fr.sentence.PlaceInfo;
+import com.rokuan.calliopecore.fr.sentence.PlacePreposition;
+import com.rokuan.calliopecore.fr.sentence.PurposePreposition;
+import com.rokuan.calliopecore.fr.sentence.TimePreposition;
+import com.rokuan.calliopecore.fr.sentence.TransportInfo;
+import com.rokuan.calliopecore.fr.sentence.UnitInfo;
 import com.rokuan.calliopecore.fr.sentence.Verb;
 import com.rokuan.calliopecore.fr.sentence.VerbConjugation;
-import com.rokuan.calliopecore.parser.WordDatabase;
+import com.rokuan.calliopecore.fr.sentence.WayPreposition;
+import com.rokuan.calliopecore.fr.sentence.Word;
 import com.rokuan.calliopecore.sentence.Action;
-import com.rokuan.calliopecore.sentence.CharacterInfo;
-import com.rokuan.calliopecore.sentence.CityInfo;
-import com.rokuan.calliopecore.sentence.ColorInfo;
-import com.rokuan.calliopecore.sentence.CountryInfo;
-import com.rokuan.calliopecore.sentence.CustomData;
-import com.rokuan.calliopecore.sentence.CustomMode;
-import com.rokuan.calliopecore.sentence.CustomObject;
-import com.rokuan.calliopecore.sentence.CustomPerson;
-import com.rokuan.calliopecore.sentence.CustomPlace;
+import com.rokuan.calliopecore.sentence.IAdjectiveInfo;
 import com.rokuan.calliopecore.sentence.IVerbConjugation;
-import com.rokuan.calliopecore.sentence.LanguageInfo;
-import com.rokuan.calliopecore.sentence.PlaceInfo;
-import com.rokuan.calliopecore.sentence.PlacePreposition;
-import com.rokuan.calliopecore.sentence.PurposePreposition;
-import com.rokuan.calliopecore.sentence.TimePreposition;
-import com.rokuan.calliopecore.sentence.TransportInfo;
-import com.rokuan.calliopecore.sentence.UnitInfo;
-import com.rokuan.calliopecore.sentence.WayPreposition;
-import com.rokuan.calliopecore.sentence.Word;
 import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 import com.rokuan.calliopecore.sentence.structure.data.nominal.CharacterObject;
 import com.rokuan.calliopecore.sentence.structure.data.nominal.UnitObject;
@@ -53,7 +56,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -74,6 +76,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             TimePreposition.class,
             WayPreposition.class,
             PurposePreposition.class,
+            NameInfo.class,
+            AdjectiveInfo.class,
             LanguageInfo.class,
             ColorInfo.class,
             CityInfo.class,
@@ -91,6 +95,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             TimePreposition.VALUE_FIELD_NAME,
             WayPreposition.VALUE_FIELD_NAME,
             PurposePreposition.VALUE_FIELD_NAME,
+            NameInfo.VALUE_FIELD_NAME,
+            AdjectiveInfo.VALUE_FIELD_NAME,
             LanguageInfo.LANGUAGE_FIELD_NAME,
             ColorInfo.COLOR_FIELD_NAME,
             CityInfo.CITY_FIELD_NAME,
@@ -128,6 +134,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             // TODO: table des prenoms ?
             TableUtils.createTable(connectionSource, Word.class);
 
+            TableUtils.createTable(connectionSource, NameInfo.class);
+            TableUtils.createTable(connectionSource, AdjectiveInfo.class);
             TableUtils.createTable(connectionSource, CityInfo.class);
             TableUtils.createTable(connectionSource, CountryInfo.class);
             TableUtils.createTable(connectionSource, LanguageInfo.class);
@@ -154,6 +162,8 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
             loadProfiles(connectionSource);
             defaultBus.post(new DatabaseEvent("Mots"));
             loadWords(connectionSource);
+            loadCommonNames(connectionSource);
+            loadAdjectives(connectionSource);
             defaultBus.post(new DatabaseEvent("Villes"));
             loadCities(connectionSource);
             defaultBus.post(new DatabaseEvent("Pays"));
@@ -208,327 +218,290 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
                 .apply();
     }
 
-    private void loadWords(ConnectionSource connectionSource) throws IOException, SQLException {
+    private static <T> void loadData(ConnectionSource connectionSource, Class<T> dataClass, Context context, String assetName, DataAdapter<T> adapter) throws IOException, SQLException {
         AssetManager assets = context.getAssets();
-        InputStream in = assets.open("words.txt");
+        InputStream in = assets.open(assetName);
         Scanner sc = new Scanner(in);
-        Dao<Word, Integer> dao = DaoManager.createDao(connectionSource, Word.class);
+        Dao<T, ?> dao = DaoManager.createDao(connectionSource, dataClass);
 
         while(sc.hasNextLine()){
             String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-            String[] types = fields[1].split(",");
-            Set<Word.WordType> wordTypes = new HashSet<>();
-
-            for(String ty: types){
-                wordTypes.add(Word.WordType.valueOf(ty));
-            }
-
-            dao.create(new Word(fields[0], wordTypes));
+            dao.create(adapter.transform(line));
         }
 
         in.close();
         sc.close();
+    }
+
+    private void loadWords(ConnectionSource connectionSource) throws IOException, SQLException {
+        DataAdapter<Word> wordAdapter = new DataAdapter<Word>() {
+            @Override
+            public Word transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                String[] types = fields[1].split(",");
+                Set<Word.WordType> wordTypes = new HashSet<>();
+
+                for(String ty: types){
+                    wordTypes.add(Word.WordType.valueOf(ty));
+                }
+
+                return new Word(fields[0], wordTypes);
+            }
+        };
+
+        loadData(connectionSource, Word.class, context, "words.txt", wordAdapter);
+    }
+
+    private void loadCommonNames(ConnectionSource connectionSource) throws IOException, SQLException {
+        DataAdapter<NameInfo> nameAdapter = new DataAdapter<NameInfo>() {
+            @Override
+            public NameInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new NameInfo(fields[0], fields[1]);
+            }
+        };
+
+        loadData(connectionSource, NameInfo.class, context, "common_names.txt", nameAdapter);
+    }
+
+    private void loadAdjectives(ConnectionSource connectionSource) throws IOException, SQLException {
+        DataAdapter<AdjectiveInfo> adjectiveAdapter = new DataAdapter<AdjectiveInfo>() {
+            @Override
+            public AdjectiveInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new AdjectiveInfo(fields[0], IAdjectiveInfo.AdjectiveValue.valueOf(fields[1]));
+            }
+        };
+
+        loadData(connectionSource, AdjectiveInfo.class, context, "adjectives.txt", adjectiveAdapter);
     }
 
     private void loadCities(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("cities.txt");
-        Scanner sc = new Scanner(in);
-        Dao<CityInfo, Integer> dao = DaoManager.createDao(connectionSource, CityInfo.class);
+        DataAdapter<CityInfo> cityAdapter = new DataAdapter<CityInfo>() {
+            @Override
+            public CityInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new CityInfo(fields[2], Double.parseDouble(fields[0]), Double.parseDouble(fields[1]));
+            }
+        };
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-
-            dao.create(new CityInfo(fields[2], Double.parseDouble(fields[0]), Double.parseDouble(fields[1])));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, CityInfo.class, context, "cities.txt", cityAdapter);
     }
 
     private void loadCountries(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("countries.txt");
-        Scanner sc = new Scanner(in);
-        Dao<CountryInfo, String> dao = DaoManager.createDao(connectionSource, CountryInfo.class);
+        DataAdapter<CountryInfo> countryAdapter = new DataAdapter<CountryInfo>() {
+            @Override
+            public CountryInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new CountryInfo(fields[4], fields[2]);
+            }
+        };
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-
-            dao.create(new CountryInfo(fields[4], fields[2]));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, CountryInfo.class, context, "countries.txt", countryAdapter);
     }
 
     private void loadLanguages(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("languages.txt");
-        Scanner sc = new Scanner(in);
-        Dao<LanguageInfo, String> dao = DaoManager.createDao(connectionSource, LanguageInfo.class);
+        DataAdapter<LanguageInfo> languageAdapter = new DataAdapter<LanguageInfo>() {
+            @Override
+            public LanguageInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new LanguageInfo(fields[0], fields[1]);
+            }
+        };
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-
-            dao.create(new LanguageInfo(fields[0], fields[1]));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, LanguageInfo.class, context, "languages.txt", languageAdapter);
     }
 
     private void loadColors(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("colors.txt");
-        Scanner sc = new Scanner(in);
-        Dao<ColorInfo, String> dao = DaoManager.createDao(connectionSource, ColorInfo.class);
+        DataAdapter<ColorInfo> colorAdapter = new DataAdapter<ColorInfo>() {
+            @Override
+            public ColorInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new ColorInfo(fields[0], fields[1]);
+            }
+        };
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-
-            dao.create(new ColorInfo(fields[0], fields[1]));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, ColorInfo.class, context, "colors.txt", colorAdapter);
     }
 
     private void loadTransports(ConnectionSource connectionSource) throws SQLException, IOException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("transports.txt");
-        Scanner sc = new Scanner(in);
-        Dao<TransportInfo, String> dao = DaoManager.createDao(connectionSource, TransportInfo.class);
+        DataAdapter<TransportInfo> transportAdapter = new DataAdapter<TransportInfo>() {
+            @Override
+            public TransportInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new TransportInfo(fields[0], TransportObject.TransportType.valueOf(fields[1]));
+            }
+        };
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-
-            dao.create(new TransportInfo(fields[0], TransportObject.TransportType.valueOf(fields[1])));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, TransportInfo.class, context, "transports.txt", transportAdapter);
     }
 
     private void loadUnits(ConnectionSource connectionSource) throws SQLException, IOException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("units.txt");
-        Scanner sc = new Scanner(in);
-        Dao<UnitInfo, String> dao = DaoManager.createDao(connectionSource, UnitInfo.class);
+        DataAdapter<UnitInfo> unitAdapter = new DataAdapter<UnitInfo>() {
+            @Override
+            public UnitInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new UnitInfo(fields[0], UnitObject.UnitType.valueOf(fields[1]));
+            }
+        };
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-
-            dao.create(new UnitInfo(fields[0], UnitObject.UnitType.valueOf(fields[1])));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, UnitInfo.class, context, "units.txt", unitAdapter);
     }
 
     private void loadCharacters(ConnectionSource connectionSource) throws SQLException, IOException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("characters.txt");
-        Scanner sc = new Scanner(in);
-        Dao<CharacterInfo, String> dao = DaoManager.createDao(connectionSource, CharacterInfo.class);
+        DataAdapter<CharacterInfo> characterAdapter = new DataAdapter<CharacterInfo>() {
+            @Override
+            public CharacterInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new CharacterInfo(fields[0], CharacterObject.CharacterType.valueOf(fields[1]));
+            }
+        };
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-
-            dao.create(new CharacterInfo(fields[0], CharacterObject.CharacterType.valueOf(fields[1])));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, CharacterInfo.class, context, "characters.txt", characterAdapter);
     }
 
     private void loadPlaces(ConnectionSource connectionSource) throws SQLException, IOException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("places.txt");
-        Scanner sc = new Scanner(in);
-        Dao<PlaceInfo, String> dao = DaoManager.createDao(connectionSource, PlaceInfo.class);
+        DataAdapter<PlaceInfo> placeAdapter = new DataAdapter<PlaceInfo>() {
+            @Override
+            public PlaceInfo transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                return new PlaceInfo(fields[0], PlaceObject.PlaceCategory.valueOf(fields[1]));
+            }
+        };
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-
-            dao.create(new PlaceInfo(fields[0], PlaceObject.PlaceCategory.valueOf(fields[1])));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, PlaceInfo.class, context, "places.txt", placeAdapter);
     }
 
     private void loadVerbs(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("verbs.txt");
-        Scanner sc = new Scanner(in, SPECIAL_ENCODING);
-        Dao<Verb, String> dao = DaoManager.createDao(connectionSource, Verb.class);
+        //Scanner sc = new Scanner(in, SPECIAL_ENCODING);
+        DataAdapter<Verb> verbAdapter = new DataAdapter<Verb>() {
+            @Override
+            public Verb transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
+                Set<Action.ActionType> actions = new HashSet<>();
+                String[] actionNames = fields[1].split(",");
 
-            Set<Action.ActionType> actions = new HashSet<>();
-            String[] actionNames = fields[1].split(",");
+                for(String act: actionNames){
+                    actions.add(Action.ActionType.valueOf(act));
+                }
 
-            for(String act: actionNames){
-                actions.add(Action.ActionType.valueOf(act));
+                return new Verb(fields[0], actions, (Integer.parseInt(fields[3]) != 0));
             }
+        };
 
-            dao.create(new Verb(fields[0], actions, (Integer.parseInt(fields[3]) != 0)));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, Verb.class, context, "verbs.txt", verbAdapter);
     }
 
     private void loadConjugations(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("conjugations.txt");
-        //Scanner sc = new Scanner(in, SPECIAL_ENCODING);
-        Scanner sc = new Scanner(in, SPECIAL_ENCODING);
-        Dao<VerbConjugation, String> dao = DaoManager.createDao(connectionSource, VerbConjugation.class);
-        Dao<Verb, String> verbDao = DaoManager.createDao(connectionSource, Verb.class);
+        final Dao<Verb, String> verbDao = DaoManager.createDao(connectionSource, Verb.class);
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-            Verb.Pronoun pronoun = null;
+        DataAdapter<VerbConjugation> conjugationAdapter = new DataAdapter<VerbConjugation>() {
+            @Override
+            public VerbConjugation transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                Verb.Pronoun pronoun = null;
+                Verb verb = null;
 
-            try{
-                pronoun = Verb.Pronoun.values()[Integer.parseInt(fields[4])];
-            }catch(Exception e){
+                try {
+                    verb = verbDao.queryForId(fields[0]);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
+                try{
+                    pronoun = Verb.Pronoun.values()[Integer.parseInt(fields[4])];
+                }catch(Exception e){
+
+                }
+
+                return new VerbConjugation(Verb.ConjugationTense.valueOf(fields[3]),
+                        IVerbConjugation.Form.valueOf(fields[2]),
+                        pronoun,
+                        fields[1],
+                        verb
+                );
             }
+        };
 
-            dao.create(new VerbConjugation(Verb.ConjugationTense.valueOf(fields[3]),
-                    IVerbConjugation.Form.valueOf(fields[2]),
-                    pronoun,
-                    fields[1],
-                    verbDao.queryForId(fields[0])
-            ));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, VerbConjugation.class, context, "conjugations.txt", conjugationAdapter);
     }
 
     private void loadPlacePrepositions(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("place_prepositions.txt");
-        Scanner sc = new Scanner(in);
-        Dao<PlacePreposition, String> dao = DaoManager.createDao(connectionSource, PlacePreposition.class);
+        DataAdapter<PlacePreposition> placePrepositionAdapter = new DataAdapter<PlacePreposition>() {
+            @Override
+            public PlacePreposition transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                String[] types = fields[2].split(",");
+                Set<PlaceAdverbial.PlaceType> prepTypes = new HashSet<>();
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-            String[] types = fields[2].split(",");
-            Set<PlaceAdverbial.PlaceType> prepTypes = new HashSet<>();
+                for(String ty: types){
+                    prepTypes.add(PlaceAdverbial.PlaceType.valueOf(ty));
+                }
 
-            for(String ty: types){
-                prepTypes.add(PlaceAdverbial.PlaceType.valueOf(ty));
+                return new PlacePreposition(fields[0], PlaceAdverbial.PlaceContext.valueOf(fields[1]), prepTypes);
             }
+        };
 
-            dao.create(new PlacePreposition(fields[0], PlaceAdverbial.PlaceContext.valueOf(fields[1]), prepTypes));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, PlacePreposition.class, context, "place_prepositions.txt", placePrepositionAdapter);
     }
 
     private void loadTimePrepositions(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("time_prepositions.txt");
-        Scanner sc = new Scanner(in);
-        Dao<TimePreposition, String> dao = DaoManager.createDao(connectionSource, TimePreposition.class);
+        DataAdapter<TimePreposition> timePrepositionAdapter = new DataAdapter<TimePreposition>() {
+            @Override
+            public TimePreposition transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                String[] types = fields[2].split(",");
+                Set<TimeAdverbial.TimeType> prepTypes = new HashSet<>();
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-            String[] types = fields[2].split(",");
-            Set<TimeAdverbial.TimeType> prepTypes = new HashSet<>();
+                for(String ty: types){
+                    prepTypes.add(TimeAdverbial.TimeType.valueOf(ty));
+                }
 
-            for(String ty: types){
-                prepTypes.add(TimeAdverbial.TimeType.valueOf(ty));
+                return new TimePreposition(fields[0], TimeAdverbial.TimeContext.valueOf(fields[1]), prepTypes);
             }
+        };
 
-            dao.create(new TimePreposition(fields[0], TimeAdverbial.TimeContext.valueOf(fields[1]), prepTypes));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, TimePreposition.class, context, "time_prepositions.txt", timePrepositionAdapter);
     }
 
     private void loadWayPrepositions(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("way_prepositions.txt");
-        Scanner sc = new Scanner(in);
-        Dao<WayPreposition, String> dao = DaoManager.createDao(connectionSource, WayPreposition.class);
+        DataAdapter<WayPreposition> wayPrepositionAdapter = new DataAdapter<WayPreposition>() {
+            @Override
+            public WayPreposition transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                String[] types = fields[2].split(",");
+                Set<WayAdverbial.WayType> prepTypes = new HashSet<>();
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-            String[] types = fields[2].split(",");
-            Set<WayAdverbial.WayType> prepTypes = new HashSet<>();
+                for(String ty: types){
+                    prepTypes.add(WayAdverbial.WayType.valueOf(ty));
+                }
 
-            for(String ty: types){
-                prepTypes.add(WayAdverbial.WayType.valueOf(ty));
+                return new WayPreposition(fields[0], WayAdverbial.WayContext.valueOf(fields[1]), prepTypes);
             }
+        };
 
-            dao.create(new WayPreposition(fields[0], WayAdverbial.WayContext.valueOf(fields[1]), prepTypes));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, WayPreposition.class, context, "way_prepositions.txt", wayPrepositionAdapter);
     }
 
     private void loadPurposePrepositions(ConnectionSource connectionSource) throws IOException, SQLException {
-        AssetManager assets = context.getAssets();
-        InputStream in = assets.open("purpose_prepositions.txt");
-        Scanner sc = new Scanner(in);
-        Dao<PurposePreposition, String> dao = DaoManager.createDao(connectionSource, PurposePreposition.class);
+        DataAdapter<PurposePreposition> purposePrepositionAdapter = new DataAdapter<PurposePreposition>() {
+            @Override
+            public PurposePreposition transform(String s) {
+                String[] fields = s.split(DATA_SEPARATOR);
+                String[] types = fields[2].split(",");
+                Set<PurposeAdverbial.PurposeType> prepTypes = new HashSet<>();
 
-        while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            String[] fields = line.split(DATA_SEPARATOR);
-            String[] types = fields[2].split(",");
-            Set<PurposeAdverbial.PurposeType> prepTypes = new HashSet<>();
+                for(String ty: types){
+                    prepTypes.add(PurposeAdverbial.PurposeType.valueOf(ty));
+                }
 
-            for(String ty: types){
-                prepTypes.add(PurposeAdverbial.PurposeType.valueOf(ty));
+                return new PurposePreposition(fields[0], PurposeAdverbial.PurposeContext.valueOf(fields[1]), prepTypes);
             }
+        };
 
-            dao.create(new PurposePreposition(fields[0], PurposeAdverbial.PurposeContext.valueOf(fields[1]), prepTypes));
-        }
-
-        in.close();
-        sc.close();
+        loadData(connectionSource, PurposePreposition.class, context, "purpose_prepositions.txt", purposePrepositionAdapter);
     }
-
-    /*public List<CustomProfileObject> queryProfileObjects(String profileId, String queryString){
-        return queryProfileData(this, CustomProfileObject.class, queryString, profileId);
-    }
-
-    public List<CustomProfilePlace> queryProfilePlaces(String profileId, String queryString){
-        return queryProfileData(this, CustomProfilePlace.class, queryString, profileId);
-    }
-
-    public List<CustomProfilePerson> queryProfilePeople(String profileId, String queryString){
-        return queryProfileData(this, CustomProfilePerson.class, queryString, profileId);
-    }
-
-    public List<CustomProfileMode> queryProfileModes(String profileId, String queryString){
-        return queryProfileData(this, CustomProfileMode.class, queryString, profileId);
-    }*/
 
     public List<Profile> queryProfiles(){
         try {
@@ -611,9 +584,9 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
         return dao.queryForId(profileId);
     }
 
-    public ProfileVersion getProfileVersion(int profileId) throws SQLException {
+    public ProfileVersion getProfileVersion(int profileVersionId) throws SQLException {
         Dao<ProfileVersion, Integer> dao = DaoManager.createDao(this.getConnectionSource(), ProfileVersion.class);
-        return dao.queryForId(profileId);
+        return dao.queryForId(profileVersionId);
     }
 
     public List<ProfileVersion> getAvailableProfileVersions(String profileId){
@@ -777,6 +750,16 @@ public class CalliopeSQLiteOpenHelper extends OrmLiteSqliteOpenHelper implements
     @Override
     public Word findWord(String q) {
         return queryFirst(this, Word.class, Word.WORD_FIELD_NAME, q);
+    }
+
+    @Override
+    public NameInfo findNameInfo(String q) {
+        return queryFirst(this, NameInfo.class, NameInfo.VALUE_FIELD_NAME, q);
+    }
+
+    @Override
+    public AdjectiveInfo findAdjectiveInfo(String q) {
+        return queryFirst(this, AdjectiveInfo.class, AdjectiveInfo.VALUE_FIELD_NAME, q);
     }
 
     @Override
